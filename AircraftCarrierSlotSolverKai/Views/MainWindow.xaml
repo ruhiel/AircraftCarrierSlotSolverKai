@@ -1,0 +1,234 @@
+﻿<Controls:MetroWindow x:Class="AircraftCarrierSlotSolverKai.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AircraftCarrierSlotSolverKai"
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:vm="clr-namespace:AircraftCarrierSlotSolverKai.ViewModels"
+        xmlns:m="clr-namespace:AircraftCarrierSlotSolverKai.Models"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
+        mc:Ignorable="d"
+        Title="空母スロットソルバー改" Height="900" Width="400"
+        GlowBrush="{DynamicResource AccentColorBrush}"
+        BorderThickness="1"
+        ShowMaxRestoreButton="False"
+        SaveWindowPosition="True">
+    <Controls:MetroWindow.DataContext>
+        <vm:MainWindowViewModel/>
+    </Controls:MetroWindow.DataContext>
+    <Controls:MetroWindow.Resources>
+        <CollectionViewSource x:Key="AirCraftListSource" Source="{Binding AirCraftList}"/>
+        <LinearGradientBrush x:Key="LinearGradientBrushStyle" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="LightSkyBlue" Offset="0.00" />
+            <GradientStop Color="RoyalBlue" Offset="0.55" />
+            <GradientStop Color="SlateBlue" Offset="1.0" />
+        </LinearGradientBrush>
+        <Style x:Key="BorderStyle" TargetType="Border">
+            <Setter Property="BorderBrush" Value="{StaticResource LinearGradientBrushStyle}"/>
+            <Setter Property="BorderThickness" Value="3"/>
+            <Setter Property="Margin" Value="0,0,0,3"/>
+            <Setter Property="Padding" Value="0"/>
+        </Style>
+        <Style x:Key="Slot1Style" TargetType="TextBlock">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Slot1.Value.Type}" Value="艦戦">
+                    <Setter Property="Foreground" Value="Green" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Slot1.Value.Type}" Value="艦攻">
+                    <Setter Property="Foreground" Value="Blue" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Slot1.Value.Type}" Value="艦爆">
+                    <Setter Property="Foreground" Value="Red" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="Slot2Style" TargetType="TextBlock">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Slot2.Value.Type}" Value="艦戦">
+                    <Setter Property="Foreground" Value="Green" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Slot2.Value.Type}" Value="艦攻">
+                    <Setter Property="Foreground" Value="Blue" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Slot2.Value.Type}" Value="艦爆">
+                    <Setter Property="Foreground" Value="Red" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="Slot3Style" TargetType="TextBlock">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Slot3.Value.Type}" Value="艦戦">
+                    <Setter Property="Foreground" Value="Green" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Slot3.Value.Type}" Value="艦攻">
+                    <Setter Property="Foreground" Value="Blue" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Slot3.Value.Type}" Value="艦爆">
+                    <Setter Property="Foreground" Value="Red" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="Slot4Style" TargetType="TextBlock">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Slot4.Value.Type}" Value="艦戦">
+                    <Setter Property="Foreground" Value="Green" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Slot4.Value.Type}" Value="艦攻">
+                    <Setter Property="Foreground" Value="Blue" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Slot4.Value.Type}" Value="艦爆">
+                    <Setter Property="Foreground" Value="Red" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Controls:MetroWindow.Resources>
+    <Controls:MetroWindow.Flyouts>
+        <Controls:FlyoutsControl>
+            <Controls:Flyout Name="AirCraftSettingFlyout" Header="詳細設定" Position="Right" Width="330">
+                <StackPanel>
+                    <WrapPanel Margin="10">
+                        <TextBlock Text="{Binding ShipName.Value}" FontSize="16"/>
+                    </WrapPanel>
+                    <StackPanel>
+                        <GroupBox>
+                            <StackPanel>
+                                <CheckBox Name="AttackCheckBox" IsEnabled="{Binding IsChecked, ElementName=AirCraftSettingRadio}" IsChecked="{Binding Attack.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="攻撃機を必ず積む" Margin="5" />
+                                <CheckBox Name="SaiunCheckBox" IsEnabled="{Binding IsChecked, ElementName=AirCraftSettingRadio}" IsChecked="{Binding Saiun.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="彩雲を最小スロットに積む" Margin="5" />
+                                <CheckBox Name="MaintenancePersonnelCheckBox"  IsEnabled="{Binding IsChecked, ElementName=AirCraftSettingRadio}" IsChecked="{Binding MaintenancePersonnel.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="熟練整備員を最小スロットに積む" Margin="5" />
+                                <CheckBox Name="MinimumSlotCheckBox" IsEnabled="{Binding IsChecked, ElementName=AirCraftSettingRadio}" IsChecked="{Binding MinimumSlot.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="攻撃機を最小スロットに積まない" Margin="5" />
+                                <CheckBox Name="FirstSlotAttackCheckBox" IsEnabled="{Binding IsChecked, ElementName=AirCraftSettingRadio}" IsChecked="{Binding FirstSlotAttack.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="攻撃機を第一スロットに積む" Margin="5" />
+                                <CheckBox Name="OnlyAttackerCheckBox" IsEnabled="{Binding IsChecked, ElementName=AirCraftSettingRadio}" IsChecked="{Binding OnlyAttacker.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="攻撃機のみ積む" Margin="5" />
+                            </StackPanel>
+                        </GroupBox>
+                        <GroupBox>
+                            <StackPanel>
+                                <StackPanel>
+                                    <WrapPanel HorizontalAlignment="Left">
+                                        <ComboBox IsEnabled="{Binding IsChecked, ElementName=AirCraftDesignationRadio}" Name="SlotComboBox" Width="170" ItemsSource="{Binding AirCraftList}" DisplayMemberPath="AirCraft.AirCraftName" SelectedItem="{Binding NowSelectSlotSetting, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
+                                    </WrapPanel>
+                                    <Border Style="{StaticResource BorderStyle}">
+                                        <WrapPanel>
+                                            <TextBlock Margin="2,0,0,0" VerticalAlignment="Center" FontSize="12" Text="{Binding Slot1Num.Value}"/>
+                                            <TextBlock Margin="5,0,0,0" Width="215" VerticalAlignment="Center" FontSize="12" Text="{Binding SlotSetting1.Value.AirCraftName}"/>
+                                            <Button Command="{Binding SlotSetting1SetCommand}" Width="30" Height="30" Margin="0,0,5,0" Style="{DynamicResource AccentedSquareButtonStyle}" Content="＋" FontSize="12"/>
+                                            <Button Command="{Binding SlotSetting1ReSetCommand}" Width="30" Height="30" Margin="0" Content="×" FontSize="12"/>
+                                        </WrapPanel>
+                                    </Border>
+                                    <Border Style="{StaticResource BorderStyle}">
+                                        <WrapPanel>
+                                            <TextBlock Margin="2,0,0,0" VerticalAlignment="Center" FontSize="12" Text="{Binding Slot2Num.Value}"/>
+                                            <TextBlock Margin="5,0,0,0" Width="215" VerticalAlignment="Center" FontSize="12" Text="{Binding SlotSetting2.Value.AirCraftName}"/>
+                                            <Button Command="{Binding SlotSetting2SetCommand}" Width="30" Height="30" Margin="0,0,5,0" Style="{DynamicResource AccentedSquareButtonStyle}" Content="＋" FontSize="12"/>
+                                            <Button Command="{Binding SlotSetting2ReSetCommand}" Width="30" Height="30" Margin="0" Content="×" FontSize="12"/>
+                                        </WrapPanel>
+                                    </Border>
+                                    <Border Style="{StaticResource BorderStyle}">
+                                        <WrapPanel>
+                                            <TextBlock Margin="2,0,0,0" VerticalAlignment="Center" FontSize="12" Text="{Binding Slot3Num.Value}"/>
+                                            <TextBlock Margin="5,0,0,0" Width="215" VerticalAlignment="Center" FontSize="12" Text="{Binding SlotSetting3.Value.AirCraftName}"/>
+                                            <Button Command="{Binding SlotSetting3SetCommand}" Width="30" Height="30" Margin="0,0,5,0" Style="{DynamicResource AccentedSquareButtonStyle}" Content="＋" FontSize="12"/>
+                                            <Button Command="{Binding SlotSetting3ReSetCommand}" Width="30" Height="30" Margin="0" Content="×" FontSize="12"/>
+                                        </WrapPanel>
+                                    </Border>
+                                    <Border Style="{StaticResource BorderStyle}">
+                                        <WrapPanel>
+                                            <TextBlock Margin="2,0,0,0" VerticalAlignment="Center" FontSize="12" Text="{Binding Slot4Num.Value}"/>
+                                            <TextBlock Margin="5,0,0,0" Width="215" VerticalAlignment="Center" FontSize="12" Text="{Binding SlotSetting4.Value.AirCraftName}"/>
+                                            <Button Command="{Binding SlotSetting4SetCommand}" Width="30" Height="30" Margin="0,0,5,0" Style="{DynamicResource AccentedSquareButtonStyle}" Content="＋" FontSize="12"/>
+                                            <Button Command="{Binding SlotSetting4ReSetCommand}" Width="30" Height="30" Margin="0" Content="×" FontSize="12"/>
+                                        </WrapPanel>
+                                    </Border>
+                                    <Button IsEnabled="{Binding IsChecked, ElementName=AirCraftDesignationRadio}" Content="リセット"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+                    </StackPanel>
+                </StackPanel>
+            </Controls:Flyout>
+        </Controls:FlyoutsControl>
+    </Controls:MetroWindow.Flyouts>
+    <Controls:MetroWindow.RightWindowCommands>
+        <Controls:WindowCommands>
+            <Button Content="ソルバ設定" Command="{Binding SolverSettingCommand}" />
+            <Button Content="艦載機設定" Command="{Binding AirCraftSettingCommand}"/>
+        </Controls:WindowCommands>
+    </Controls:MetroWindow.RightWindowCommands>
+    <StackPanel>
+        <WrapPanel Margin="5">
+            <ComboBox ItemsSource="{Binding ShipList}" SelectedItem="{Binding NowSelectShip, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="120" Margin="0,0,10,0">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <Button Content="追加" Command="{Binding ShipAddCommand}"  Margin="0,0,10,0"/>
+            <WrapPanel Margin="0,0,10,0" VerticalAlignment="Center">
+                <TextBlock Text="制空値" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                <Controls:NumericUpDown Name="TargetAirSuperiorityPotentialInput" Value="{Binding TargetAirSuperiorityPotential.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Minimum="0" Speedup="True" InterceptMouseWheel="True"/>
+            </WrapPanel>
+            <Button Content="計算" FontSize="14" Command="{Binding CalcCommand}" Margin="0,0,10,0" Style="{DynamicResource AccentedSquareButtonStyle}"/>
+        </WrapPanel>
+        <WrapPanel Margin="5">
+            <ComboBox ItemsSource="{Binding AreaList}" SelectedItem="{Binding NowSelectArea, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0" Width="150">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}" Margin="2.5"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <Button Content="優勢" Command="{Binding SuperiorityCommand}" Margin="0,0,5,0"/>
+            <Button Content="確保" Command="{Binding EnsureCommand}" Margin="0,0,5,0"/>
+            <WrapPanel Margin="0,0,5,0" VerticalAlignment="Center">
+                <TextBlock Text="制空値ゆとり" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                <Controls:NumericUpDown Value="{Binding MarginAirSuperiorityPotential.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Minimum="0" Speedup="True" InterceptMouseWheel="True"/>
+            </WrapPanel>
+        </WrapPanel>
+        <WrapPanel Margin="5">
+            <Button Content="編成登録" Command="{Binding PresetCommand}"/>
+            <Button Content="編成展開" Command="{Binding PresetViewCommand}"/>
+            <Button Content="編成削除" Command="{Binding PresetDeleteCommand}"/>
+            <ComboBox ItemsSource="{Binding FleetList}" DisplayMemberPath="Name" SelectedItem="{Binding NowSelectFleet, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
+        </WrapPanel>
+        <WrapPanel Margin="5">
+            <DataGrid ItemsSource="{Binding ShipSlotInfoList}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="True" CanUserSortColumns="False" Width="400">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="艦名" Binding="{Binding ShipName.Value}" IsReadOnly="True" Width="90"/>
+                    <DataGridTemplateColumn Header="スロット" Width="220">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <WrapPanel>
+                                        <TextBlock Width="15" Margin="3" Text="{Binding Slot1Num.Value}"/>
+                                        <TextBlock Style="{StaticResource Slot1Style}" Margin="3" Text="{Binding Slot1.Value.AirCraftName}"/>
+                                    </WrapPanel>
+                                    <WrapPanel>
+                                        <TextBlock Width="15" Margin="3" Text="{Binding Slot2Num.Value}"/>
+                                        <TextBlock Style="{StaticResource Slot2Style}" Margin="3" Text="{Binding Slot2.Value.AirCraftName}"/>
+                                    </WrapPanel>
+                                    <WrapPanel>
+                                        <TextBlock Width="15" Margin="3" Text="{Binding Slot3Num.Value}"/>
+                                        <TextBlock Style="{StaticResource Slot3Style}" Margin="3" Text="{Binding Slot3.Value.AirCraftName}"/>
+                                    </WrapPanel>
+                                    <WrapPanel>
+                                        <TextBlock Width="15" Margin="3" Text="{Binding Slot4Num.Value}"/>
+                                        <TextBlock Style="{StaticResource Slot4Style}" Margin="3" Text="{Binding Slot4.Value.AirCraftName}"/>
+                                    </WrapPanel>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="詳細設定" Width="80">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Name="AirCraftSettingButton" Click="AirCraftSettingButton_Click" Content="設定" Tag="{Binding}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </WrapPanel>
+    </StackPanel>
+</Controls:MetroWindow>

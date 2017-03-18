@@ -1,0 +1,164 @@
+﻿using AircraftCarrierSlotSolverKai.Models;
+using Reactive.Bindings;
+using Reactive.Bindings.Extensions;
+using System.Collections.ObjectModel;
+using System;
+
+namespace AircraftCarrierSlotSolverKai.ViewModels
+{
+    public class ShipSlotInfoViewModel
+    {
+        public ShipSlotInfo ShipSlotInfo { get; private set; }
+
+        public ReactiveProperty<string> ShipName { get; private set; }
+
+        public ReactiveProperty<AirCraft> Slot1 { get; private set; }
+
+        public ReactiveProperty<AirCraft> Slot2 { get; private set; }
+
+        public ReactiveProperty<AirCraft> Slot3 { get; private set; }
+
+        public ReactiveProperty<AirCraft> Slot4 { get; private set; }
+
+        public ReactiveProperty<int> Slot1Num { get; private set; }
+
+        public ReactiveProperty<int> Slot2Num { get; private set; }
+
+        public ReactiveProperty<int> Slot3Num { get; private set; }
+
+        public ReactiveProperty<int> Slot4Num { get; private set; }
+
+        public ReactiveProperty<bool> Attack { get; private set; }
+
+        public ReactiveProperty<bool> Saiun { get; private set; }
+
+        public ReactiveProperty<bool> MaintenancePersonnel { get; private set; }
+
+        public ReactiveProperty<bool> MinimumSlot { get; private set; }
+
+        public ReactiveProperty<bool> FirstSlotAttack { get; private set; }
+
+        public ReactiveProperty<bool> OnlyAttacker { get; private set; }
+
+        public ReactiveProperty<AirCraft> SlotSetting1 { get; private set; }
+
+        public ReactiveProperty<AirCraft> SlotSetting2 { get; private set; }
+
+        public ReactiveProperty<AirCraft> SlotSetting3 { get; private set; }
+
+        public ReactiveProperty<AirCraft> SlotSetting4 { get; private set; }
+
+        public AirCraftSetting NowSelectSlotSetting { get; set; }
+
+        public ObservableCollection<AirCraftSetting> AirCraftList => AirCraftSettingList.Instance;
+
+        public ReactiveCommand SlotSetting1SetCommand { get; } = new ReactiveCommand();
+
+        public ReactiveCommand SlotSetting1ReSetCommand { get; } = new ReactiveCommand();
+
+        public ReactiveCommand SlotSetting2SetCommand { get; } = new ReactiveCommand();
+
+        public ReactiveCommand SlotSetting2ReSetCommand { get; } = new ReactiveCommand();
+
+        public ReactiveCommand SlotSetting3SetCommand { get; } = new ReactiveCommand();
+
+        public ReactiveCommand SlotSetting3ReSetCommand { get; } = new ReactiveCommand();
+
+        public ReactiveCommand SlotSetting4SetCommand { get; } = new ReactiveCommand();
+
+        public ReactiveCommand SlotSetting4ReSetCommand { get; } = new ReactiveCommand();
+
+        private ShipSlotInfoViewModel(ShipSlotInfo info)
+        {
+            ShipSlotInfo = info;
+
+            ShipName = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.ShipName);
+
+            Slot1 = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.Slot1);
+
+            Slot2 = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.Slot2);
+
+            Slot3 = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.Slot3);
+
+            Slot4 = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.Slot4);
+
+            Slot1Num = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.Slot1Num);
+
+            Slot2Num = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.Slot2Num);
+
+            Slot3Num = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.Slot3Num);
+
+            Slot4Num = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.Slot4Num);
+
+            Attack = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.Attack);
+
+            Saiun = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.Saiun);
+
+            MaintenancePersonnel = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.MaintenancePersonnel);
+
+            MinimumSlot = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.MinimumSlot);
+
+            FirstSlotAttack = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.FirstSlotAttack);
+
+            OnlyAttacker = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.OnlyAttacker);
+
+            SlotSetting1 = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.SlotSetting1);
+
+            SlotSetting2 = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.SlotSetting2);
+
+            SlotSetting3 = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.SlotSetting3);
+
+            SlotSetting4 = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.SlotSetting4);
+
+            SlotSetting1SetCommand.Subscribe(_ => 
+            {
+                if(NowSelectSlotSetting != null)
+                {
+                    SlotSetting1.Value = new AirCraft(NowSelectSlotSetting.AirCraft);
+                }
+            });
+
+            SlotSetting1ReSetCommand.Subscribe(_ => SlotSetting1.Value = null);
+
+            SlotSetting2SetCommand.Subscribe(_ =>
+            {
+                if (NowSelectSlotSetting != null)
+                {
+                    SlotSetting2.Value = new AirCraft(NowSelectSlotSetting.AirCraft);
+                }
+            });
+
+            SlotSetting2ReSetCommand.Subscribe(_ => SlotSetting2.Value = null);
+
+            SlotSetting3SetCommand.Subscribe(_ =>
+            {
+                if (NowSelectSlotSetting != null)
+                {
+                    SlotSetting3.Value = new AirCraft(NowSelectSlotSetting.AirCraft);
+                }
+            });
+
+            SlotSetting3ReSetCommand.Subscribe(_ => SlotSetting3.Value = null);
+
+            SlotSetting4SetCommand.Subscribe(_ =>
+            {
+                if (NowSelectSlotSetting != null)
+                {
+                    SlotSetting4.Value = new AirCraft(NowSelectSlotSetting.AirCraft);
+                }
+            });
+
+            SlotSetting4ReSetCommand.Subscribe(_ => SlotSetting4.Value = null);
+        }
+
+        public ShipSlotInfoViewModel(ShipInfo shipInfo) : this(new ShipSlotInfo(shipInfo)) {}
+
+        public ShipSlotInfoViewModel(ShipInfo shipInfo, AirCraft Slot1, AirCraft Slot2, AirCraft Slot3, AirCraft Slot4) : this(new ShipSlotInfo(shipInfo))
+        {
+            ShipSlotInfo.Slot1 = Slot1;
+            ShipSlotInfo.Slot2 = Slot2;
+            ShipSlotInfo.Slot3 = Slot3;
+            ShipSlotInfo.Slot4 = Slot4;
+        }
+    }
+}

@@ -1,0 +1,23 @@
+﻿<Controls:MetroWindow x:Class="AircraftCarrierSlotSolverKai.Views.PresetRegisterView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AircraftCarrierSlotSolverKai.Views"
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:vm="clr-namespace:AircraftCarrierSlotSolverKai.ViewModels"
+        mc:Ignorable="d"
+        Title="艦隊名登録" Height="120" Width="300"
+        GlowBrush="{DynamicResource AccentColorBrush}"
+        BorderThickness="1"
+        ShowMaxRestoreButton="False">
+    <Controls:MetroWindow.DataContext>
+        <vm:PresetRegisterViewModel/>
+    </Controls:MetroWindow.DataContext>
+    <StackPanel Margin="10">
+        <WrapPanel HorizontalAlignment="Center">
+            <TextBox Width="250" Text="{Binding FleetName.Value}" Controls:TextBoxHelper.Watermark="艦隊名を入力" Controls:TextBoxHelper.ClearTextButton="True"/>
+        </WrapPanel>
+        <Button Margin="5,10,0,0" Name="OKButton" Content="OK" Click="OKButton_Click"/>
+    </StackPanel>
+</Controls:MetroWindow>

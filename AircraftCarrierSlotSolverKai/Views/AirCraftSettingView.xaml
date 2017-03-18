@@ -1,0 +1,94 @@
+﻿<Controls:MetroWindow x:Class="AircraftCarrierSlotSolverKai.Views.AirCraftSettingView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AircraftCarrierSlotSolverKai.Views"
+        xmlns:vm="clr-namespace:AircraftCarrierSlotSolverKai.ViewModels"
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
+        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+        xmlns:p="clr-namespace:AircraftCarrierSlotSolverKai.Properties"
+        mc:Ignorable="d"
+        Title="艦載機設定" Height="700" Width="400"
+        GlowBrush="{DynamicResource AccentColorBrush}"
+        BorderThickness="1"
+        ShowMaxRestoreButton="False">
+    <Controls:MetroWindow.DataContext>
+        <vm:AirCraftSettingViewModel/>
+    </Controls:MetroWindow.DataContext>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closing">
+            <i:InvokeCommandAction Command="{Binding AirCraftSettingSaveCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <StackPanel>
+        <WrapPanel>
+            <ComboBox Width="150" ItemsSource="{Binding AirCraftList}" SelectedItem="{Binding NowSelectAirCraft, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}" Margin="2.5">
+                            <TextBlock.Style>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Type}" Value="艦戦">
+                                            <Setter Property="Foreground" Value="Green" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Type}" Value="艦攻">
+                                            <Setter Property="Foreground" Value="Blue" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Type}" Value="艦爆">
+                                            <Setter Property="Foreground" Value="Red" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <Button Content="追加" Command="{Binding AddCommand}"/>
+            <TextBlock Text="巡洋艦に積む水上機数" FontSize="10" VerticalAlignment="Center" Margin="30,0,5,0"/>
+            <Controls:NumericUpDown Minimum="0" Maximum="4" Value="{Binding Source={x:Static p:Settings.Default}, Path=CruiserSlotNum, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+        </WrapPanel>
+        <DataGrid ItemsSource="{Binding AirCraftSettings}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="False" CanUserDeleteRows="True" HorizontalScrollBarVisibility="Auto" Height="500">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="艦載機" Binding="{Binding AirCraft.Name}" IsReadOnly="True" Width="170">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding AirCraft.Type}" Value="艦戦">
+                                    <Setter Property="Foreground" Value="Green" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding AirCraft.Type}" Value="艦攻">
+                                    <Setter Property="Foreground" Value="Blue" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding AirCraft.Type}" Value="艦爆">
+                                    <Setter Property="Foreground" Value="Red" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTemplateColumn Header="改修値">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <WrapPanel HorizontalAlignment="Right">
+                                <TextBlock Text="★"/>
+                                <TextBlock Text="{Binding Improvement}" />
+                            </WrapPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <Controls:NumericUpDown Value="{Binding Improvement}" Maximum="10" Minimum="0"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+                <Controls:DataGridNumericUpDownColumn Header="所持数" Binding="{Binding Value}" Minimum="1"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </StackPanel>
+</Controls:MetroWindow>

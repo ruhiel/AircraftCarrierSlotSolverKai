@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MahApps.Metro.Controls;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,17 +11,16 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace AircraftCarrierSlotSolverKai
+namespace AircraftCarrierSlotSolverKai.Views
 {
     /// <summary>
-    /// MainWindow.xaml の相互作用ロジック
+    /// AirCraftSettingView.xaml の相互作用ロジック
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class AirCraftSettingView : MetroWindow
     {
-        public MainWindow()
+        public AirCraftSettingView()
         {
             InitializeComponent();
         }
