@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:AircraftCarrierSlotSolverKai"
         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:vm="clr-namespace:AircraftCarrierSlotSolverKai.ViewModels"
+        xmlns:model="clr-namespace:AircraftCarrierSlotSolverKai.Models"
         xmlns:m="clr-namespace:AircraftCarrierSlotSolverKai.Models"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
@@ -33,52 +34,52 @@
         </Style>
         <Style x:Key="Slot1Style" TargetType="TextBlock">
             <Style.Triggers>
-                <DataTrigger Binding="{Binding Slot1.Value.Type}" Value="艦戦">
+                <DataTrigger Binding="{Binding Slot1.Value.Type}" Value="{x:Static model:Consts.Fighter}">
                     <Setter Property="Foreground" Value="Green" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Slot1.Value.Type}" Value="艦攻">
+                <DataTrigger Binding="{Binding Slot1.Value.Type}" Value="{x:Static model:Consts.TorpedoBomber}">
                     <Setter Property="Foreground" Value="Blue" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Slot1.Value.Type}" Value="艦爆">
+                <DataTrigger Binding="{Binding Slot1.Value.Type}" Value="{x:Static model:Consts.DiveBomber}">
                     <Setter Property="Foreground" Value="Red" />
                 </DataTrigger>
             </Style.Triggers>
         </Style>
         <Style x:Key="Slot2Style" TargetType="TextBlock">
             <Style.Triggers>
-                <DataTrigger Binding="{Binding Slot2.Value.Type}" Value="艦戦">
+                <DataTrigger Binding="{Binding Slot2.Value.Type}" Value="{x:Static model:Consts.Fighter}">
                     <Setter Property="Foreground" Value="Green" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Slot2.Value.Type}" Value="艦攻">
+                <DataTrigger Binding="{Binding Slot2.Value.Type}" Value="{x:Static model:Consts.TorpedoBomber}">
                     <Setter Property="Foreground" Value="Blue" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Slot2.Value.Type}" Value="艦爆">
+                <DataTrigger Binding="{Binding Slot2.Value.Type}" Value="{x:Static model:Consts.DiveBomber}">
                     <Setter Property="Foreground" Value="Red" />
                 </DataTrigger>
             </Style.Triggers>
         </Style>
         <Style x:Key="Slot3Style" TargetType="TextBlock">
             <Style.Triggers>
-                <DataTrigger Binding="{Binding Slot3.Value.Type}" Value="艦戦">
+                <DataTrigger Binding="{Binding Slot3.Value.Type}" Value="{x:Static model:Consts.Fighter}">
                     <Setter Property="Foreground" Value="Green" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Slot3.Value.Type}" Value="艦攻">
+                <DataTrigger Binding="{Binding Slot3.Value.Type}" Value="{x:Static model:Consts.TorpedoBomber}">
                     <Setter Property="Foreground" Value="Blue" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Slot3.Value.Type}" Value="艦爆">
+                <DataTrigger Binding="{Binding Slot3.Value.Type}" Value="{x:Static model:Consts.DiveBomber}">
                     <Setter Property="Foreground" Value="Red" />
                 </DataTrigger>
             </Style.Triggers>
         </Style>
         <Style x:Key="Slot4Style" TargetType="TextBlock">
             <Style.Triggers>
-                <DataTrigger Binding="{Binding Slot4.Value.Type}" Value="艦戦">
+                <DataTrigger Binding="{Binding Slot4.Value.Type}" Value="{x:Static model:Consts.Fighter}">
                     <Setter Property="Foreground" Value="Green" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Slot4.Value.Type}" Value="艦攻">
+                <DataTrigger Binding="{Binding Slot4.Value.Type}" Value="{x:Static model:Consts.TorpedoBomber}">
                     <Setter Property="Foreground" Value="Blue" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Slot4.Value.Type}" Value="艦爆">
+                <DataTrigger Binding="{Binding Slot4.Value.Type}" Value="{x:Static model:Consts.DiveBomber}">
                     <Setter Property="Foreground" Value="Red" />
                 </DataTrigger>
             </Style.Triggers>
@@ -96,7 +97,7 @@
                             <StackPanel>
                                 <CheckBox Name="AttackCheckBox" IsEnabled="{Binding IsChecked, ElementName=AirCraftSettingRadio}" IsChecked="{Binding Attack.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="攻撃機を必ず積む" Margin="5" />
                                 <CheckBox Name="SaiunCheckBox" IsEnabled="{Binding IsChecked, ElementName=AirCraftSettingRadio}" IsChecked="{Binding Saiun.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="彩雲を最小スロットに積む" Margin="5" />
-                                <CheckBox Name="MaintenancePersonnelCheckBox"  IsEnabled="{Binding IsChecked, ElementName=AirCraftSettingRadio}" IsChecked="{Binding MaintenancePersonnel.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="熟練整備員を最小スロットに積む" Margin="5" />
+                                <CheckBox Name="MaintenancePersonnelCheckBox"  IsEnabled="{Binding IsChecked, ElementName=AirCraftSettingRadio}" IsChecked="{Binding MaintenancePersonnel.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="熟練艦載機整備員を最小スロットに積む" Margin="5" />
                                 <CheckBox Name="MinimumSlotCheckBox" IsEnabled="{Binding IsChecked, ElementName=AirCraftSettingRadio}" IsChecked="{Binding MinimumSlot.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="攻撃機を最小スロットに積まない" Margin="5" />
                                 <CheckBox Name="FirstSlotAttackCheckBox" IsEnabled="{Binding IsChecked, ElementName=AirCraftSettingRadio}" IsChecked="{Binding FirstSlotAttack.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="攻撃機を第一スロットに積む" Margin="5" />
                                 <CheckBox Name="OnlyAttackerCheckBox" IsEnabled="{Binding IsChecked, ElementName=AirCraftSettingRadio}" IsChecked="{Binding OnlyAttacker.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="攻撃機のみ積む" Margin="5" />

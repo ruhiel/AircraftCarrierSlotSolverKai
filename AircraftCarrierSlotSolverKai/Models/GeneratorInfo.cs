@@ -22,12 +22,12 @@ namespace AircraftCarrierSlotSolverKai.Models
         {
             get
             {
-                if (AirCraft.Item1.Type == "艦爆")
+                if (AirCraft.Item1.Type == Consts.DiveBomber)
                 {
                     var pow = 1 * (25 + AirCraft.Item1.Bomber * Math.Sqrt(Slot.Item1));
                     return (int)Math.Floor(pow);
                 }
-                else if (AirCraft.Item1.Type == "艦攻")
+                else if (AirCraft.Item1.Type == Consts.TorpedoBomber)
                 {
                     var pow = 1.15 * (25 + AirCraft.Item1.Torpedo * Math.Sqrt(Slot.Item1));
                     return (int)Math.Floor(pow);
@@ -52,13 +52,13 @@ namespace AircraftCarrierSlotSolverKai.Models
                 double bonus = 0;
                 switch (AirCraft.Item1.Type)
                 {
-                    case "艦攻":
-                    case "艦爆":
-                    case "水爆":
+                    case Consts.TorpedoBomber:
+                    case Consts.DiveBomber:
+                    case Consts.SeaplaneBomber:
                         bonus = 3;
                         break;
-                    case "艦戦":
-                    case "水戦":
+                    case Consts.Fighter:
+                    case Consts.SeaplaneFighter:
                         bonus = 25;
                         break;
                     default:

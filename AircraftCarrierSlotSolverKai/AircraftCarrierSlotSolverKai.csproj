@@ -94,6 +94,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\Consts.cs" />
     <Compile Include="Models\FleetList.cs" />
     <Compile Include="Models\FleetRecords.cs" />
     <Compile Include="Models\FleetShip.cs" />

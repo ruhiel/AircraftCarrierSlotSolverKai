@@ -124,17 +124,17 @@ namespace AircraftCarrierSlotSolverKai.Models
             switch (ship.Type)
             {
                 case "揚陸":
-                    predicate = (x) => x.Type == "艦戦" || x.Type == "その他";
+                    predicate = (x) => x.Type == Consts.Fighter || x.Type == "その他";
                     break;
                 case "補給":
-                    predicate = (x) => x.Type == "艦攻" || x.Type == "その他";
+                    predicate = (x) => x.Type == Consts.TorpedoBomber || x.Type == "その他";
                     break;
                 case "巡洋艦":
                 case "潜母":
-                    predicate = (x) => x.Type == "水爆" || x.Type == "水戦" || x.Type == "その他";
+                    predicate = (x) => x.Type == Consts.SeaplaneBomber || x.Type == Consts.SeaplaneFighter || x.Type == "その他";
                     break;
                 default:
-                    predicate = (x) => x.Type == "艦攻" || x.Type == "艦爆" || x.Type == "艦戦" || x.Type == "その他";
+                    predicate = (x) => x.Type == Consts.TorpedoBomber || x.Type == Consts.DiveBomber || x.Type == Consts.Fighter || x.Type == "その他";
                     break;
             }
 
@@ -260,7 +260,7 @@ namespace AircraftCarrierSlotSolverKai.Models
 
             foreach (var info in shipSlotList.Where(x => x.OnlyAttacker))
             {
-                var list = infoList.Where(x => x.Ship.Item1.Name == info.ShipName && x.AirCraft.Item1.Type == "艦戦");
+                var list = infoList.Where(x => x.Ship.Item1.Name == info.ShipName && x.AirCraft.Item1.Type == Consts.Fighter);
                 foreach (var i in list)
                 {
                     var text = "+ " + i.SlotName + @" \ 攻撃機のみ";
@@ -301,15 +301,15 @@ namespace AircraftCarrierSlotSolverKai.Models
             {
                 var min = info.MinSlotNum;
 
-                var saiun = infoList.Where(x => x.Slot.Item1 == min && x.AirCraft.Item1.AirCraftName == "熟練整備員").First();
-                writer.WriteLine("+ " + saiun.SlotName + @" = 1 \ " + "熟練整備員");
+                var saiun = infoList.Where(x => x.Slot.Item1 == min && x.AirCraft.Item1.AirCraftName == "熟練艦載機整備員").First();
+                writer.WriteLine("+ " + saiun.SlotName + @" = 1 \ " + "熟練艦載機整備員");
                 writer.WriteLine();
             }
 
             foreach (var info in shipSlotList.Where(x => x.MinimumSlot))
             {
                 var min = info.MinSlotNum;
-                var list = infoList.Where(x => x.Slot.Item1 == min && (x.AirCraft.Item1.Type == "艦攻" || x.AirCraft.Item1.Type == "艦爆"));
+                var list = infoList.Where(x => x.Slot.Item1 == min && (x.AirCraft.Item1.Type == Consts.TorpedoBomber || x.AirCraft.Item1.Type == Consts.DiveBomber));
                 if (list.Any())
                 {
                     foreach (var i in list)

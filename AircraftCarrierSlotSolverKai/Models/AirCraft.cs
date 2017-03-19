@@ -35,11 +35,11 @@ namespace AircraftCarrierSlotSolverKai.Models
             {
                 switch (Type)
                 {
-                    case "艦戦":
+                    case Consts.Fighter:
                         return 0;
-                    case "艦攻":
+                    case Consts.TorpedoBomber:
                         return 1;
-                    case "艦爆":
+                    case Consts.DiveBomber:
                         return 2;
                     default:
                         return 3;
@@ -49,7 +49,7 @@ namespace AircraftCarrierSlotSolverKai.Models
         /// <summary>
         /// 攻撃可能か
         /// </summary>
-        public bool Attackable => Type == "艦攻" || Type == "艦爆";
+        public bool Attackable => Type == Consts.TorpedoBomber || Type == Consts.DiveBomber;
 
         /// <summary>
         /// 火力

@@ -113,7 +113,7 @@ namespace AircraftCarrierSlotSolverKai.Models
         }
 
         /// <summary>
-        /// 熟練整備員
+        /// 熟練艦載機整備員
         /// </summary>
         private bool _MaintenancePersonnel;
         public bool MaintenancePersonnel

@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AircraftCarrierSlotSolverKai.Views"
+        xmlns:model="clr-namespace:AircraftCarrierSlotSolverKai.Models"
         xmlns:vm="clr-namespace:AircraftCarrierSlotSolverKai.ViewModels"
         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
@@ -31,13 +32,13 @@
                             <TextBlock.Style>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Type}" Value="艦戦">
+                                        <DataTrigger Binding="{Binding Type}" Value="{x:Static model:Consts.Fighter}">
                                             <Setter Property="Foreground" Value="Green" />
                                         </DataTrigger>
-                                        <DataTrigger Binding="{Binding Type}" Value="艦攻">
+                                        <DataTrigger Binding="{Binding Type}" Value="{x:Static model:Consts.TorpedoBomber}">
                                             <Setter Property="Foreground" Value="Blue" />
                                         </DataTrigger>
-                                        <DataTrigger Binding="{Binding Type}" Value="艦爆">
+                                        <DataTrigger Binding="{Binding Type}" Value="{x:Static model:Consts.DiveBomber}">
                                             <Setter Property="Foreground" Value="Red" />
                                         </DataTrigger>
                                     </Style.Triggers>
@@ -57,13 +58,13 @@
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding AirCraft.Type}" Value="艦戦">
+                                <DataTrigger Binding="{Binding AirCraft.Type}" Value="{x:Static model:Consts.Fighter}">
                                     <Setter Property="Foreground" Value="Green" />
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding AirCraft.Type}" Value="艦攻">
+                                <DataTrigger Binding="{Binding AirCraft.Type}" Value="{x:Static model:Consts.TorpedoBomber}">
                                     <Setter Property="Foreground" Value="Blue" />
                                 </DataTrigger>
-                                <DataTrigger Binding="{Binding AirCraft.Type}" Value="艦爆">
+                                <DataTrigger Binding="{Binding AirCraft.Type}" Value="{x:Static model:Consts.DiveBomber}">
                                     <Setter Property="Foreground" Value="Red" />
                                 </DataTrigger>
                             </Style.Triggers>
