@@ -11,7 +11,7 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
         mc:Ignorable="d"
-        Title="空母スロットソルバー改" Height="900" Width="400"
+        Title="空母スロットソルバー改" Height="900" Width="420"
         GlowBrush="{DynamicResource AccentColorBrush}"
         BorderThickness="1"
         ShowMaxRestoreButton="False"
@@ -111,7 +111,7 @@
                                     </WrapPanel>
                                     <Border Style="{StaticResource BorderStyle}">
                                         <WrapPanel>
-                                            <TextBlock Margin="2,0,0,0" VerticalAlignment="Center" FontSize="12" Text="{Binding Slot1Num.Value}"/>
+                                            <TextBlock Width="15" Margin="2,0,0,0" VerticalAlignment="Center" FontSize="12" Text="{Binding Slot1Num.Value}"/>
                                             <TextBlock Margin="5,0,0,0" Width="215" VerticalAlignment="Center" FontSize="12" Text="{Binding SlotSetting1.Value.AirCraftName}"/>
                                             <Button Command="{Binding SlotSetting1SetCommand}" Width="30" Height="30" Margin="0,0,5,0" Style="{DynamicResource AccentedSquareButtonStyle}" Content="＋" FontSize="12"/>
                                             <Button Command="{Binding SlotSetting1ReSetCommand}" Width="30" Height="30" Margin="0" Content="×" FontSize="12"/>
@@ -119,7 +119,7 @@
                                     </Border>
                                     <Border Style="{StaticResource BorderStyle}">
                                         <WrapPanel>
-                                            <TextBlock Margin="2,0,0,0" VerticalAlignment="Center" FontSize="12" Text="{Binding Slot2Num.Value}"/>
+                                            <TextBlock Width="15" Margin="2,0,0,0" VerticalAlignment="Center" FontSize="12" Text="{Binding Slot2Num.Value}"/>
                                             <TextBlock Margin="5,0,0,0" Width="215" VerticalAlignment="Center" FontSize="12" Text="{Binding SlotSetting2.Value.AirCraftName}"/>
                                             <Button Command="{Binding SlotSetting2SetCommand}" Width="30" Height="30" Margin="0,0,5,0" Style="{DynamicResource AccentedSquareButtonStyle}" Content="＋" FontSize="12"/>
                                             <Button Command="{Binding SlotSetting2ReSetCommand}" Width="30" Height="30" Margin="0" Content="×" FontSize="12"/>
@@ -127,7 +127,7 @@
                                     </Border>
                                     <Border Style="{StaticResource BorderStyle}">
                                         <WrapPanel>
-                                            <TextBlock Margin="2,0,0,0" VerticalAlignment="Center" FontSize="12" Text="{Binding Slot3Num.Value}"/>
+                                            <TextBlock Width="15" Margin="2,0,0,0" VerticalAlignment="Center" FontSize="12" Text="{Binding Slot3Num.Value}"/>
                                             <TextBlock Margin="5,0,0,0" Width="215" VerticalAlignment="Center" FontSize="12" Text="{Binding SlotSetting3.Value.AirCraftName}"/>
                                             <Button Command="{Binding SlotSetting3SetCommand}" Width="30" Height="30" Margin="0,0,5,0" Style="{DynamicResource AccentedSquareButtonStyle}" Content="＋" FontSize="12"/>
                                             <Button Command="{Binding SlotSetting3ReSetCommand}" Width="30" Height="30" Margin="0" Content="×" FontSize="12"/>
@@ -135,7 +135,7 @@
                                     </Border>
                                     <Border Style="{StaticResource BorderStyle}">
                                         <WrapPanel>
-                                            <TextBlock Margin="2,0,0,0" VerticalAlignment="Center" FontSize="12" Text="{Binding Slot4Num.Value}"/>
+                                            <TextBlock Width="15" Margin="2,0,0,0" VerticalAlignment="Center" FontSize="12" Text="{Binding Slot4Num.Value}"/>
                                             <TextBlock Margin="5,0,0,0" Width="215" VerticalAlignment="Center" FontSize="12" Text="{Binding SlotSetting4.Value.AirCraftName}"/>
                                             <Button Command="{Binding SlotSetting4SetCommand}" Width="30" Height="30" Margin="0,0,5,0" Style="{DynamicResource AccentedSquareButtonStyle}" Content="＋" FontSize="12"/>
                                             <Button Command="{Binding SlotSetting4ReSetCommand}" Width="30" Height="30" Margin="0" Content="×" FontSize="12"/>
@@ -194,7 +194,28 @@
             <ComboBox ItemsSource="{Binding FleetList}" DisplayMemberPath="Name" SelectedItem="{Binding NowSelectFleet, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
         </WrapPanel>
         <WrapPanel Margin="5">
-            <DataGrid ItemsSource="{Binding ShipSlotInfoList}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="True" CanUserSortColumns="False" Width="400">
+            <DataGrid RowBackground="LightYellow" AlternatingRowBackground="#f0f0f0" ItemsSource="{Binding ShipSlotInfoList}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="True" CanUserSortColumns="False" Width="400">
+                <DataGrid.CellStyle>
+                    <Style TargetType="DataGridCell">
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="SkyBlue" />
+                            </Trigger>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="Background" Value="SkyBlue" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.CellStyle>
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow">
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="Green" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.RowStyle>
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="艦名" Binding="{Binding ShipName.Value}" IsReadOnly="True" Width="90"/>
                     <DataGridTemplateColumn Header="スロット" Width="220">
@@ -221,7 +242,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="詳細設定" Width="80">
+                    <DataGridTemplateColumn Header="詳細設定" Width="*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button Name="AirCraftSettingButton" Click="AirCraftSettingButton_Click" Content="設定" Tag="{Binding}"/>
