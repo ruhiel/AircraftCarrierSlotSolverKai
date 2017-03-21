@@ -10,6 +10,7 @@
         xmlns:m="clr-namespace:AircraftCarrierSlotSolverKai.Models"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
+        xmlns:properties="clr-namespace:AircraftCarrierSlotSolverKai.Properties"
         mc:Ignorable="d"
         Title="空母スロットソルバー改" Height="900" Width="420"
         GlowBrush="{DynamicResource AccentColorBrush}"
@@ -184,7 +185,7 @@
             <Button Content="確保" Command="{Binding EnsureCommand}" Margin="0,0,5,0"/>
             <WrapPanel Margin="0,0,5,0" VerticalAlignment="Center">
                 <TextBlock Text="制空値ゆとり" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                <Controls:NumericUpDown Value="{Binding MarginAirSuperiorityPotential.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Minimum="0" Speedup="True" InterceptMouseWheel="True"/>
+                <Controls:NumericUpDown Value="{Binding Path=MarginAirSuperiorityPotential,Source={x:Static properties:Settings.Default}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Minimum="0" Speedup="True" InterceptMouseWheel="True"/>
             </WrapPanel>
         </WrapPanel>
         <WrapPanel Margin="5">

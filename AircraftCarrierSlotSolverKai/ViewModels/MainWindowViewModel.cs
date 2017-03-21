@@ -25,9 +25,6 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
         [Int("整数を入力してください")]
         public ReactiveProperty<string> TargetAirSuperiorityPotential { get; }
 
-        [Int("整数を入力してください")]
-        public ReactiveProperty<string> MarginAirSuperiorityPotential { get; }
-
         public ObservableCollection<ShipSlotInfoViewModel> ShipSlotInfoList { get; set; }
 
         public ObservableCollection<Fleet> FleetList => Models.FleetList.Instance;
@@ -64,8 +61,6 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
 
             TargetAirSuperiorityPotential = new ReactiveProperty<string>(default(int).ToString()).SetValidateAttribute(() => TargetAirSuperiorityPotential);
 
-            MarginAirSuperiorityPotential = new ReactiveProperty<string>(default(int).ToString()).SetValidateAttribute(() => MarginAirSuperiorityPotential);
-
             CalcCommand = new[] { TargetAirSuperiorityPotential.ObserveHasErrors}.CombineLatestValuesAreAllFalse().ToReactiveCommand();
             CalcCommand.Subscribe(_ => 
             {
@@ -79,9 +74,9 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
                 new AirCraftSettingView().ShowDialog();
             });
 
-            SuperiorityCommand.Subscribe(_ => TargetAirSuperiorityPotential.Value = (NowSelectArea == null ? TargetAirSuperiorityPotential.Value : (int.Parse(MarginAirSuperiorityPotential.Value) + (int)(NowSelectArea.AirSuperiorityPotential * 1.5)).ToString()));
+            SuperiorityCommand.Subscribe(_ => TargetAirSuperiorityPotential.Value = (NowSelectArea == null ? TargetAirSuperiorityPotential.Value : (int.Parse(Properties.Settings.Default.MarginAirSuperiorityPotential) + (int)(NowSelectArea.AirSuperiorityPotential * 1.5)).ToString()));
 
-            EnsureCommand.Subscribe(_ => TargetAirSuperiorityPotential.Value = (NowSelectArea == null ? TargetAirSuperiorityPotential.Value : (int.Parse(MarginAirSuperiorityPotential.Value) + NowSelectArea.AirSuperiorityPotential * 3).ToString()));
+            EnsureCommand.Subscribe(_ => TargetAirSuperiorityPotential.Value = (NowSelectArea == null ? TargetAirSuperiorityPotential.Value : (int.Parse(Properties.Settings.Default.MarginAirSuperiorityPotential) + NowSelectArea.AirSuperiorityPotential * 3).ToString()));
 
             PresetCommand.Subscribe(_ =>
             {
@@ -134,6 +129,11 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
 
                 NowSelectFleet = null;
             });
+        }
+
+        ~MainWindowViewModel()
+        {
+            Properties.Settings.Default.Save();
         }
     }
 }
