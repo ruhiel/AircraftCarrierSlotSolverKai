@@ -11,7 +11,7 @@
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:p="clr-namespace:AircraftCarrierSlotSolverKai.Properties"
         mc:Ignorable="d"
-        Title="艦載機設定" Height="700" Width="400"
+        Title="艦載機設定" Height="700" Width="300"
         GlowBrush="{DynamicResource AccentColorBrush}"
         BorderThickness="1"
         ShowMaxRestoreButton="False">
@@ -24,7 +24,7 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <StackPanel>
-        <WrapPanel>
+        <WrapPanel Margin="5">
             <ComboBox Width="150" ItemsSource="{Binding AirCraftList}" SelectedItem="{Binding NowSelectAirCraft, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
@@ -49,7 +49,9 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
             <Button Content="追加" Command="{Binding AddCommand}"/>
-            <TextBlock Text="巡洋艦に積む水上機数" FontSize="10" VerticalAlignment="Center" Margin="30,0,5,0"/>
+        </WrapPanel>
+        <WrapPanel HorizontalAlignment="Left" Margin="5">
+            <TextBlock Text="巡洋艦に積む水上機数" FontSize="10" VerticalAlignment="Center"/>
             <Controls:NumericUpDown Minimum="0" Maximum="4" Value="{Binding Source={x:Static p:Settings.Default}, Path=CruiserSlotNum, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
         </WrapPanel>
         <DataGrid ItemsSource="{Binding AirCraftSettings}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="False" CanUserDeleteRows="True" HorizontalScrollBarVisibility="Auto" Height="500">
