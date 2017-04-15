@@ -119,7 +119,7 @@ namespace AircraftCarrierSlotSolverKai.Models
         private static IEnumerable<AirCraft> GetAircraft(ShipInfo ship)
         {
             Func<AirCraft, bool> predicate = null;
-            List<AirCraft> airCrafts = new List<AirCraft>();
+            var airCrafts = new List<AirCraft>();
 
             switch (ship.Type)
             {
@@ -134,7 +134,7 @@ namespace AircraftCarrierSlotSolverKai.Models
                     predicate = (x) => x.Type == Consts.SeaplaneBomber || x.Type == Consts.SeaplaneFighter || x.Type == "その他";
                     break;
                 default:
-                    predicate = (x) => x.Type == Consts.TorpedoBomber || x.Type == Consts.DiveBomber || x.Type == Consts.Fighter || x.Type == "その他";
+                    predicate = (x) => x.Type == Consts.TorpedoBomber || x.Type == Consts.DiveBomber || x.Type == Consts.Fighter || x.Type == Consts.JetBomber || x.Type == "その他";
                     break;
             }
 

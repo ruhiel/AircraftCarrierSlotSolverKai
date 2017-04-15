@@ -100,7 +100,11 @@ namespace AircraftCarrierSlotSolverKai.Models
         /// 回避
         /// </summary>
         public int Evasion { get; set; }
-
+        public int Id { get; internal set; }
+        public int Armor { get; internal set; }
+        public int ASW { get; internal set; }
+        public int ViewRange { get; internal set; }
+        public int Luck { get; internal set; }
 
         public AirCraft()
         {
