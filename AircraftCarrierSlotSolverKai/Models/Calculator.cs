@@ -96,12 +96,12 @@ namespace AircraftCarrierSlotSolverKai.Models
             };
 
             foreach (var ship in ShipInfoRecords.Instance.Records
-                .Select((item, index) => Tuple.Create(item, index))
+                .Select((item, index) => (item, index))
                 .Where(x => shipSlotList.Select(y => y.ShipName).Contains(x.Item1.Name)))
             {
-                foreach (var slot in ship.Item1.Slots.Select((item, index) => Tuple.Create(item, index)))
+                foreach (var slot in ship.Item1.Slots.Select((item, index) => (item, index)))
                 {
-                    foreach (var aircraft in GetAircraft(ship.Item1).Concat(noEquip).Select((item, index) => Tuple.Create(item, index)))
+                    foreach (var aircraft in GetAircraft(ship.Item1).Concat(noEquip).Select((item, index) => (item, index)))
                     {
                         if (ship.Item1.SlotNum > slot.Item2)
                         {
@@ -122,19 +122,19 @@ namespace AircraftCarrierSlotSolverKai.Models
 
             if (IsSeaplaneEquippable(ship.Type))
             {
-                predicate = (x) => x.Type == Consts.SeaplaneBomber || x.Type == Consts.SeaplaneFighter || x.Type == "その他";
+                predicate = (x) => x.Type == Consts.SeaplaneBomber || x.Type == Consts.SeaplaneFighter || x.AirCraftName == "装備なし";
             }
             else if (ship.Type == "揚陸艦")
             {
-                predicate = (x) => x.Type == Consts.Fighter || x.Type == "その他";
+                predicate = (x) => x.Type == Consts.Fighter || x.AirCraftName == "装備なし";
             }
             else if (ship.Type == "補給艦")
             {
-                predicate = (x) => x.Type == Consts.TorpedoBomber || x.Type == "その他";
+                predicate = (x) => x.Type == Consts.TorpedoBomber || x.AirCraftName == "装備なし";
             }
             else
             {
-                predicate = (x) => x.Type == Consts.TorpedoBomber || x.Type == Consts.DiveBomber || x.Type == Consts.Fighter || x.Type == Consts.JetBomber || x.Type == "その他";
+                predicate = (x) => x.Type == Consts.TorpedoBomber || x.Type == Consts.DiveBomber || x.Type == Consts.Fighter || x.Type == Consts.JetBomber || x.AirCraftName == "装備なし";
             }
 
             return _AirCraftLimits.Select(y => y.Key).Where(predicate);

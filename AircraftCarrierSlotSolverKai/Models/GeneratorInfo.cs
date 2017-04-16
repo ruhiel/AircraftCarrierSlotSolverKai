@@ -8,13 +8,13 @@ namespace AircraftCarrierSlotSolverKai.Models
 {
     public class GeneratorInfo
     {
-        public Tuple<ShipInfo, int> Ship { get; set; }
+        public (ShipInfo, int) Ship { get; set; }
         /// <summary>
         /// Item1:機数、Item2:スロット番号
         /// </summary>
-        public Tuple<int, int> Slot { get; set; }
+        public (int, int) Slot { get; set; }
 
-        public Tuple<AirCraft, int> AirCraft { get; set; }
+        public (AirCraft, int) AirCraft { get; set; }
 
         public string SlotName => string.Format("slot_{0}_{1}_{2}", Ship.Item2, Slot.Item2, AirCraft.Item2);
 
