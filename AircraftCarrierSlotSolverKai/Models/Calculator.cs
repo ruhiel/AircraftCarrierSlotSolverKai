@@ -67,7 +67,7 @@ namespace AircraftCarrierSlotSolverKai.Models
 
         private static void GenerateLPFile(IEnumerable<ShipSlotInfo> shipSlotList, int airSuperiority)
         {
-            using (StreamWriter writer = new StreamWriter(@"slot.lp", false, new UTF8Encoding(false)))
+            using (var writer = new StreamWriter(@"slot.lp", false, new UTF8Encoding(false)))
             {
                 OutputTarget(writer, shipSlotList);
 
@@ -118,24 +118,23 @@ namespace AircraftCarrierSlotSolverKai.Models
 
         private static IEnumerable<AirCraft> GetAircraft(ShipInfo ship)
         {
-            Func<AirCraft, bool> predicate = null;
-            var airCrafts = new List<AirCraft>();
+            Func<AirCraft, bool> predicate;
 
-            switch (ship.Type)
+            if (IsSeaplaneEquippable(ship.Type))
             {
-                case "揚陸":
-                    predicate = (x) => x.Type == Consts.Fighter || x.Type == "その他";
-                    break;
-                case "補給":
-                    predicate = (x) => x.Type == Consts.TorpedoBomber || x.Type == "その他";
-                    break;
-                case "巡洋艦":
-                case "潜母":
-                    predicate = (x) => x.Type == Consts.SeaplaneBomber || x.Type == Consts.SeaplaneFighter || x.Type == "その他";
-                    break;
-                default:
-                    predicate = (x) => x.Type == Consts.TorpedoBomber || x.Type == Consts.DiveBomber || x.Type == Consts.Fighter || x.Type == Consts.JetBomber || x.Type == "その他";
-                    break;
+                predicate = (x) => x.Type == Consts.SeaplaneBomber || x.Type == Consts.SeaplaneFighter || x.Type == "その他";
+            }
+            else if (ship.Type == "揚陸艦")
+            {
+                predicate = (x) => x.Type == Consts.Fighter || x.Type == "その他";
+            }
+            else if (ship.Type == "補給艦")
+            {
+                predicate = (x) => x.Type == Consts.TorpedoBomber || x.Type == "その他";
+            }
+            else
+            {
+                predicate = (x) => x.Type == Consts.TorpedoBomber || x.Type == Consts.DiveBomber || x.Type == Consts.Fighter || x.Type == Consts.JetBomber || x.Type == "その他";
             }
 
             return _AirCraftLimits.Select(y => y.Key).Where(predicate);
@@ -204,11 +203,11 @@ namespace AircraftCarrierSlotSolverKai.Models
 
         private static void OutputShipTypeCondition(StreamWriter writer, IEnumerable<ShipSlotInfo> shipSlotList)
         {
-            if (GetIEnumerable(shipSlotList).Any(x => x.Ship.Item1.Type == "巡洋艦"))
+            if (GetIEnumerable(shipSlotList).Any(x => IsSeaplaneEquippable(x.Ship.Item1.Type)))
             {
                 // 水上機制限数
                 foreach (var noEquipShipList in GetIEnumerable(shipSlotList)
-                    .Where(x => x.Ship.Item1.Type == "巡洋艦" && x.AirCraft.Item1.AirCraftName != "装備なし")
+                    .Where(x => IsSeaplaneEquippable(x.Ship.Item1.Type) && x.AirCraft.Item1.AirCraftName != "装備なし")
                     .GroupBy(y => y.Ship.Item2))
                 {
                     foreach (var noEquipList in noEquipShipList)
@@ -260,8 +259,7 @@ namespace AircraftCarrierSlotSolverKai.Models
 
             foreach (var info in shipSlotList.Where(x => x.OnlyAttacker))
             {
-                var list = infoList.Where(x => x.Ship.Item1.Name == info.ShipName && x.AirCraft.Item1.Type == Consts.Fighter);
-                foreach (var i in list)
+                foreach (var i in infoList.Where(x => x.Ship.Item1.Name == info.ShipName && x.AirCraft.Item1.Type == Consts.Fighter))
                 {
                     var text = "+ " + i.SlotName + @" \ 攻撃機のみ";
                     writer.WriteLine(text);
@@ -335,7 +333,7 @@ namespace AircraftCarrierSlotSolverKai.Models
 
         private static void GenerateSolveFile(string dir)
         {
-            using (StreamWriter writer = new StreamWriter(Path.Combine(dir, "solve.txt"), false, new UTF8Encoding(false)))
+            using (var writer = new StreamWriter(Path.Combine(dir, "solve.txt"), false, new UTF8Encoding(false)))
             {
                 writer.WriteLine("read slot.lp");
                 writer.WriteLine("optimize");
@@ -367,7 +365,7 @@ namespace AircraftCarrierSlotSolverKai.Models
 
             var log = Path.Combine(dir, "result.log");
             var regex = new Regex(@"(?<slot>slot_\d+_\d_\d+).+");
-            using (StreamReader r = new StreamReader(log))
+            using (var r = new StreamReader(log))
             {
                 string line;
                 while ((line = r.ReadLine()) != null)
@@ -404,6 +402,20 @@ namespace AircraftCarrierSlotSolverKai.Models
                 {
                     ship.Slot4 = generatorInfo.AirCraft.Item1;
                 }
+            }
+        }
+
+        private static bool IsSeaplaneEquippable(String shipType)
+        {
+            switch (shipType)
+            {
+                case "航空巡洋艦":
+                case "水上機母艦":
+                case "航空戦艦":
+                case "潜水空母":
+                    return true;
+                default:
+                    return false;
             }
         }
     }

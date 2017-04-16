@@ -9,6 +9,10 @@ namespace AircraftCarrierSlotSolverKai.Models
     public class ShipInfo
     {
         /// <summary>
+        /// ID
+        /// </summary>
+        public int ID { get; set; }
+        /// <summary>
         /// 艦名
         /// </summary>
         public string Name { get; set; }
@@ -44,6 +48,11 @@ namespace AircraftCarrierSlotSolverKai.Models
         /// スロット数リスト
         /// </summary>
         public int[] Slots => new int[] { Slot1Num, Slot2Num, Slot3Num, Slot4Num };
+
+        /// <summary>
+        /// 改装前
+        /// </summary>
+        public string Prev { get; set; }
     }
 
 }

@@ -21,6 +21,8 @@ namespace AircraftCarrierSlotSolverKai.Models
             Load();
         }
 
+        public virtual List<T> GetList(List<T> list) => list;
+
         public void Load()
         {
             try
@@ -33,7 +35,7 @@ namespace AircraftCarrierSlotSolverKai.Models
 
                     using (var reader = new CsvReader(parser))
                     {
-                        Records = reader.GetRecords<T>().ToList();
+                        Records = GetList(reader.GetRecords<T>().ToList());
                     }
                 }
             }
