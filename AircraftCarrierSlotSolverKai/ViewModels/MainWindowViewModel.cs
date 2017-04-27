@@ -108,12 +108,12 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
                 
                 foreach(var ship in ships.Where(x => !string.IsNullOrEmpty(x.Name)))
                 {
-                    var slot1 = AirCraftRecords.Instance.Records.FirstOrDefault(x => x.Name == ship.Slot1.Name && x.Improvement == ship.Slot1.Improvement);
-                    var slot2 = AirCraftRecords.Instance.Records.FirstOrDefault(x => x.Name == ship.Slot2.Name && x.Improvement == ship.Slot2.Improvement);
-                    var slot3 = AirCraftRecords.Instance.Records.FirstOrDefault(x => x.Name == ship.Slot3.Name && x.Improvement == ship.Slot3.Improvement);
-                    var slot4 = AirCraftRecords.Instance.Records.FirstOrDefault(x => x.Name == ship.Slot4.Name && x.Improvement == ship.Slot4.Improvement);
+                    var slot1 = AirCraftSettingRecords.Instance.Records.FirstOrDefault(x => x.Name == ship.Slot1.Name && x.Improvement == ship.Slot1.Improvement);
+                    var slot2 = AirCraftSettingRecords.Instance.Records.FirstOrDefault(x => x.Name == ship.Slot2.Name && x.Improvement == ship.Slot2.Improvement);
+                    var slot3 = AirCraftSettingRecords.Instance.Records.FirstOrDefault(x => x.Name == ship.Slot3.Name && x.Improvement == ship.Slot3.Improvement);
+                    var slot4 = AirCraftSettingRecords.Instance.Records.FirstOrDefault(x => x.Name == ship.Slot4.Name && x.Improvement == ship.Slot4.Improvement);
 
-                    var vm = new ShipSlotInfoViewModel(ShipInfoRecords.Instance.Records.First(x => x.Name == ship.Name), slot1, slot2, slot3, slot4);
+                    var vm = new ShipSlotInfoViewModel(ShipInfoRecords.Instance.Records.First(x => x.Name == ship.Name), new AirCraft(slot1), new AirCraft(slot2), new AirCraft(slot3), new AirCraft(slot4));
 
                     ShipSlotInfoList.Add(vm);
                 }

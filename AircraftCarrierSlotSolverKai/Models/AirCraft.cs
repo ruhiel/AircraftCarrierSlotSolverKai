@@ -125,16 +125,19 @@ namespace AircraftCarrierSlotSolverKai.Models
 
         public AirCraft(AirCraft source)
         {
-            Name = source.Name;
-            Type = source.Type;
-            AAValue = source.AAValue;
-            Bomber = source.Bomber;
-            Torpedo = source.Torpedo;
-            Accuracy = source.Accuracy;
-            Evasion = source.Evasion;
-            Improvement = source.Improvement;
+            Name = source?.Name ?? "装備なし";
+            Type = source?.Type ?? "その他";
+            AAValue = source?.AAValue ?? default(int);
+            Bomber = source?.Bomber ?? default(int);
+            Torpedo = source?.Torpedo ?? default(int);
+            Accuracy = source?.Accuracy ?? default(int);
+            Evasion = source?.Evasion ?? default(int);
+            Improvement = source?.Improvement ?? default(int);
         }
 
+        public AirCraft(AirCraftSetting setting) : this(setting?.AirCraft)
+        {
+        }
     }
 
 }
