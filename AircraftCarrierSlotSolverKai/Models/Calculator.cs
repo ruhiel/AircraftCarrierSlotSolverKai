@@ -122,7 +122,14 @@ namespace AircraftCarrierSlotSolverKai.Models
 
             if (IsSeaplaneEquippable(ship.Type))
             {
-                predicate = (x) => x.Type == Consts.SeaplaneBomber || x.Type == Consts.SeaplaneFighter || x.AirCraftName == "装備なし";
+                if(ship.Type.Contains("航空"))
+                {
+                    predicate = (x) => x.Type == Consts.SeaplaneBomber || x.Type == Consts.SeaplaneFighter || x.Type == Consts.AviationPersonnel || x.AirCraftName == "装備なし";
+                }
+                else
+                {
+                    predicate = (x) => x.Type == Consts.SeaplaneBomber || x.Type == Consts.SeaplaneFighter || x.AirCraftName == "装備なし";
+                }
             }
             else if (ship.Type == "揚陸艦")
             {
@@ -134,7 +141,7 @@ namespace AircraftCarrierSlotSolverKai.Models
             }
             else
             {
-                predicate = (x) => x.Type == Consts.TorpedoBomber || x.Type == Consts.DiveBomber || x.Type == Consts.Fighter || x.Type == Consts.JetBomber || x.AirCraftName == "装備なし";
+                predicate = (x) => x.Type == Consts.TorpedoBomber || x.Type == Consts.DiveBomber || x.Type == Consts.Fighter || x.Type == Consts.JetBomber || x.Type == Consts.ReconAircraft || x.Type == Consts.AviationPersonnel || x.AirCraftName == "装備なし";
             }
 
             return _AirCraftLimits.Select(y => y.Key).Where(predicate);
@@ -272,11 +279,21 @@ namespace AircraftCarrierSlotSolverKai.Models
             {
                 foreach (var dic in info.AirCraftSetting.Where(z => z.Value != "未指定"))
                 {
-                    var v = infoList.Single(j => j.Ship.Item1.Name == info.ShipName && j.AirCraft.Item1.AirCraftName == dic.Value && j.Slot.Item2 == dic.Key);
+                    try
+                    {
+                        var v = infoList.Single(j => j.Ship.Item1.Name == info.ShipName && j.AirCraft.Item1.AirCraftName == dic.Value && j.Slot.Item2 == dic.Key);
 
-                    var text = "+ " + v.SlotName + @" = 1 \ 艦載機指定";
-                    writer.WriteLine(text);
-                    writer.WriteLine();
+                        var text = "+ " + v.SlotName + @" = 1 \ 艦載機指定";
+                        writer.WriteLine(text);
+                        writer.WriteLine();
+                    }
+                    catch (Exception)
+                    {
+                        foreach(var i in infoList.Where(x => x.Ship.Item1.Name == "大鷹改"))
+                        {
+                            Console.WriteLine(i.AirCraft.Item1.Name);
+                        }
+                    }
                 }
             }
 
