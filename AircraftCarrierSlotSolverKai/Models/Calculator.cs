@@ -279,21 +279,11 @@ namespace AircraftCarrierSlotSolverKai.Models
             {
                 foreach (var dic in info.AirCraftSetting.Where(z => z.Value != "未指定"))
                 {
-                    try
-                    {
-                        var v = infoList.Single(j => j.Ship.Item1.Name == info.ShipName && j.AirCraft.Item1.AirCraftName == dic.Value && j.Slot.Item2 == dic.Key);
+                    var v = infoList.Single(j => j.Ship.Item1.Name == info.ShipName && j.AirCraft.Item1.AirCraftName == dic.Value && j.Slot.Item2 == dic.Key);
 
-                        var text = "+ " + v.SlotName + @" = 1 \ 艦載機指定";
-                        writer.WriteLine(text);
-                        writer.WriteLine();
-                    }
-                    catch (Exception)
-                    {
-                        foreach(var i in infoList.Where(x => x.Ship.Item1.Name == "大鷹改"))
-                        {
-                            Console.WriteLine(i.AirCraft.Item1.Name);
-                        }
-                    }
+                    var text = "+ " + v.SlotName + @" = 1 \ 艦載機指定";
+                    writer.WriteLine(text);
+                    writer.WriteLine();
                 }
             }
 
