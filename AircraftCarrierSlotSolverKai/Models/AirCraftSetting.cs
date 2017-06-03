@@ -14,7 +14,12 @@ namespace AircraftCarrierSlotSolverKai.Models
         {
             get
             {
-                var aircraft = new AirCraft(AirCraftRecords.Instance.Records.Single(x => x.Name == Name));
+                var aircraft = new AirCraft(AirCraftRecords.Instance.Records.SingleOrDefault(x => x.Name == Name));
+                if(aircraft == null)
+                {
+                    return null;
+                }
+
                 aircraft.Improvement = Improvement;
                 return aircraft;
             }

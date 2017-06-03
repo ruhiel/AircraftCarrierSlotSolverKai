@@ -12,7 +12,7 @@ namespace AircraftCarrierSlotSolverKai.Models
         {
             AirCraftSettingRecords.Instance.Load();
 
-            foreach (var record in AirCraftSettingRecords.Instance.Records.OrderBy(x => x.AirCraft.TypeOrder))
+            foreach (var record in AirCraftSettingRecords.Instance.Records.Where(x => x.AirCraft != null).OrderBy(y => y.AirCraft.TypeOrder))
             {
                 Add(record);
             }
