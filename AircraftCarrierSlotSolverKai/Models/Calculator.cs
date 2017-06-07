@@ -35,9 +35,12 @@ namespace AircraftCarrierSlotSolverKai.Models
 
             foreach (var aircraft in AirCraftSettingRecords.Instance.Records)
             {
-                var air = new AirCraft(AirCraftRecords.Instance.Records.First(x => x.Name == aircraft.Name));
-                air.Improvement = aircraft.Improvement;
-                _AirCraftLimits.Add(air, aircraft.Value);
+                var air = new AirCraft(AirCraftRecords.Instance.Records.FirstOrDefault(x => x.Name == aircraft.Name));
+                if(air != null)
+                {
+                    air.Improvement = aircraft.Improvement;
+                    _AirCraftLimits.Add(air, aircraft.Value);
+                }
             }
 
             try
