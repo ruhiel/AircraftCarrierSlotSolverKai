@@ -7,6 +7,9 @@ namespace AircraftCarrierSlotSolverKai.Models
     public class ShipSlotInfo : BindableBase
     {
         private string _ShipName;
+
+        public ShipInfo ShipInfo { get; private set; }
+
         /// <summary>
         /// 艦名
         /// </summary>
@@ -179,6 +182,7 @@ namespace AircraftCarrierSlotSolverKai.Models
 
         public ShipSlotInfo(ShipInfo shipInfo)
         {
+            ShipInfo = shipInfo;
             ShipName = shipInfo.Name;
             Slot1Num = shipInfo.Slot1Num;
             Slot2Num = shipInfo.Slot2Num;

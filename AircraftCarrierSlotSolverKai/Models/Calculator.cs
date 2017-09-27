@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.SolverFoundation.Services;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -14,6 +15,13 @@ namespace AircraftCarrierSlotSolverKai.Models
 
         public static (bool result, string message) Calc(int airSuperiority, IEnumerable<ShipSlotInfo> shipSlotInfos)
         {
+            // Create solver context and model
+            var context = SolverContext.GetContext();
+            context.ClearModel();
+            var model = context.CreateModel();
+
+            CreateVariable(model, shipSlotInfos);
+            /*
             if (string.IsNullOrEmpty(Properties.Settings.Default.SolverPath))
             {
                 return (false, "SCIPソルバーが指定されていないため計算実行できません。");
@@ -64,9 +72,68 @@ namespace AircraftCarrierSlotSolverKai.Models
             {
                 return (false, $"SCIPソルバーの実行に失敗しました。:{ex.Message}");
             }
-
+            */
             return (true, string.Empty);
         }
+
+        private static void CreateVariable(Model model, IEnumerable<ShipSlotInfo> shipSlotInfos)
+        {
+            var list = shipSlotInfos.SelectMany(ship =>
+                                AirCraftSettingRecords.Instance.Records
+                                .Where(y => Equippable(ship.ShipInfo, y.AirCraft))
+                                .Select(airCraft => (ship, airCraft))).SelectMany(a => Enumerable.Range(1, a.ship.ShipInfo.SlotNum).Select(slotIndex => (a.ship, a.airCraft, slotIndex))).ToList();
+            foreach(var item in list)
+            {
+                Console.WriteLine($"{item.ship.ShipInfo.Name} {item.airCraft.AirCraft.AirCraftName} {item.slotIndex}");
+            }
+        }
+
+        private static bool Equippable(ShipInfo ship, AirCraft airCraft)
+        {
+            Func<AirCraft, bool> predicate;
+
+            if (IsSeaplaneEquippable(ship.Type))
+            {
+                if (ship.Type.Contains("航空"))
+                {
+                    predicate = (x) => x.Type == Consts.SeaplaneBomber || x.Type == Consts.SeaplaneFighter || x.Type == Consts.AviationPersonnel || x.AirCraftName == "装備なし";
+                }
+                else
+                {
+                    predicate = (x) => x.Type == Consts.SeaplaneBomber || x.Type == Consts.SeaplaneFighter || x.AirCraftName == "装備なし";
+                }
+            }
+            else if (ship.Type == "揚陸艦")
+            {
+                predicate = (x) => x.Type == Consts.Fighter || x.AirCraftName == "装備なし";
+            }
+            else if (ship.Type == "補給艦")
+            {
+                predicate = (x) => x.Type == Consts.TorpedoBomber || x.AirCraftName == "装備なし";
+            }
+            else
+            {
+                predicate = (x) => x.Type == Consts.TorpedoBomber || x.Type == Consts.DiveBomber || x.Type == Consts.Fighter || x.Type == Consts.JetBomber || x.Type == Consts.ReconAircraft || x.Type == Consts.AviationPersonnel || x.AirCraftName == "装備なし";
+            }
+
+            return predicate(airCraft);
+        }
+
+        private static bool IsSeaplaneEquippable(string shipType)
+        {
+            switch (shipType)
+            {
+                case "航空巡洋艦":
+                case "水上機母艦":
+                case "航空戦艦":
+                case "潜水空母":
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        /*
 
         private static void GenerateLPFile(IEnumerable<ShipSlotInfo> shipSlotList, int airSuperiority)
         {
@@ -415,18 +482,7 @@ namespace AircraftCarrierSlotSolverKai.Models
             }
         }
 
-        private static bool IsSeaplaneEquippable(String shipType)
-        {
-            switch (shipType)
-            {
-                case "航空巡洋艦":
-                case "水上機母艦":
-                case "航空戦艦":
-                case "潜水空母":
-                    return true;
-                default:
-                    return false;
-            }
-        }
+        
+        */
     }
 }
