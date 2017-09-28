@@ -100,11 +100,11 @@ namespace AircraftCarrierSlotSolverKai.Models
         /// 回避
         /// </summary>
         public int Evasion { get; set; }
-        public int Id { get; internal set; }
-        public int Armor { get; internal set; }
-        public int ASW { get; internal set; }
-        public int ViewRange { get; internal set; }
-        public int Luck { get; internal set; }
+        public int Id { get; set; }
+        public int Armor { get; set; }
+        public int ASW { get; set; }
+        public int ViewRange { get; set; }
+        public int Luck { get; set; }
 
         public AirCraft()
         {
@@ -125,6 +125,7 @@ namespace AircraftCarrierSlotSolverKai.Models
 
         public AirCraft(AirCraft source)
         {
+            Id = source?.Id ?? 0;
             Name = source?.Name ?? "装備なし";
             Type = source?.Type ?? "その他";
             AAValue = source?.AAValue ?? default(int);

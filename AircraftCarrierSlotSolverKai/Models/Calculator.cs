@@ -9,10 +9,8 @@ using System.Text.RegularExpressions;
 
 namespace AircraftCarrierSlotSolverKai.Models
 {
-    public class Calculator
+    public static class Calculator
     {
-        private static Dictionary<AirCraft, int> _AirCraftLimits;
-
         public static (bool result, string message) Calc(int airSuperiority, IEnumerable<ShipSlotInfo> shipSlotInfos)
         {
             // Create solver context and model
@@ -21,6 +19,8 @@ namespace AircraftCarrierSlotSolverKai.Models
             var model = context.CreateModel();
 
             CreateVariable(model, shipSlotInfos);
+
+            AirConstraints(model, shipSlotInfos);
             /*
             if (string.IsNullOrEmpty(Properties.Settings.Default.SolverPath))
             {
@@ -76,15 +76,34 @@ namespace AircraftCarrierSlotSolverKai.Models
             return (true, string.Empty);
         }
 
+        /// <summary>
+        /// 制空値制約
+        /// </summary>
+        private static void AirConstraints(Model model, IEnumerable<ShipSlotInfo> shipSlotInfos)
+        {
+            foreach(var decisions in model.Decisions)
+            {
+                var val = Parse(decisions.Name);
+            }
+        }
+
+        private static (int shipId, int airCraftId, int improvement, int index) Parse(string variableName)
+        {
+            var val = variableName.Split('_');
+
+            return (int.Parse(val[1]), int.Parse(val[2]), int.Parse(val[3]), int.Parse(val[4]));
+        }
+
         private static void CreateVariable(Model model, IEnumerable<ShipSlotInfo> shipSlotInfos)
         {
             var list = shipSlotInfos.SelectMany(ship =>
                                 AirCraftSettingRecords.Instance.Records
                                 .Where(y => Equippable(ship.ShipInfo, y.AirCraft))
                                 .Select(airCraft => (ship, airCraft))).SelectMany(a => Enumerable.Range(1, a.ship.ShipInfo.SlotNum).Select(slotIndex => (a.ship, a.airCraft, slotIndex))).ToList();
-            foreach(var item in list)
+
+            foreach (var item in list)
             {
-                Console.WriteLine($"{item.ship.ShipInfo.Name} {item.airCraft.AirCraft.AirCraftName} {item.slotIndex}");
+                model.AddDecision(new Decision(Domain.Boolean, $"_{item.ship.ShipInfo.ID}_{item.airCraft.AirCraft.Id}_{item.airCraft.AirCraft.Improvement}_{item.slotIndex}"));
             }
         }
 
@@ -132,6 +151,10 @@ namespace AircraftCarrierSlotSolverKai.Models
                     return false;
             }
         }
+
+        private static Decision Variable(this Model model, Func<Decision, bool> predicate) => model.Decisions.First(predicate);
+
+        private static IEnumerable<Decision> Variables(this Model model, Func<Decision, bool> predicate) => model.Decisions.Where(predicate);
 
         /*
 
