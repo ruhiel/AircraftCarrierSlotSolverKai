@@ -24,17 +24,13 @@ namespace AircraftCarrierSlotSolverKai.Models
 
             SlotConstraints(model, shipSlotInfos);
 
+            StockConstraints(model, shipSlotInfos);
+
             SetGoal(model, shipSlotInfos);
 
-            var solution = context.Solve(new SimplexDirective());
-            var report = solution.GetReport();
-            Console.WriteLine("result: " + solution.Goals.First().ToDouble());
+            CalcResultViewProcess(context);
 
-            foreach(var answer in solution.Decisions.Where(x => x.ToDouble() > 0).Select(x => Parse(x.Name)).OrderBy(y => y.index))
-            {
-                var air = GetAirCraft(answer.airCraftId, answer.improvement);
-                Console.WriteLine(air.AirCraftName);
-            }
+            return (true, string.Empty);
 
             /*
             if (string.IsNullOrEmpty(Properties.Settings.Default.SolverPath))
@@ -88,19 +84,66 @@ namespace AircraftCarrierSlotSolverKai.Models
                 return (false, $"SCIPソルバーの実行に失敗しました。:{ex.Message}");
             }
             */
-            return (true, string.Empty);
+        }
+
+        private static void CalcResultViewProcess(SolverContext context)
+        {
+            //Stopwatchオブジェクトを作成する
+            var sw = new System.Diagnostics.Stopwatch();
+            //ストップウォッチを開始する
+            sw.Start();
+            var solution = context.Solve(new MixedIntegerProgrammingDirective());
+            var report = solution.GetReport();
+            Console.WriteLine("result: " + solution.Goals.First().ToDouble());
+
+            //ストップウォッチを止める
+            sw.Stop();
+
+            Console.WriteLine("変数:" + solution.Decisions.Count());
+
+            //結果を表示する
+            Console.WriteLine(sw.Elapsed);
+            foreach (var answer in solution.Decisions.Where(x => x.ToDouble() > 0).Select(x => Parse(x.Name)).OrderBy(g => g.shipId).ThenBy(y => y.index))
+            {
+                var air = GetAirCraft(answer.airCraftId, answer.improvement);
+                Console.WriteLine($"{answer.shipId} {air.AirCraftName}");
+            }
+        }
+
+        private static void StockConstraints(Model model, IEnumerable<ShipSlotInfo> shipSlotInfos)
+        {
+            var terms = new List<Term>();
+
+            foreach (var setting in AirCraftSettingRecords.Instance.Records)
+            {
+                Term term = null;
+                var init = false;
+                foreach (var info in model.Decisions.Select(decision => (decision, Parse(decision.Name)))
+                                                    .Where(x => x.Item2.airCraftId == setting.AirCraft.Id && x.Item2.improvement == setting.Improvement))
+                {
+                    term = init ? term + info.decision : info.decision;
+                    init = true;
+                }
+
+                term = term <= setting.Value;
+
+                terms.Add(term);
+            }
+
+            model.AddConstraints(nameof(StockConstraints), terms.ToArray());
         }
 
         private static void SetGoal(Model model, IEnumerable<ShipSlotInfo> shipSlotInfos)
         {
             Term term = null;
             var init = false;
+            // 火力
             foreach (var info in model.Decisions.Select(decision => (decision, Parse(decision.Name))))
             {
                 var airCraft = GetAirCraft(info.Item2.airCraftId, info.Item2.improvement);
                 var slotNum = GetSlotNum(info.Item2.shipId, info.Item2.index);
 
-                term = init ? term + airCraft.Power(slotNum) * info.decision : airCraft.Power(slotNum) * info.decision;
+                term = init ? term + (airCraft.Accuracy + airCraft.Evasion + airCraft.Power(slotNum)) * info.decision : (airCraft.Accuracy + airCraft.Evasion + airCraft.Power(slotNum)) * info.decision;
 
                 init = true;
             }
@@ -110,7 +153,7 @@ namespace AircraftCarrierSlotSolverKai.Models
 
         private static void SlotConstraints(Model model, IEnumerable<ShipSlotInfo> shipSlotInfos)
         {
-            var temrs = new List<Term>();
+            var terms = new List<Term>();
 
             foreach (var slotGroups in model.Decisions.Select(decision => (decision, Parse(decision.Name))).GroupBy(x => (x.Item2.shipId, x.Item2.index)))
             {
@@ -123,10 +166,10 @@ namespace AircraftCarrierSlotSolverKai.Models
                 }
 
                 term = term == 1;
-                temrs.Add(term);
+                terms.Add(term);
             }
 
-            model.AddConstraints(nameof(SlotConstraints), temrs.ToArray());
+            model.AddConstraints(nameof(SlotConstraints), terms.ToArray());
         }
 
         /// <summary>
