@@ -20,7 +20,22 @@ namespace AircraftCarrierSlotSolverKai.Models
 
             CreateVariable(model, shipSlotInfos);
 
-            AirConstraints(model, shipSlotInfos);
+            AirConstraints(model, shipSlotInfos, airSuperiority);
+
+            SlotConstraints(model, shipSlotInfos);
+
+            SetGoal(model, shipSlotInfos);
+
+            var solution = context.Solve(new SimplexDirective());
+            var report = solution.GetReport();
+            Console.WriteLine("result: " + solution.Goals.First().ToDouble());
+
+            foreach(var answer in solution.Decisions.Where(x => x.ToDouble() > 0).Select(x => Parse(x.Name)).OrderBy(y => y.index))
+            {
+                var air = GetAirCraft(answer.airCraftId, answer.improvement);
+                Console.WriteLine(air.AirCraftName);
+            }
+
             /*
             if (string.IsNullOrEmpty(Properties.Settings.Default.SolverPath))
             {
@@ -76,14 +91,83 @@ namespace AircraftCarrierSlotSolverKai.Models
             return (true, string.Empty);
         }
 
+        private static void SetGoal(Model model, IEnumerable<ShipSlotInfo> shipSlotInfos)
+        {
+            Term term = null;
+            var init = false;
+            foreach (var info in model.Decisions.Select(decision => (decision, Parse(decision.Name))))
+            {
+                var airCraft = GetAirCraft(info.Item2.airCraftId, info.Item2.improvement);
+                var slotNum = GetSlotNum(info.Item2.shipId, info.Item2.index);
+
+                term = init ? term + airCraft.Power(slotNum) * info.decision : airCraft.Power(slotNum) * info.decision;
+
+                init = true;
+            }
+
+            model.AddGoal(nameof(SetGoal), GoalKind.Maximize, term);
+        }
+
+        private static void SlotConstraints(Model model, IEnumerable<ShipSlotInfo> shipSlotInfos)
+        {
+            var temrs = new List<Term>();
+
+            foreach (var slotGroups in model.Decisions.Select(decision => (decision, Parse(decision.Name))).GroupBy(x => (x.Item2.shipId, x.Item2.index)))
+            {
+                Term term = null;
+                var init = false;
+                foreach (var slot in slotGroups)
+                {
+                    term = init ? term + slot.decision : slot.decision;
+                    init = true;
+                }
+
+                term = term == 1;
+                temrs.Add(term);
+            }
+
+            model.AddConstraints(nameof(SlotConstraints), temrs.ToArray());
+        }
+
         /// <summary>
         /// 制空値制約
         /// </summary>
-        private static void AirConstraints(Model model, IEnumerable<ShipSlotInfo> shipSlotInfos)
+        private static void AirConstraints(Model model, IEnumerable<ShipSlotInfo> shipSlotInfos, int airSuperiority)
         {
-            foreach(var decisions in model.Decisions)
+            Term term = null;
+            var init = false;
+            foreach(var info in model.Decisions.Select(decision => (decision, Parse(decision.Name))))
             {
-                var val = Parse(decisions.Name);
+                var airCraft = GetAirCraft(info.Item2.airCraftId, info.Item2.improvement);
+                var slotNum = GetSlotNum(info.Item2.shipId, info.Item2.index);
+
+                term = init ? term + airCraft.AirSuperiorityPotential(slotNum) * info.decision : airCraft.AirSuperiorityPotential(slotNum) * info.decision;
+
+                init = true;
+            }
+
+            term = term >= airSuperiority;
+
+            model.AddConstraint(nameof(AirConstraints), term);
+        }
+
+        private static AirCraft GetAirCraft(int airCraftId, int improvement) => AirCraftSettingRecords.Instance.Records.Find(x => x.AirCraft.Id == airCraftId && x.AirCraft.Improvement == improvement).AirCraft;
+
+        private static int GetSlotNum(int shipId, int slotIndex)
+        {
+            var ship = ShipInfoRecords.Instance.Records.Find(x => x.ID == shipId);
+            switch(slotIndex)
+            {
+                case 1:
+                    return ship.Slot1Num;
+                case 2:
+                    return ship.Slot2Num;
+                case 3:
+                    return ship.Slot3Num;
+                case 4:
+                    return ship.Slot4Num;
+                default:
+                    throw new ArgumentException(slotIndex.ToString());
             }
         }
 
