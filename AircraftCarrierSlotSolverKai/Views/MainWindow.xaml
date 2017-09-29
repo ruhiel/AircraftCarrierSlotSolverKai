@@ -153,7 +153,6 @@
     </Controls:MetroWindow.Flyouts>
     <Controls:MetroWindow.RightWindowCommands>
         <Controls:WindowCommands>
-            <Button Content="ソルバ設定" Command="{Binding SolverSettingCommand}" />
             <Button Content="艦載機設定" Command="{Binding AirCraftSettingCommand}"/>
         </Controls:WindowCommands>
     </Controls:MetroWindow.RightWindowCommands>

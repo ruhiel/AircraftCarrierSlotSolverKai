@@ -33,8 +33,6 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
 
         public ReactiveCommand CalcCommand { get; }
 
-        public ReactiveCommand SolverSettingCommand { get; } = new ReactiveCommand();
-
         public ReactiveCommand AirCraftSettingCommand { get; } = new ReactiveCommand();
 
         public ReactiveCommand SuperiorityCommand { get; } = new ReactiveCommand();
@@ -66,8 +64,6 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
             {
                 Messenger.Instance.GetEvent<PubSubEvent<(bool result, string message)>>().Publish(Calculator.Calc(int.Parse(TargetAirSuperiorityPotential.Value), ShipSlotInfoList.Select(x => x.ShipSlotInfo)));
             });
-
-            SolverSettingCommand.Subscribe(_ => SolverSetting.Setting());
 
             AirCraftSettingCommand.Subscribe(_ =>
             {

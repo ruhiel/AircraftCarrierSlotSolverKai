@@ -141,7 +141,6 @@
     <Compile Include="Models\ShipInfoMap.cs" />
     <Compile Include="Models\ShipInfoRecords.cs" />
     <Compile Include="Models\ShipSlotInfo.cs" />
-    <Compile Include="Models\SolverSetting.cs" />
     <Compile Include="ViewModels\AirCraftSettingViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\Messenger.cs" />

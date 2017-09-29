@@ -204,7 +204,6 @@ namespace AircraftCarrierSlotSolverKai.Models
                     constraint.SetCoefficient(info.variable, 1);
                 }
             }
-
         }
 
         /// <summary>
