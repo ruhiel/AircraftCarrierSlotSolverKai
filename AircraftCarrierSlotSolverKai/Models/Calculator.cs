@@ -360,23 +360,15 @@ namespace AircraftCarrierSlotSolverKai.Models
         /// <param name="solver"></param>
         /// <param name="shipSlotInfos"></param>
         /// <returns></returns>
-        private static List<Variable> CreateVariable(Solver solver, IEnumerable<ShipSlotInfo> shipSlotInfos)
-        {
-            var variables = new List<Variable>();
-            var list = shipSlotInfos.SelectMany(ship =>
-                                AirCraftSettingRecords.Instance.Records
-                                .Where(y => Equippable(ship.ShipInfo, y.AirCraft))
-                                .Select(airCraft => (ship, airCraft))).SelectMany(a => Enumerable.Range(1, a.ship.ShipInfo.SlotNum).Select(slotIndex => (a.ship, a.airCraft, slotIndex))).ToList();
-
-            foreach (var item in list)
-            {
-                var variable = solver.MakeBoolVar($"_{item.ship.ShipInfo.ID}_{item.airCraft.AirCraft.Id}_{item.airCraft.AirCraft.Improvement}_{item.slotIndex}");
-
-                variables.Add(variable);
-            }
-
-            return variables;
-        }
+        private static List<Variable> CreateVariable(Solver solver, IEnumerable<ShipSlotInfo> shipSlotInfos) => 
+                                shipSlotInfos.SelectMany(shipSlotInfo =>
+                                    AirCraftSettingRecords.Instance.Records
+                                        .Where(x => Equippable(shipSlotInfo.ShipInfo, x.AirCraft))
+                                        .Select(y => (shipSlotInfo, y)))
+                                        .SelectMany(z => Enumerable.Range(1, z.shipSlotInfo.ShipInfo.SlotNum)
+                                        .Select(slotIndex => (z.shipSlotInfo, z.y, slotIndex)))
+                                        .Select(i => solver.MakeBoolVar($"_{i.shipSlotInfo.ShipInfo.ID}_{i.y.AirCraft.Id}_{i.y.AirCraft.Improvement}_{i.slotIndex}"))
+                                        .ToList();
 
         /// <summary>
         /// 装備可能かどうか取得
