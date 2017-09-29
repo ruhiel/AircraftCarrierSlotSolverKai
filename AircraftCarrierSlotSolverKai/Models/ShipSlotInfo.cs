@@ -101,6 +101,8 @@ namespace AircraftCarrierSlotSolverKai.Models
 
         public int MinSlotNum => new[] { Slot1Num, Slot2Num, Slot3Num, Slot4Num }.Min();
 
+        public int MinSlotIndex => new[] { Slot1Num, Slot2Num, Slot3Num, Slot4Num }.Select((slot, index) => (slot, index)).OrderByDescending(x => x.index).First(y => y.slot == MinSlotNum).index + 1;
+
         private bool _Attack;
         public bool Attack
         {
