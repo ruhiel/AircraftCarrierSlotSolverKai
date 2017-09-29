@@ -7,6 +7,12 @@ namespace AircraftCarrierSlotSolverKai.Models
 {
     public static class Calculator
     {
+        /// <summary>
+        /// 計算処理
+        /// </summary>
+        /// <param name="airSuperiority"></param>
+        /// <param name="shipSlotInfos"></param>
+        /// <returns></returns>
         public static (bool result, string message) Calc(int airSuperiority, IEnumerable<ShipSlotInfo> shipSlotInfos)
         {
             if (!shipSlotInfos.Any())
@@ -14,8 +20,10 @@ namespace AircraftCarrierSlotSolverKai.Models
                 return (false, "艦娘が追加されていないため計算実行できません。");
             }
 
+            // ソルバー生成
             var solver = Solver.CreateSolver("IntegerProgramming", "CBC_MIXED_INTEGER_PROGRAMMING");
 
+            // 変数作成
             var variables = CreateVariable(solver, shipSlotInfos);
 
             // 制約条件(制空値)
@@ -81,21 +89,31 @@ namespace AircraftCarrierSlotSolverKai.Models
                     var constraint = solver.MakeConstraint(1, 1);
 
                     var info = GetInfoListFromVariables(variables).First(x => 
-                                                                    x.Item2.shipId == shipSlotInfo.ShipInfo.ID &&
-                                                                    x.Item2.airCraftId == airCraftInfos.airCraft.Id &&
-                                                                    x.Item2.improvement == airCraftInfos.airCraft.Improvement &&
-                                                                    x.Item2.slotIndex == airCraftInfos.index);
+                                                                    x.shipId == shipSlotInfo.ShipInfo.ID &&
+                                                                    x.airCraftId == airCraftInfos.airCraft.Id &&
+                                                                    x.improvement == airCraftInfos.airCraft.Improvement &&
+                                                                    x.slotIndex == airCraftInfos.index);
 
                     constraint.SetCoefficient(info.variable, 1);
                 }
             }
         }
 
+        /// <summary>
+        /// 制約条件(艦載機設定)共通処理
+        /// </summary>
+        /// <param name="solver"></param>
+        /// <param name="variables"></param>
+        /// <param name="shipSlotInfos"></param>
+        /// <param name="filter"></param>
+        /// <param name="predicate"></param>
+        /// <param name="lb"></param>
+        /// <param name="ub"></param>
         private static void AirCraftSettingConstraintsDetail(Solver solver,
                                                                 List<Variable> variables,
                                                                 IEnumerable<ShipSlotInfo> shipSlotInfos,
                                                                 Func<ShipSlotInfo, bool> filter,
-                                                                Func<ShipSlotInfo, Func<(Variable variable, (int shipId, int airCraftId, int improvement, int slotIndex)), bool>> predicate,
+                                                                Func<ShipSlotInfo, Func<(Variable variable, int shipId, int airCraftId, int improvement, int slotIndex), bool>> predicate,
                                                                 double lb = 1,
                                                                 double ub = double.PositiveInfinity)
         {
@@ -110,40 +128,74 @@ namespace AircraftCarrierSlotSolverKai.Models
             }
         }
 
-        private static Func<(Variable variable, (int shipId, int airCraftId, int improvement, int slotIndex)), bool> FirstAttackFilter(ShipSlotInfo ship) =>
-                                v => v.Item2.shipId == ship.ShipInfo.ID &&
-                                GetAirCraft(v.Item2.airCraftId, v.Item2.improvement).Attackable &&
-                                v.Item2.slotIndex == 1;
+        /// <summary>
+        /// 制約条件(艦載機設定)フィルタ(攻撃機を第一スロットに積む)
+        /// </summary>
+        /// <param name="ship"></param>
+        /// <returns></returns>
+        private static Func<(Variable variable, int shipId, int airCraftId, int improvement, int slotIndex), bool> FirstAttackFilter(ShipSlotInfo ship) =>
+                                v => v.shipId == ship.ShipInfo.ID &&
+                                GetAirCraft(v.airCraftId, v.improvement).Attackable &&
+                                v.slotIndex == 1;
 
-        private static Func<(Variable variable, (int shipId, int airCraftId, int improvement, int slotIndex)), bool> MinimumSlotFilter(ShipSlotInfo ship) =>
-                                v => v.Item2.shipId == ship.ShipInfo.ID &&
-                                GetAirCraft(v.Item2.airCraftId, v.Item2.improvement).Attackable &&
-                                v.Item2.slotIndex == ship.MinSlotIndex;
+        /// <summary>
+        /// 制約条件(艦載機設定)フィルタ(攻撃機を最小スロットに積まない)
+        /// </summary>
+        /// <param name="ship"></param>
+        /// <returns></returns>
+        private static Func<(Variable variable, int shipId, int airCraftId, int improvement, int slotIndex), bool> MinimumSlotFilter(ShipSlotInfo ship) =>
+                                v => v.shipId == ship.ShipInfo.ID &&
+                                GetAirCraft(v.airCraftId, v.improvement).Attackable &&
+                                v.slotIndex == ship.MinSlotIndex;
 
-        private static Func<(Variable variable, (int shipId, int airCraftId, int improvement, int slotIndex)), bool> MaintenancePersonnelFilter(ShipSlotInfo ship) =>
-                                        v => v.Item2.shipId == ship.ShipInfo.ID &&
-                                        GetAirCraft(v.Item2.airCraftId, v.Item2.improvement).Name.Contains("熟練艦載機整備員") &&
-                                        v.Item2.slotIndex == ship.MinSlotIndex;
+        /// <summary>
+        /// 制約条件(艦載機設定)フィルタ(熟練艦載機整備員を最小スロットに積む)
+        /// </summary>
+        /// <param name="ship"></param>
+        /// <returns></returns>
+        private static Func<(Variable variable, int shipId, int airCraftId, int improvement, int slotIndex), bool> MaintenancePersonnelFilter(ShipSlotInfo ship) =>
+                                        v => v.shipId == ship.ShipInfo.ID &&
+                                        GetAirCraft(v.airCraftId, v.improvement).Name.Contains("熟練艦載機整備員") &&
+                                        v.slotIndex == ship.MinSlotIndex;
 
-        private static Func<(Variable variable, (int shipId, int airCraftId, int improvement, int slotIndex)), bool> SaiunFilter(ShipSlotInfo ship) => 
-                                        v => v.Item2.shipId == ship.ShipInfo.ID &&
-                                        GetAirCraft(v.Item2.airCraftId, v.Item2.improvement).Name.Contains("彩雲") &&
-                                        v.Item2.slotIndex == ship.MinSlotIndex;
+        /// <summary>
+        /// 制約条件(艦載機設定)フィルタ(彩雲を最小スロットに積む)
+        /// </summary>
+        /// <param name="ship"></param>
+        /// <returns></returns>
+        private static Func<(Variable variable, int shipId, int airCraftId, int improvement, int slotIndex), bool> SaiunFilter(ShipSlotInfo ship) => 
+                                        v => v.shipId == ship.ShipInfo.ID &&
+                                        GetAirCraft(v.airCraftId, v.improvement).Name.Contains("彩雲") &&
+                                        v.slotIndex == ship.MinSlotIndex;
 
-        private static Func<(Variable variable, (int shipId, int airCraftId, int improvement, int slotIndex)), bool> AttackFilter(ShipSlotInfo ship) => 
-                                        v => v.Item2.shipId == ship.ShipInfo.ID &&
-                                        GetAirCraft(v.Item2.airCraftId, v.Item2.improvement).Attackable;
+        /// <summary>
+        /// 制約条件(艦載機設定)フィルタ(攻撃機を必ず積む)
+        /// </summary>
+        /// <param name="ship"></param>
+        /// <returns></returns>
+        private static Func<(Variable variable, int shipId, int airCraftId, int improvement, int slotIndex), bool> AttackFilter(ShipSlotInfo ship) => 
+                                        v => v.shipId == ship.ShipInfo.ID &&
+                                        GetAirCraft(v.airCraftId, v.improvement).Attackable;
 
-        private static Func<(Variable variable, (int shipId, int airCraftId, int improvement, int slotIndex)), bool> OnlyAttackerFilter(ShipSlotInfo ship) =>
-                        v => v.Item2.shipId == ship.ShipInfo.ID &&
-                        !GetAirCraft(v.Item2.airCraftId, v.Item2.improvement).Attackable;
+        /// <summary>
+        /// 制約条件(艦載機設定)フィルタ(攻撃機のみ積む)
+        /// </summary>
+        /// <param name="ship"></param>
+        /// <returns></returns>
+        private static Func<(Variable variable, int shipId, int airCraftId, int improvement, int slotIndex), bool> OnlyAttackerFilter(ShipSlotInfo ship) =>
+                        v => v.shipId == ship.ShipInfo.ID &&
+                        !GetAirCraft(v.airCraftId, v.improvement).Attackable;
 
         /// <summary>
         /// 変数リスト取得
         /// </summary>
         /// <param name="variables"></param>
         /// <returns></returns>
-        private static IEnumerable<(Variable variable, (int shipId, int airCraftId, int improvement, int slotIndex))> GetInfoListFromVariables(IEnumerable<Variable> variables) => variables.Select(variable => (variable, Parse(variable.Name())));
+        private static IEnumerable<(Variable variable, int shipId, int airCraftId, int improvement, int slotIndex)> GetInfoListFromVariables(IEnumerable<Variable> variables) => variables.Select(variable =>
+        {
+            var info = Parse(variable.Name());
+            return (variable, info.shipId, info.airCraftId, info.improvement, info.slotIndex);
+        });
 
 
         /// <summary>
@@ -164,23 +216,23 @@ namespace AircraftCarrierSlotSolverKai.Models
 
             foreach (var answer in GetInfoListFromVariables(variables.Where(x => x.SolutionValue() > 0)))
             {
-                var airCraft = GetAirCraft(answer.Item2.airCraftId, answer.Item2.improvement);
+                var airCraft = GetAirCraft(answer.airCraftId, answer.improvement);
 
-                var shipSlotInfo = shipSlotInfos.First(x => x.ShipInfo.ID == answer.Item2.shipId);
+                var shipSlotInfo = shipSlotInfos.First(x => x.ShipInfo.ID == answer.shipId);
 
-                if(answer.Item2.slotIndex == 1)
+                if(answer.slotIndex == 1)
                 {
                     shipSlotInfo.Slot1 = airCraft;
                 }
-                else if(answer.Item2.slotIndex == 2)
+                else if(answer.slotIndex == 2)
                 {
                     shipSlotInfo.Slot2 = airCraft;
                 }
-                else if (answer.Item2.slotIndex == 3)
+                else if (answer.slotIndex == 3)
                 {
                     shipSlotInfo.Slot3 = airCraft;
                 }
-                else if (answer.Item2.slotIndex == 4)
+                else if (answer.slotIndex == 4)
                 {
                     shipSlotInfo.Slot4 = airCraft;
                 }
@@ -199,7 +251,7 @@ namespace AircraftCarrierSlotSolverKai.Models
                 var constraint = solver.MakeConstraint(double.NegativeInfinity, setting.Value);
 
                 foreach (var info in GetInfoListFromVariables(variables)
-                    .Where(x => x.Item2.airCraftId == setting.AirCraft.Id && x.Item2.improvement == setting.Improvement))
+                    .Where(x => x.airCraftId == setting.AirCraft.Id && x.improvement == setting.Improvement))
                 {
                     constraint.SetCoefficient(info.variable, 1);
                 }
@@ -214,11 +266,11 @@ namespace AircraftCarrierSlotSolverKai.Models
         private static void SetGoal(Solver solver, List<Variable> variables)
         {
             var objective = solver.Objective();
-            // 火力
+            // 火力+命中+回避
             foreach (var info in GetInfoListFromVariables(variables))
             {
-                var airCraft = GetAirCraft(info.Item2.airCraftId, info.Item2.improvement);
-                var slotNum = GetSlotNum(info.Item2.shipId, info.Item2.slotIndex);
+                var airCraft = GetAirCraft(info.airCraftId, info.improvement);
+                var slotNum = GetSlotNum(info.shipId, info.slotIndex);
 
                 objective.SetCoefficient(info.variable, airCraft.Accuracy + airCraft.Evasion + airCraft.Power(slotNum));
             }
@@ -232,7 +284,7 @@ namespace AircraftCarrierSlotSolverKai.Models
         /// <param name="variables"></param>
         private static void SlotConstraints(Solver solver, List<Variable> variables)
         {
-            foreach (var slotGroups in GetInfoListFromVariables(variables).GroupBy(x => (x.Item2.shipId, x.Item2.slotIndex)))
+            foreach (var slotGroups in GetInfoListFromVariables(variables).GroupBy(x => (x.shipId, x.slotIndex)))
             {
                 var constraint = solver.MakeConstraint(double.NegativeInfinity, 1);
                 foreach (var slot in slotGroups)
@@ -251,15 +303,27 @@ namespace AircraftCarrierSlotSolverKai.Models
 
             foreach (var info in GetInfoListFromVariables(variables))
             {
-                var airCraft = GetAirCraft(info.Item2.airCraftId, info.Item2.improvement);
-                var slotNum = GetSlotNum(info.Item2.shipId, info.Item2.slotIndex);
+                var airCraft = GetAirCraft(info.airCraftId, info.improvement);
+                var slotNum = GetSlotNum(info.shipId, info.slotIndex);
 
                 constraint.SetCoefficient(info.variable, airCraft.AirSuperiorityPotential(slotNum));
             }
         }
 
+        /// <summary>
+        /// 艦載機取得
+        /// </summary>
+        /// <param name="airCraftId"></param>
+        /// <param name="improvement"></param>
+        /// <returns></returns>
         private static AirCraft GetAirCraft(int airCraftId, int improvement) => AirCraftSettingRecords.Instance.Records.Find(x => x.AirCraft.Id == airCraftId && x.AirCraft.Improvement == improvement).AirCraft;
 
+        /// <summary>
+        /// スロット数取得
+        /// </summary>
+        /// <param name="shipId"></param>
+        /// <param name="slotIndex"></param>
+        /// <returns></returns>
         private static int GetSlotNum(int shipId, int slotIndex)
         {
             var ship = ShipInfoRecords.Instance.Records.Find(x => x.ID == shipId);
@@ -278,6 +342,11 @@ namespace AircraftCarrierSlotSolverKai.Models
             }
         }
 
+        /// <summary>
+        /// 変数名から各種情報取り出し
+        /// </summary>
+        /// <param name="variableName"></param>
+        /// <returns></returns>
         private static (int shipId, int airCraftId, int improvement, int slotIndex) Parse(string variableName)
         {
             var val = variableName.Split('_');
@@ -285,6 +354,12 @@ namespace AircraftCarrierSlotSolverKai.Models
             return (int.Parse(val[1]), int.Parse(val[2]), int.Parse(val[3]), int.Parse(val[4]));
         }
 
+        /// <summary>
+        /// 変数作成
+        /// </summary>
+        /// <param name="solver"></param>
+        /// <param name="shipSlotInfos"></param>
+        /// <returns></returns>
         private static List<Variable> CreateVariable(Solver solver, IEnumerable<ShipSlotInfo> shipSlotInfos)
         {
             var variables = new List<Variable>();
@@ -303,6 +378,12 @@ namespace AircraftCarrierSlotSolverKai.Models
             return variables;
         }
 
+        /// <summary>
+        /// 装備可能かどうか取得
+        /// </summary>
+        /// <param name="ship"></param>
+        /// <param name="airCraft"></param>
+        /// <returns></returns>
         private static bool Equippable(ShipInfo ship, AirCraft airCraft)
         {
             Func<AirCraft, bool> predicate;
@@ -334,6 +415,11 @@ namespace AircraftCarrierSlotSolverKai.Models
             return predicate(airCraft);
         }
 
+        /// <summary>
+        /// 水上機が装備可能かどうか取得
+        /// </summary>
+        /// <param name="shipType"></param>
+        /// <returns></returns>
         private static bool IsSeaplaneEquippable(string shipType)
         {
             switch (shipType)
