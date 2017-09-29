@@ -72,6 +72,23 @@ namespace AircraftCarrierSlotSolverKai.Models
 
             // 攻撃機のみ積む
             AirCraftSettingConstraintsDetail(solver, variables, shipSlotInfos, x => x.OnlyAttacker, OnlyAttackerFilter, double.NegativeInfinity, 0);
+
+            // 艦載機指定
+            foreach (var shipSlotInfo in shipSlotInfos)
+            {
+                foreach (var airCraftInfos in shipSlotInfo.SlotSettings.Where(x => x.airCraft != null))
+                {
+                    var constraint = solver.MakeConstraint(1, 1);
+
+                    var info = GetInfoListFromVariables(variables).First(x => 
+                                                                    x.Item2.shipId == shipSlotInfo.ShipInfo.ID &&
+                                                                    x.Item2.airCraftId == airCraftInfos.airCraft.Id &&
+                                                                    x.Item2.improvement == airCraftInfos.airCraft.Improvement &&
+                                                                    x.Item2.slotIndex == airCraftInfos.index);
+
+                    constraint.SetCoefficient(info.variable, 1);
+                }
+            }
         }
 
         private static void AirCraftSettingConstraintsDetail(Solver solver,

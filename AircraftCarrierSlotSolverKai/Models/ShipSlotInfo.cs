@@ -174,6 +174,8 @@ namespace AircraftCarrierSlotSolverKai.Models
             set { SetProperty(ref _SlotSetting4, value); }
         }
 
+        public IEnumerable<(AirCraft airCraft, int index)> SlotSettings => new AirCraft[] { SlotSetting1, SlotSetting2, SlotSetting3, SlotSetting4 }.Select((airCraft, index) => { (AirCraft airCraft, int index) tuple = (airCraft, index + 1); return tuple; });
+
         public Dictionary<int, string> AirCraftSetting
         {
             get
