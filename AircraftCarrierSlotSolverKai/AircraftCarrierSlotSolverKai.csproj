@@ -39,11 +39,14 @@
     <Reference Include="CsvHelper, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
       <HintPath>..\packages\CsvHelper.2.16.3.0\lib\net45\CsvHelper.dll</HintPath>
     </Reference>
+    <Reference Include="Google.OrTools.x86, Version=5.0.6170.24109, Culture=neutral, PublicKeyToken=fdef6fe93723b46c, processorArchitecture=x86">
+      <HintPath>..\packages\Google.OrTools.x86.5.0.6170.24109\lib\net40\Google.OrTools.x86.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Protobuf, Version=3.0.0.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Protobuf.3.0.0\lib\net45\Google.Protobuf.dll</HintPath>
+    </Reference>
     <Reference Include="MahApps.Metro, Version=1.4.3.0, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
       <HintPath>..\packages\MahApps.Metro.1.4.3\lib\net45\MahApps.Metro.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Solver.Foundation, Version=3.0.2.10889, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Solver.Foundation.3.1.0\lib\Microsoft.Solver.Foundation.dll</HintPath>
     </Reference>
     <Reference Include="Prism, Version=6.2.0.0, Culture=neutral, PublicKeyToken=91a96d2a154366d8, processorArchitecture=MSIL">
       <HintPath>..\packages\Prism.Core.6.2.0\lib\net45\Prism.dll</HintPath>
@@ -134,7 +137,6 @@
     <Compile Include="Models\CSVRecords.cs" />
     <Compile Include="Models\Fleet.cs" />
     <Compile Include="Models\FleetMap.cs" />
-    <Compile Include="Models\GeneratorInfo.cs" />
     <Compile Include="Models\ShipInfo.cs" />
     <Compile Include="Models\ShipInfoMap.cs" />
     <Compile Include="Models\ShipInfoRecords.cs" />
