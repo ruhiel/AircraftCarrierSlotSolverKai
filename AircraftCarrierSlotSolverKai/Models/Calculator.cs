@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace AircraftCarrierSlotSolverKai.Models
 {
@@ -13,7 +15,7 @@ namespace AircraftCarrierSlotSolverKai.Models
         /// <param name="airSuperiority"></param>
         /// <param name="shipSlotInfos"></param>
         /// <returns></returns>
-        public static (bool result, string message) Calc(int airSuperiority, IEnumerable<ShipSlotInfo> shipSlotInfos)
+        public static async Task<(bool result, string message)> Calc(int airSuperiority, IEnumerable<ShipSlotInfo> shipSlotInfos) => await Task.Run(() =>
         {
             if (!shipSlotInfos.Any())
             {
@@ -56,7 +58,7 @@ namespace AircraftCarrierSlotSolverKai.Models
             CalcResultViewProcess(solver, variables, shipSlotInfos);
 
             return (true, string.Empty);
-        }
+        });
 
         /// <summary>
         /// 制約条件(艦載機設定)

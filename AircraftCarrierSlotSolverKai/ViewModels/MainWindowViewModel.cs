@@ -65,10 +65,10 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
             TargetAirSuperiorityPotential = new ReactiveProperty<string>(default(int).ToString()).SetValidateAttribute(() => TargetAirSuperiorityPotential);
 
             CalcCommand = new[] { TargetAirSuperiorityPotential.ObserveHasErrors}.CombineLatestValuesAreAllFalse().ToReactiveCommand();
-            CalcCommand.Subscribe(_ => 
+            CalcCommand.Subscribe(async _ => 
             {
                 GridVisible.Value = false;
-                Messenger.Instance.GetEvent<PubSubEvent<(bool result, string message)>>().Publish(Calculator.Calc(int.Parse(TargetAirSuperiorityPotential.Value), ShipSlotInfoList.Select(x => x.ShipSlotInfo)));
+                Messenger.Instance.GetEvent<PubSubEvent<(bool result, string message)>>().Publish(await Calculator.Calc(int.Parse(TargetAirSuperiorityPotential.Value), ShipSlotInfoList.Select(x => x.ShipSlotInfo)));
                 GridVisible.Value = true;
             });
 
