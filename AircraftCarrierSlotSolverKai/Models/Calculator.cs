@@ -20,6 +20,9 @@ namespace AircraftCarrierSlotSolverKai.Models
                 return (false, "艦娘が追加されていないため計算実行できません。");
             }
 
+            // 表示初期化
+            ResetViewProcess(shipSlotInfos);
+
             // ソルバー生成
             var solver = Solver.CreateSolver("IntegerProgramming", "CBC_MIXED_INTEGER_PROGRAMMING");
 
@@ -206,25 +209,17 @@ namespace AircraftCarrierSlotSolverKai.Models
         /// <param name="shipSlotInfos"></param>
         private static void CalcResultViewProcess(Solver solver, List<Variable> variables, IEnumerable<ShipSlotInfo> shipSlotInfos)
         {
-            foreach(var shipSlotInfo in shipSlotInfos)
-            {
-                shipSlotInfo.Slot1 = null;
-                shipSlotInfo.Slot2 = null;
-                shipSlotInfo.Slot3 = null;
-                shipSlotInfo.Slot4 = null;
-            }
-
             foreach (var answer in GetInfoListFromVariables(variables.Where(x => x.SolutionValue() > 0)))
             {
                 var airCraft = GetAirCraft(answer.airCraftId, answer.improvement);
 
                 var shipSlotInfo = shipSlotInfos.First(x => x.ShipInfo.ID == answer.shipId);
 
-                if(answer.slotIndex == 1)
+                if (answer.slotIndex == 1)
                 {
                     shipSlotInfo.Slot1 = airCraft;
                 }
-                else if(answer.slotIndex == 2)
+                else if (answer.slotIndex == 2)
                 {
                     shipSlotInfo.Slot2 = airCraft;
                 }
@@ -236,6 +231,21 @@ namespace AircraftCarrierSlotSolverKai.Models
                 {
                     shipSlotInfo.Slot4 = airCraft;
                 }
+            }
+        }
+
+        /// <summary>
+        /// 表示初期化
+        /// </summary>
+        /// <param name="shipSlotInfos"></param>
+        private static void ResetViewProcess(IEnumerable<ShipSlotInfo> shipSlotInfos)
+        {
+            foreach (var shipSlotInfo in shipSlotInfos)
+            {
+                shipSlotInfo.Slot1 = null;
+                shipSlotInfo.Slot2 = null;
+                shipSlotInfo.Slot3 = null;
+                shipSlotInfo.Slot4 = null;
             }
         }
 

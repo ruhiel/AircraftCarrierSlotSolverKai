@@ -113,6 +113,7 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibility"/>
     </Controls:MetroWindow.Resources>
     <Controls:MetroWindow.Flyouts>
         <Controls:FlyoutsControl>
@@ -221,8 +222,11 @@
             <Button Content="編成削除" Command="{Binding PresetDeleteCommand}"/>
             <ComboBox ItemsSource="{Binding FleetList}" DisplayMemberPath="Name" SelectedItem="{Binding NowSelectFleet, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
         </WrapPanel>
+        <WrapPanel HorizontalAlignment="Center">
+            <Controls:ProgressRing Foreground="{DynamicResource AccentColorBrush}" Visibility="{Binding ProgressVisible.Value, Converter={StaticResource BoolToVisibility}}"/>
+        </WrapPanel>
         <WrapPanel Margin="5">
-            <DataGrid RowBackground="LightYellow" AlternatingRowBackground="#f0f0f0" ItemsSource="{Binding ShipSlotInfoList}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="True" CanUserSortColumns="False" Width="400">
+            <DataGrid Visibility="{Binding GridVisible.Value, Converter={StaticResource BoolToVisibility}}" RowBackground="LightYellow" AlternatingRowBackground="#f0f0f0" ItemsSource="{Binding ShipSlotInfoList}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="True" CanUserSortColumns="False" Width="400">
                 <DataGrid.CellStyle>
                     <Style TargetType="DataGridCell">
                         <Style.Triggers>

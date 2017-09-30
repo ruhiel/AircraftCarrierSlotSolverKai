@@ -7,6 +7,7 @@ using System.Linq;
 using Prism.Events;
 using AircraftCarrierSlotSolverKai.Views;
 using Reactive.Bindings.Extensions;
+using System.Reactive.Linq;
 
 namespace AircraftCarrierSlotSolverKai.ViewModels
 {
@@ -45,6 +46,10 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
 
         public ReactiveCommand PresetDeleteCommand { get; } = new ReactiveCommand();
 
+        public ReactiveProperty<bool> GridVisible { get; } = new ReactiveProperty<bool>(true);
+
+        public ReactiveProperty<bool> ProgressVisible { get; }
+
         public MainWindowViewModel()
         {
             ShipSlotInfoList = new ObservableCollection<ShipSlotInfoViewModel>();
@@ -62,7 +67,9 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
             CalcCommand = new[] { TargetAirSuperiorityPotential.ObserveHasErrors}.CombineLatestValuesAreAllFalse().ToReactiveCommand();
             CalcCommand.Subscribe(_ => 
             {
+                GridVisible.Value = false;
                 Messenger.Instance.GetEvent<PubSubEvent<(bool result, string message)>>().Publish(Calculator.Calc(int.Parse(TargetAirSuperiorityPotential.Value), ShipSlotInfoList.Select(x => x.ShipSlotInfo)));
+                GridVisible.Value = true;
             });
 
             AirCraftSettingCommand.Subscribe(_ =>
@@ -125,6 +132,8 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
 
                 NowSelectFleet = null;
             });
+
+            ProgressVisible = GridVisible.Select(x => !x).ToReactiveProperty();
         }
 
         ~MainWindowViewModel()
