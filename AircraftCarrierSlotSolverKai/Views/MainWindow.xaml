@@ -51,6 +51,12 @@
                 <DataTrigger Binding="{Binding Slot1.Value.Type}" Value="{x:Static model:Consts.JetBomber}">
                     <Setter Property="Foreground" Value="Orange" />
                 </DataTrigger>
+                <DataTrigger Binding="{Binding Slot1.Value.Type}" Value="{x:Static model:Consts.SeaplaneBomber}">
+                    <Setter Property="Foreground" Value="LightGreen" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Slot1.Value.Type}" Value="{x:Static model:Consts.SeaplaneFighter}">
+                    <Setter Property="Foreground" Value="LightGreen" />
+                </DataTrigger>
             </Style.Triggers>
         </Style>
         <Style x:Key="Slot2Style" TargetType="TextBlock">
@@ -70,6 +76,12 @@
                 </DataTrigger>
                 <DataTrigger Binding="{Binding Slot2.Value.Type}" Value="{x:Static model:Consts.JetBomber}">
                     <Setter Property="Foreground" Value="Orange" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Slot2.Value.Type}" Value="{x:Static model:Consts.SeaplaneBomber}">
+                    <Setter Property="Foreground" Value="LightGreen" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Slot2.Value.Type}" Value="{x:Static model:Consts.SeaplaneFighter}">
+                    <Setter Property="Foreground" Value="LightGreen" />
                 </DataTrigger>
             </Style.Triggers>
         </Style>
@@ -91,6 +103,12 @@
                 <DataTrigger Binding="{Binding Slot3.Value.Type}" Value="{x:Static model:Consts.JetBomber}">
                     <Setter Property="Foreground" Value="Orange" />
                 </DataTrigger>
+                <DataTrigger Binding="{Binding Slot3.Value.Type}" Value="{x:Static model:Consts.SeaplaneBomber}">
+                    <Setter Property="Foreground" Value="LightGreen" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Slot3.Value.Type}" Value="{x:Static model:Consts.SeaplaneFighter}">
+                    <Setter Property="Foreground" Value="LightGreen" />
+                </DataTrigger>
             </Style.Triggers>
         </Style>
         <Style x:Key="Slot4Style" TargetType="TextBlock">
@@ -110,6 +128,12 @@
                 </DataTrigger>
                 <DataTrigger Binding="{Binding Slot4.Value.Type}" Value="{x:Static model:Consts.JetBomber}">
                     <Setter Property="Foreground" Value="Orange" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Slot4.Value.Type}" Value="{x:Static model:Consts.SeaplaneBomber}">
+                    <Setter Property="Foreground" Value="LightGreen" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Slot4.Value.Type}" Value="{x:Static model:Consts.SeaplaneFighter}">
+                    <Setter Property="Foreground" Value="LightGreen" />
                 </DataTrigger>
             </Style.Triggers>
         </Style>
