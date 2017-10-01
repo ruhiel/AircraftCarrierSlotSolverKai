@@ -51,6 +51,9 @@
                 <DataTrigger Binding="{Binding Slot1.Value.Type}" Value="{x:Static model:Consts.JetBomber}">
                     <Setter Property="Foreground" Value="Orange" />
                 </DataTrigger>
+                <DataTrigger Binding="{Binding Slot1.Value.Type}" Value="{x:Static model:Consts.ReconnaissanceSeaplane}">
+                    <Setter Property="Foreground" Value="LightGreen" />
+                </DataTrigger>
                 <DataTrigger Binding="{Binding Slot1.Value.Type}" Value="{x:Static model:Consts.SeaplaneBomber}">
                     <Setter Property="Foreground" Value="LightGreen" />
                 </DataTrigger>
@@ -79,6 +82,9 @@
                 </DataTrigger>
                 <DataTrigger Binding="{Binding Slot2.Value.Type}" Value="{x:Static model:Consts.JetBomber}">
                     <Setter Property="Foreground" Value="Orange" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Slot2.Value.Type}" Value="{x:Static model:Consts.ReconnaissanceSeaplane}">
+                    <Setter Property="Foreground" Value="LightGreen" />
                 </DataTrigger>
                 <DataTrigger Binding="{Binding Slot2.Value.Type}" Value="{x:Static model:Consts.SeaplaneBomber}">
                     <Setter Property="Foreground" Value="LightGreen" />
@@ -109,6 +115,9 @@
                 <DataTrigger Binding="{Binding Slot3.Value.Type}" Value="{x:Static model:Consts.JetBomber}">
                     <Setter Property="Foreground" Value="Orange" />
                 </DataTrigger>
+                <DataTrigger Binding="{Binding Slot3.Value.Type}" Value="{x:Static model:Consts.ReconnaissanceSeaplane}">
+                    <Setter Property="Foreground" Value="LightGreen" />
+                </DataTrigger>
                 <DataTrigger Binding="{Binding Slot3.Value.Type}" Value="{x:Static model:Consts.SeaplaneBomber}">
                     <Setter Property="Foreground" Value="LightGreen" />
                 </DataTrigger>
@@ -137,6 +146,9 @@
                 </DataTrigger>
                 <DataTrigger Binding="{Binding Slot4.Value.Type}" Value="{x:Static model:Consts.JetBomber}">
                     <Setter Property="Foreground" Value="Orange" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Slot4.Value.Type}" Value="{x:Static model:Consts.ReconnaissanceSeaplane}">
+                    <Setter Property="Foreground" Value="LightGreen" />
                 </DataTrigger>
                 <DataTrigger Binding="{Binding Slot4.Value.Type}" Value="{x:Static model:Consts.SeaplaneBomber}">
                     <Setter Property="Foreground" Value="LightGreen" />

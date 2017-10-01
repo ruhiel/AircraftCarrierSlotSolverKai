@@ -17,47 +17,54 @@ namespace AircraftCarrierSlotSolverKai.Models
         /// <returns></returns>
         public static async Task<(bool result, string message)> Calc(int airSuperiority, IEnumerable<ShipSlotInfo> shipSlotInfos) => await Task.Run(() =>
         {
-            if (!shipSlotInfos.Any())
+            try
             {
-                return (false, "艦娘が追加されていないため計算実行できません。");
+                if (!shipSlotInfos.Any())
+                {
+                    return (false, "艦娘が追加されていないため計算実行できません。");
+                }
+
+                // 表示初期化
+                ResetViewProcess(shipSlotInfos);
+
+                // ソルバー生成
+                var solver = Solver.CreateSolver("IntegerProgramming", "CBC_MIXED_INTEGER_PROGRAMMING");
+
+                // 変数作成
+                var variables = CreateVariable(solver, shipSlotInfos);
+
+                // 制約条件(制空値)
+                AirConstraints(solver, variables, airSuperiority);
+
+                // 制約条件(スロット)
+                SlotConstraints(solver, variables);
+
+                // 制約条件(所持数)
+                StockConstraints(solver, variables);
+
+                // 制約条件(艦載機設定)
+                AirCraftSettingConstraints(solver, variables, shipSlotInfos);
+
+                // 目的関数
+                SetGoal(solver, variables);
+
+                // ソルバー実行
+                var resultStatus = solver.Solve();
+
+                if (resultStatus != Solver.OPTIMAL)
+                {
+                    return (false, "制空値を満たす解がありませんでした。");
+                }
+
+                // 結果表示
+                CalcResultViewProcess(solver, variables, shipSlotInfos);
+
+                return (true, string.Empty);
             }
-
-            // 表示初期化
-            ResetViewProcess(shipSlotInfos);
-
-            // ソルバー生成
-            var solver = Solver.CreateSolver("IntegerProgramming", "CBC_MIXED_INTEGER_PROGRAMMING");
-
-            // 変数作成
-            var variables = CreateVariable(solver, shipSlotInfos);
-
-            // 制約条件(制空値)
-            AirConstraints(solver, variables, airSuperiority);
-
-            // 制約条件(スロット)
-            SlotConstraints(solver, variables);
-
-            // 制約条件(所持数)
-            StockConstraints(solver, variables);
-
-            // 制約条件(艦載機設定)
-            AirCraftSettingConstraints(solver, variables, shipSlotInfos);
-
-            // 目的関数
-            SetGoal(solver, variables);
-
-            // ソルバー実行
-            var resultStatus = solver.Solve();
-
-            if (resultStatus != Solver.OPTIMAL)
+            catch (Exception e)
             {
-                return (false, "制空値を満たす解がありませんでした。");
+                return (false, $"計算に失敗しました。{e.Message}");
             }
-
-            // 結果表示
-            CalcResultViewProcess(solver, variables, shipSlotInfos);
-
-            return (true, string.Empty);
         });
 
         /// <summary>
@@ -396,11 +403,11 @@ namespace AircraftCarrierSlotSolverKai.Models
             {
                 if (ship.Type.Contains("航空"))
                 {
-                    predicate = (x) => x.Type == Consts.SeaplaneBomber || x.Type == Consts.SeaplaneFighter || x.Type == Consts.AviationPersonnel || x.AirCraftName == "装備なし";
+                    predicate = (x) => x.Type == Consts.ReconnaissanceSeaplane || x.Type == Consts.SeaplaneBomber || x.Type == Consts.SeaplaneFighter || x.Type == Consts.AviationPersonnel || x.AirCraftName == "装備なし";
                 }
                 else
                 {
-                    predicate = (x) => x.Type == Consts.SeaplaneBomber || x.Type == Consts.SeaplaneFighter || x.AirCraftName == "装備なし";
+                    predicate = (x) => x.Type == Consts.ReconnaissanceSeaplane || x.Type == Consts.SeaplaneBomber || x.Type == Consts.SeaplaneFighter || x.AirCraftName == "装備なし";
                 }
             }
             else if (ship.Type == "揚陸艦")
