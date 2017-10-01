@@ -54,6 +54,9 @@
                                         <DataTrigger Binding="{Binding Type}" Value="{x:Static model:Consts.SeaplaneFighter}">
                                             <Setter Property="Foreground" Value="LightGreen" />
                                         </DataTrigger>
+                                        <DataTrigger Binding="{Binding Type}" Value="{x:Static model:Consts.AviationPersonnel}">
+                                            <Setter Property="Foreground" Value="Brown" />
+                                        </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </TextBlock.Style>
