@@ -12,7 +12,7 @@
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
         xmlns:properties="clr-namespace:AircraftCarrierSlotSolverKai.Properties"
         mc:Ignorable="d"
-        Title="空母スロットソルバー改" Height="900" Width="420"
+        Title="空母スロットソルバー改" Height="900" Width="500"
         GlowBrush="{DynamicResource AccentColorBrush}"
         BorderThickness="1"
         ShowMaxRestoreButton="False"
@@ -21,7 +21,6 @@
         <vm:MainWindowViewModel/>
     </Controls:MetroWindow.DataContext>
     <Controls:MetroWindow.Resources>
-        <CollectionViewSource x:Key="AirCraftListSource" Source="{Binding AirCraftList}"/>
         <LinearGradientBrush x:Key="LinearGradientBrushStyle" StartPoint="0,0" EndPoint="1,1">
             <GradientStop Color="LightSkyBlue" Offset="0.00" />
             <GradientStop Color="RoyalBlue" Offset="0.55" />
@@ -186,6 +185,7 @@
                                 <StackPanel>
                                     <WrapPanel HorizontalAlignment="Left">
                                         <ComboBox IsEnabled="{Binding IsChecked, ElementName=AirCraftDesignationRadio}" Name="SlotComboBox" Width="170" ItemsSource="{Binding AirCraftList}" DisplayMemberPath="AirCraft.AirCraftName" SelectedItem="{Binding NowSelectSlotSetting, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
+                                        <ComboBox IsEnabled="{Binding IsChecked, ElementName=AirCraftDesignationRadio}" Name="SlotTypeComboBox" Width="100" ItemsSource="{Binding AirCraftTypeList}" SelectedItem="{Binding NowSelectAirCraftType.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
                                     </WrapPanel>
                                     <Border Style="{StaticResource BorderStyle}">
                                         <WrapPanel>
@@ -235,6 +235,7 @@
     </Controls:MetroWindow.RightWindowCommands>
     <StackPanel>
         <WrapPanel Margin="5">
+            <ComboBox ItemsSource="{Binding ShipTypeList}" SelectedItem="{Binding NowSelectShipType.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="90" Margin="0,0,5,0"/>
             <ComboBox ItemsSource="{Binding ShipList}" SelectedItem="{Binding NowSelectShip, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="120" Margin="0,0,10,0">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
@@ -247,7 +248,7 @@
                 <TextBlock Text="制空値" VerticalAlignment="Center" Margin="0,0,5,0"/>
                 <Controls:NumericUpDown Name="TargetAirSuperiorityPotentialInput" Value="{Binding TargetAirSuperiorityPotential.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Minimum="0" Speedup="True" InterceptMouseWheel="True"/>
             </WrapPanel>
-            <Button Content="計算" FontSize="14" Command="{Binding CalcCommand}" Margin="0,0,10,0" Style="{DynamicResource AccentedSquareButtonStyle}"/>
+            <Button Content="計算" FontSize="14" Command="{Binding CalcCommand}" Margin="0,0,0,0" Style="{DynamicResource AccentedSquareButtonStyle}"/>
         </WrapPanel>
         <WrapPanel Margin="5">
             <ComboBox ItemsSource="{Binding AreaList}" SelectedItem="{Binding NowSelectArea, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0" Width="150">

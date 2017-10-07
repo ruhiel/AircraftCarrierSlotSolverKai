@@ -3,6 +3,8 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using System.Collections.ObjectModel;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace AircraftCarrierSlotSolverKai.ViewModels
 {
@@ -50,7 +52,11 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
 
         public AirCraftSetting NowSelectSlotSetting { get; set; }
 
-        public ObservableCollection<AirCraftSetting> AirCraftList => AirCraftSettingList.Instance;
+        public ObservableCollection<AirCraftSetting> AirCraftList { get; set; } = new ObservableCollection<AirCraftSetting>(AirCraftSettingList.Instance);
+
+        public IEnumerable<string> AirCraftTypeList => AirCraftSettingList.Instance.Select(x => x.AirCraft.Type).OrderBy(y => y).Distinct();
+
+        public ReactiveProperty<string> NowSelectAirCraftType { get; set; } = new ReactiveProperty<string>();
 
         public ReactiveCommand SlotSetting1SetCommand { get; } = new ReactiveCommand();
 
@@ -149,6 +155,15 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
             });
 
             SlotSetting4ReSetCommand.Subscribe(_ => SlotSetting4.Value = null);
+
+            NowSelectAirCraftType.Subscribe(type =>
+            {
+                AirCraftList.Clear();
+                foreach (var item in AirCraftSettingList.Instance.Where(x => string.IsNullOrEmpty(type) || x.AirCraft.Type == type))
+                {
+                    AirCraftList.Add(item);
+                }
+            });
         }
 
         public ShipSlotInfoViewModel(ShipInfo shipInfo) : this(new ShipSlotInfo(shipInfo)) {}

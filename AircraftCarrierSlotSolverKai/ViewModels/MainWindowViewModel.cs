@@ -13,7 +13,11 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
 {
     public class MainWindowViewModel
     {
-        public List<ShipInfo> ShipList => ShipInfoRecords.Instance.Records;
+        public IEnumerable<string> ShipTypeList => ShipInfoRecords.Instance.Records.Select(x => x.Type).Distinct().OrderBy(y => Consts.ShipTypeOrder[y]);
+
+        public ReactiveProperty<string> NowSelectShipType { get; set; } = new ReactiveProperty<string>("正規空母");
+
+        public ObservableCollection<ShipInfo> ShipList { get; set; } = new ObservableCollection<ShipInfo>();
 
         public List<Area> AreaList => AreaRecords.Instance.Records;
 
@@ -134,6 +138,16 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
             });
 
             ProgressVisible = GridVisible.Select(x => !x).ToReactiveProperty();
+
+            NowSelectShipType.Subscribe(type =>
+            {
+                ShipList.Clear();
+
+                foreach (var item in ShipInfoRecords.Instance.Records.Where(x => string.IsNullOrEmpty(type) ? true : x.Type == type))
+                {
+                    ShipList.Add(item);
+                }
+            });
         }
 
         ~MainWindowViewModel()
