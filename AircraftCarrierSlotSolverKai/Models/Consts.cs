@@ -20,6 +20,8 @@ namespace AircraftCarrierSlotSolverKai.Models
 
         public const string SeaplaneBomber = "水上爆撃機";
 
+        public const string ReconnaissanceSeaplane = "水上偵察機";
+
         public const string SeaplaneFighter = "水上戦闘機";
 
         public const string AviationPersonnel = "航空要員";

@@ -7,6 +7,7 @@ using System.Linq;
 using Prism.Events;
 using AircraftCarrierSlotSolverKai.Views;
 using Reactive.Bindings.Extensions;
+using System.Reactive.Linq;
 
 namespace AircraftCarrierSlotSolverKai.ViewModels
 {
@@ -33,8 +34,6 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
 
         public ReactiveCommand CalcCommand { get; }
 
-        public ReactiveCommand SolverSettingCommand { get; } = new ReactiveCommand();
-
         public ReactiveCommand AirCraftSettingCommand { get; } = new ReactiveCommand();
 
         public ReactiveCommand SuperiorityCommand { get; } = new ReactiveCommand();
@@ -46,6 +45,10 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
         public ReactiveCommand PresetViewCommand { get; } = new ReactiveCommand();
 
         public ReactiveCommand PresetDeleteCommand { get; } = new ReactiveCommand();
+
+        public ReactiveProperty<bool> GridVisible { get; } = new ReactiveProperty<bool>(true);
+
+        public ReactiveProperty<bool> ProgressVisible { get; }
 
         public MainWindowViewModel()
         {
@@ -62,12 +65,12 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
             TargetAirSuperiorityPotential = new ReactiveProperty<string>(default(int).ToString()).SetValidateAttribute(() => TargetAirSuperiorityPotential);
 
             CalcCommand = new[] { TargetAirSuperiorityPotential.ObserveHasErrors}.CombineLatestValuesAreAllFalse().ToReactiveCommand();
-            CalcCommand.Subscribe(_ => 
+            CalcCommand.Subscribe(async _ => 
             {
-                Messenger.Instance.GetEvent<PubSubEvent<(bool result, string message)>>().Publish(Calculator.Calc(int.Parse(TargetAirSuperiorityPotential.Value), ShipSlotInfoList.Select(x => x.ShipSlotInfo)));
+                GridVisible.Value = false;
+                Messenger.Instance.GetEvent<PubSubEvent<(bool result, string message)>>().Publish(await Calculator.Calc(int.Parse(TargetAirSuperiorityPotential.Value), ShipSlotInfoList.Select(x => x.ShipSlotInfo)));
+                GridVisible.Value = true;
             });
-
-            SolverSettingCommand.Subscribe(_ => SolverSetting.Setting());
 
             AirCraftSettingCommand.Subscribe(_ =>
             {
@@ -129,6 +132,8 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
 
                 NowSelectFleet = null;
             });
+
+            ProgressVisible = GridVisible.Select(x => !x).ToReactiveProperty();
         }
 
         ~MainWindowViewModel()

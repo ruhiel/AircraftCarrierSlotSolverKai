@@ -1,137 +1,413 @@
-﻿using System;
+﻿using Google.OrTools.LinearSolver;
+using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace AircraftCarrierSlotSolverKai.Models
 {
-    public class Calculator
+    public static class Calculator
     {
-        private static Dictionary<AirCraft, int> _AirCraftLimits;
-
-        public static (bool result, string message) Calc(int airSuperiority, IEnumerable<ShipSlotInfo> shipSlotInfos)
+        /// <summary>
+        /// 計算処理
+        /// </summary>
+        /// <param name="airSuperiority"></param>
+        /// <param name="shipSlotInfos"></param>
+        /// <returns></returns>
+        public static async Task<(bool result, string message)> Calc(int airSuperiority, IEnumerable<ShipSlotInfo> shipSlotInfos) => await Task.Run(() =>
         {
-            if (string.IsNullOrEmpty(Properties.Settings.Default.SolverPath))
-            {
-                return (false, "SCIPソルバーが指定されていないため計算実行できません。");
-            }
-
-            if (!File.Exists(Properties.Settings.Default.SolverPath))
-            {
-                return (false, "SCIPソルバーが存在しないため計算実行できません。");
-            }
-
-            if (!shipSlotInfos.Any())
-            {
-                return (false, "艦娘が追加されていないため計算実行できません。");
-            }
-
-            _AirCraftLimits = new Dictionary<AirCraft, int>();
-
-            AirCraftRecords.Instance.Load();
-
-            foreach (var aircraft in AirCraftSettingRecords.Instance.Records)
-            {
-                var air = new AirCraft(AirCraftRecords.Instance.Records.FirstOrDefault(x => x.Name == aircraft.Name));
-                if(air != null)
-                {
-                    air.Improvement = aircraft.Improvement;
-                    _AirCraftLimits.Add(air, aircraft.Value);
-                }
-            }
-
             try
             {
-                GenerateLPFile(shipSlotInfos, airSuperiority);
+                if (!shipSlotInfos.Any())
+                {
+                    return (false, "艦娘が追加されていないため計算実行できません。");
+                }
 
-                var dir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+                // 表示初期化
+                ResetViewProcess(shipSlotInfos);
 
-                GenerateSolveFile(dir);
+                // ソルバー生成
+                var solver = Solver.CreateSolver("IntegerProgramming", "CBC_MIXED_INTEGER_PROGRAMMING");
 
-                var slotStringList = CalcProcess(dir);
+                // 変数作成
+                var variables = CreateVariable(solver, shipSlotInfos);
 
-                if (!slotStringList.Any())
+                // 制約条件(制空値)
+                AirConstraints(solver, variables, airSuperiority);
+
+                // 制約条件(スロット)
+                SlotConstraints(solver, variables);
+
+                // 制約条件(所持数)
+                StockConstraints(solver, variables);
+
+                // 制約条件(艦載機設定)
+                AirCraftSettingConstraints(solver, variables, shipSlotInfos);
+
+                // 目的関数
+                SetGoal(solver, variables);
+
+                // ソルバー実行
+                var resultStatus = solver.Solve();
+
+                if (resultStatus != Solver.OPTIMAL)
                 {
                     return (false, "制空値を満たす解がありませんでした。");
                 }
 
-                CalcResultViewProcess(slotStringList, shipSlotInfos);
+                // 結果表示
+                CalcResultViewProcess(solver, variables, shipSlotInfos);
+
+                return (true, string.Empty);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                return (false, $"SCIPソルバーの実行に失敗しました。:{ex.Message}");
+                return (false, $"計算に失敗しました。{e.Message}");
             }
+        });
 
-            return (true, string.Empty);
-        }
-
-        private static void GenerateLPFile(IEnumerable<ShipSlotInfo> shipSlotList, int airSuperiority)
+        /// <summary>
+        /// 制約条件(艦載機設定)
+        /// </summary>
+        /// <param name="solver"></param>
+        /// <param name="variables"></param>
+        /// <param name="shipSlotInfos"></param>
+        private static void AirCraftSettingConstraints(Solver solver, List<Variable> variables, IEnumerable<ShipSlotInfo> shipSlotInfos)
         {
-            using (var writer = new StreamWriter(@"slot.lp", false, new UTF8Encoding(false)))
+            // 攻撃機を必ず積む
+            AirCraftSettingConstraintsDetail(solver, variables, shipSlotInfos, x => x.Attack, AttackFilter);
+
+            // 彩雲を最小スロットに積む
+            AirCraftSettingConstraintsDetail(solver, variables, shipSlotInfos, x => x.Saiun, SaiunFilter);
+
+            // 熟練艦載機整備員を最小スロットに積む
+            AirCraftSettingConstraintsDetail(solver, variables, shipSlotInfos, x => x.MaintenancePersonnel, SaiunFilter);
+
+            // 攻撃機を最小スロットに積まない
+            AirCraftSettingConstraintsDetail(solver, variables, shipSlotInfos, x => x.MinimumSlot, MinimumSlotFilter, double.NegativeInfinity, 0);
+
+            // 攻撃機を第一スロットに積む
+            AirCraftSettingConstraintsDetail(solver, variables, shipSlotInfos, x => x.FirstSlotAttack, FirstAttackFilter);
+
+            // 攻撃機のみ積む
+            AirCraftSettingConstraintsDetail(solver, variables, shipSlotInfos, x => x.OnlyAttacker, OnlyAttackerFilter, double.NegativeInfinity, 0);
+
+            // 艦載機指定
+            foreach (var shipSlotInfo in shipSlotInfos)
             {
-                OutputTarget(writer, shipSlotList);
-
-                OutputAirCondition(writer, shipSlotList, airSuperiority);
-
-                OutputSlotCondition(writer, shipSlotList);
-
-                OutputStockCondition(writer, shipSlotList);
-
-                OutputShipTypeCondition(writer, shipSlotList);
-
-                OutputModeCondition(writer, shipSlotList);
-
-                OutputBinary(writer, shipSlotList);
-
-                writer.WriteLine("end");
-            }
-        }
-
-        private static IEnumerable<GeneratorInfo> GetIEnumerable(IEnumerable<ShipSlotInfo> shipSlotList)
-        {
-            var noEquip = new List<AirCraft>()
-            {
-				// 所持数制限を受けないダミー装備
-				new AirCraft("装備なし", "その他")
-            };
-
-            foreach (var ship in ShipInfoRecords.Instance.Records
-                .Select((item, index) => (item, index))
-                .Where(x => shipSlotList.Select(y => y.ShipName).Contains(x.Item1.Name)))
-            {
-                foreach (var slot in ship.Item1.Slots.Select((item, index) => (item, index)))
+                foreach (var airCraftInfos in shipSlotInfo.SlotSettings.Where(x => x.airCraft != null))
                 {
-                    foreach (var aircraft in GetAircraft(ship.Item1).Concat(noEquip).Select((item, index) => (item, index)))
-                    {
-                        if (ship.Item1.SlotNum > slot.Item2)
-                        {
-                            yield return new GeneratorInfo() { Ship = ship, Slot = slot, AirCraft = aircraft };
-                        }
-                        else if (aircraft.Item1.AirCraftName == "装備なし")
-                        {
-                            yield return new GeneratorInfo() { Ship = ship, Slot = slot, AirCraft = aircraft };
-                        }
-                    }
+                    var constraint = solver.MakeConstraint(1, 1);
+
+                    var info = GetInfoListFromVariables(variables).First(x => 
+                                                                    x.shipId == shipSlotInfo.ShipInfo.ID &&
+                                                                    x.airCraftId == airCraftInfos.airCraft.Id &&
+                                                                    x.improvement == airCraftInfos.airCraft.Improvement &&
+                                                                    x.slotIndex == airCraftInfos.index);
+
+                    constraint.SetCoefficient(info.variable, 1);
                 }
             }
         }
 
-        private static IEnumerable<AirCraft> GetAircraft(ShipInfo ship)
+        /// <summary>
+        /// 制約条件(艦載機設定)共通処理
+        /// </summary>
+        /// <param name="solver"></param>
+        /// <param name="variables"></param>
+        /// <param name="shipSlotInfos"></param>
+        /// <param name="filter"></param>
+        /// <param name="predicate"></param>
+        /// <param name="lb"></param>
+        /// <param name="ub"></param>
+        private static void AirCraftSettingConstraintsDetail(Solver solver,
+                                                                List<Variable> variables,
+                                                                IEnumerable<ShipSlotInfo> shipSlotInfos,
+                                                                Func<ShipSlotInfo, bool> filter,
+                                                                Func<ShipSlotInfo, Func<(Variable variable, int shipId, int airCraftId, int improvement, int slotIndex), bool>> predicate,
+                                                                double lb = 1,
+                                                                double ub = double.PositiveInfinity)
+        {
+            foreach (var ship in shipSlotInfos.Where(filter))
+            {
+                var constraint = solver.MakeConstraint(lb, ub);
+
+                foreach (var info in GetInfoListFromVariables(variables).Where(predicate(ship)))
+                {
+                    constraint.SetCoefficient(info.variable, 1);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 制約条件(艦載機設定)フィルタ(攻撃機を第一スロットに積む)
+        /// </summary>
+        /// <param name="ship"></param>
+        /// <returns></returns>
+        private static Func<(Variable variable, int shipId, int airCraftId, int improvement, int slotIndex), bool> FirstAttackFilter(ShipSlotInfo ship) =>
+                                v => v.shipId == ship.ShipInfo.ID &&
+                                GetAirCraft(v.airCraftId, v.improvement).Attackable &&
+                                v.slotIndex == 1;
+
+        /// <summary>
+        /// 制約条件(艦載機設定)フィルタ(攻撃機を最小スロットに積まない)
+        /// </summary>
+        /// <param name="ship"></param>
+        /// <returns></returns>
+        private static Func<(Variable variable, int shipId, int airCraftId, int improvement, int slotIndex), bool> MinimumSlotFilter(ShipSlotInfo ship) =>
+                                v => v.shipId == ship.ShipInfo.ID &&
+                                GetAirCraft(v.airCraftId, v.improvement).Attackable &&
+                                v.slotIndex == ship.MinSlotIndex;
+
+        /// <summary>
+        /// 制約条件(艦載機設定)フィルタ(熟練艦載機整備員を最小スロットに積む)
+        /// </summary>
+        /// <param name="ship"></param>
+        /// <returns></returns>
+        private static Func<(Variable variable, int shipId, int airCraftId, int improvement, int slotIndex), bool> MaintenancePersonnelFilter(ShipSlotInfo ship) =>
+                                        v => v.shipId == ship.ShipInfo.ID &&
+                                        GetAirCraft(v.airCraftId, v.improvement).Name.Contains("熟練艦載機整備員") &&
+                                        v.slotIndex == ship.MinSlotIndex;
+
+        /// <summary>
+        /// 制約条件(艦載機設定)フィルタ(彩雲を最小スロットに積む)
+        /// </summary>
+        /// <param name="ship"></param>
+        /// <returns></returns>
+        private static Func<(Variable variable, int shipId, int airCraftId, int improvement, int slotIndex), bool> SaiunFilter(ShipSlotInfo ship) => 
+                                        v => v.shipId == ship.ShipInfo.ID &&
+                                        GetAirCraft(v.airCraftId, v.improvement).Name.Contains("彩雲") &&
+                                        v.slotIndex == ship.MinSlotIndex;
+
+        /// <summary>
+        /// 制約条件(艦載機設定)フィルタ(攻撃機を必ず積む)
+        /// </summary>
+        /// <param name="ship"></param>
+        /// <returns></returns>
+        private static Func<(Variable variable, int shipId, int airCraftId, int improvement, int slotIndex), bool> AttackFilter(ShipSlotInfo ship) => 
+                                        v => v.shipId == ship.ShipInfo.ID &&
+                                        GetAirCraft(v.airCraftId, v.improvement).Attackable;
+
+        /// <summary>
+        /// 制約条件(艦載機設定)フィルタ(攻撃機のみ積む)
+        /// </summary>
+        /// <param name="ship"></param>
+        /// <returns></returns>
+        private static Func<(Variable variable, int shipId, int airCraftId, int improvement, int slotIndex), bool> OnlyAttackerFilter(ShipSlotInfo ship) =>
+                        v => v.shipId == ship.ShipInfo.ID &&
+                        !GetAirCraft(v.airCraftId, v.improvement).Attackable;
+
+        /// <summary>
+        /// 変数リスト取得
+        /// </summary>
+        /// <param name="variables"></param>
+        /// <returns></returns>
+        private static IEnumerable<(Variable variable, int shipId, int airCraftId, int improvement, int slotIndex)> GetInfoListFromVariables(IEnumerable<Variable> variables) => variables.Select(variable =>
+        {
+            var info = Parse(variable.Name());
+            return (variable, info.shipId, info.airCraftId, info.improvement, info.slotIndex);
+        });
+
+
+        /// <summary>
+        /// 結果表示
+        /// </summary>
+        /// <param name="solver"></param>
+        /// <param name="variables"></param>
+        /// <param name="shipSlotInfos"></param>
+        private static void CalcResultViewProcess(Solver solver, List<Variable> variables, IEnumerable<ShipSlotInfo> shipSlotInfos)
+        {
+            foreach (var answer in GetInfoListFromVariables(variables.Where(x => x.SolutionValue() > 0)))
+            {
+                var airCraft = GetAirCraft(answer.airCraftId, answer.improvement);
+
+                var shipSlotInfo = shipSlotInfos.First(x => x.ShipInfo.ID == answer.shipId);
+
+                if (answer.slotIndex == 1)
+                {
+                    shipSlotInfo.Slot1 = airCraft;
+                }
+                else if (answer.slotIndex == 2)
+                {
+                    shipSlotInfo.Slot2 = airCraft;
+                }
+                else if (answer.slotIndex == 3)
+                {
+                    shipSlotInfo.Slot3 = airCraft;
+                }
+                else if (answer.slotIndex == 4)
+                {
+                    shipSlotInfo.Slot4 = airCraft;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 表示初期化
+        /// </summary>
+        /// <param name="shipSlotInfos"></param>
+        private static void ResetViewProcess(IEnumerable<ShipSlotInfo> shipSlotInfos)
+        {
+            foreach (var shipSlotInfo in shipSlotInfos)
+            {
+                shipSlotInfo.Slot1 = null;
+                shipSlotInfo.Slot2 = null;
+                shipSlotInfo.Slot3 = null;
+                shipSlotInfo.Slot4 = null;
+            }
+        }
+
+        /// <summary>
+        /// 制約条件(所持数)
+        /// </summary>
+        /// <param name="solver"></param>
+        /// <param name="variables"></param>
+        private static void StockConstraints(Solver solver, List<Variable> variables)
+        {
+            foreach (var setting in AirCraftSettingRecords.Instance.Records)
+            {
+                var constraint = solver.MakeConstraint(double.NegativeInfinity, setting.Value);
+
+                foreach (var info in GetInfoListFromVariables(variables)
+                    .Where(x => x.airCraftId == setting.AirCraft.Id && x.improvement == setting.Improvement))
+                {
+                    constraint.SetCoefficient(info.variable, 1);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 目的関数
+        /// </summary>
+        /// <param name="solver"></param>
+        /// <param name="variables"></param>
+        private static void SetGoal(Solver solver, List<Variable> variables)
+        {
+            var objective = solver.Objective();
+            // 火力+命中+回避
+            foreach (var info in GetInfoListFromVariables(variables))
+            {
+                var airCraft = GetAirCraft(info.airCraftId, info.improvement);
+                var slotNum = GetSlotNum(info.shipId, info.slotIndex);
+
+                objective.SetCoefficient(info.variable, airCraft.Accuracy + airCraft.Evasion + airCraft.Power(slotNum));
+            }
+            objective.SetMaximization();
+        }
+
+        /// <summary>
+        /// 制約条件(スロット)
+        /// </summary>
+        /// <param name="solver"></param>
+        /// <param name="variables"></param>
+        private static void SlotConstraints(Solver solver, List<Variable> variables)
+        {
+            foreach (var slotGroups in GetInfoListFromVariables(variables).GroupBy(x => (x.shipId, x.slotIndex)))
+            {
+                var constraint = solver.MakeConstraint(double.NegativeInfinity, 1);
+                foreach (var slot in slotGroups)
+                {
+                    constraint.SetCoefficient(slot.variable, 1);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 制約条件(制空値)
+        /// </summary>
+        private static void AirConstraints(Solver solver, List<Variable> variables, int airSuperiority)
+        {
+            var constraint = solver.MakeConstraint(airSuperiority, double.PositiveInfinity);
+
+            foreach (var info in GetInfoListFromVariables(variables))
+            {
+                var airCraft = GetAirCraft(info.airCraftId, info.improvement);
+                var slotNum = GetSlotNum(info.shipId, info.slotIndex);
+
+                constraint.SetCoefficient(info.variable, airCraft.AirSuperiorityPotential(slotNum));
+            }
+        }
+
+        /// <summary>
+        /// 艦載機取得
+        /// </summary>
+        /// <param name="airCraftId"></param>
+        /// <param name="improvement"></param>
+        /// <returns></returns>
+        private static AirCraft GetAirCraft(int airCraftId, int improvement) => AirCraftSettingRecords.Instance.Records.Find(x => x.AirCraft.Id == airCraftId && x.AirCraft.Improvement == improvement).AirCraft;
+
+        /// <summary>
+        /// スロット数取得
+        /// </summary>
+        /// <param name="shipId"></param>
+        /// <param name="slotIndex"></param>
+        /// <returns></returns>
+        private static int GetSlotNum(int shipId, int slotIndex)
+        {
+            var ship = ShipInfoRecords.Instance.Records.Find(x => x.ID == shipId);
+            switch(slotIndex)
+            {
+                case 1:
+                    return ship.Slot1Num;
+                case 2:
+                    return ship.Slot2Num;
+                case 3:
+                    return ship.Slot3Num;
+                case 4:
+                    return ship.Slot4Num;
+                default:
+                    throw new ArgumentException(slotIndex.ToString());
+            }
+        }
+
+        /// <summary>
+        /// 変数名から各種情報取り出し
+        /// </summary>
+        /// <param name="variableName"></param>
+        /// <returns></returns>
+        private static (int shipId, int airCraftId, int improvement, int slotIndex) Parse(string variableName)
+        {
+            var val = variableName.Split('_');
+
+            return (int.Parse(val[1]), int.Parse(val[2]), int.Parse(val[3]), int.Parse(val[4]));
+        }
+
+        /// <summary>
+        /// 変数作成
+        /// </summary>
+        /// <param name="solver"></param>
+        /// <param name="shipSlotInfos"></param>
+        /// <returns></returns>
+        private static List<Variable> CreateVariable(Solver solver, IEnumerable<ShipSlotInfo> shipSlotInfos) => 
+                                shipSlotInfos.SelectMany(shipSlotInfo =>
+                                    AirCraftSettingRecords.Instance.Records
+                                        .Where(x => Equippable(shipSlotInfo.ShipInfo, x.AirCraft))
+                                        .Select(y => (shipSlotInfo, y)))
+                                        .SelectMany(z => Enumerable.Range(1, z.shipSlotInfo.ShipInfo.SlotNum)
+                                        .Select(slotIndex => (z.shipSlotInfo, z.y, slotIndex)))
+                                        .Select(i => solver.MakeBoolVar($"_{i.shipSlotInfo.ShipInfo.ID}_{i.y.AirCraft.Id}_{i.y.AirCraft.Improvement}_{i.slotIndex}"))
+                                        .ToList();
+
+        /// <summary>
+        /// 装備可能かどうか取得
+        /// </summary>
+        /// <param name="ship"></param>
+        /// <param name="airCraft"></param>
+        /// <returns></returns>
+        private static bool Equippable(ShipInfo ship, AirCraft airCraft)
         {
             Func<AirCraft, bool> predicate;
 
             if (IsSeaplaneEquippable(ship.Type))
             {
-                if(ship.Type.Contains("航空"))
+                if (ship.Type.Contains("航空"))
                 {
-                    predicate = (x) => x.Type == Consts.SeaplaneBomber || x.Type == Consts.SeaplaneFighter || x.Type == Consts.AviationPersonnel || x.AirCraftName == "装備なし";
+                    predicate = (x) => x.Type == Consts.ReconnaissanceSeaplane || x.Type == Consts.SeaplaneBomber || x.Type == Consts.SeaplaneFighter || x.Type == Consts.AviationPersonnel || x.AirCraftName == "装備なし";
                 }
                 else
                 {
-                    predicate = (x) => x.Type == Consts.SeaplaneBomber || x.Type == Consts.SeaplaneFighter || x.AirCraftName == "装備なし";
+                    predicate = (x) => x.Type == Consts.ReconnaissanceSeaplane || x.Type == Consts.SeaplaneBomber || x.Type == Consts.SeaplaneFighter || x.AirCraftName == "装備なし";
                 }
             }
             else if (ship.Type == "揚陸艦")
@@ -147,275 +423,15 @@ namespace AircraftCarrierSlotSolverKai.Models
                 predicate = (x) => x.Type == Consts.TorpedoBomber || x.Type == Consts.DiveBomber || x.Type == Consts.Fighter || x.Type == Consts.JetBomber || x.Type == Consts.ReconAircraft || x.Type == Consts.AviationPersonnel || x.AirCraftName == "装備なし";
             }
 
-            return _AirCraftLimits.Select(y => y.Key).Where(predicate);
+            return predicate(airCraft);
         }
 
-        private static void OutputTarget(StreamWriter writer, IEnumerable<ShipSlotInfo> shipSlotList)
-        {
-            writer.WriteLine("maximize");
-
-            foreach (var record in GetIEnumerable(shipSlotList))
-            {
-                var text = "+ " + record.Power + " " + record.SlotName + @" \ " + record.Ship.Item1.Name + " " + record.Slot.Item1 + " " + record.AirCraft.Item1.AirCraftName + " 火力";
-                writer.WriteLine(text);
-                text = "+ " + record.AirCraft.Item1.Accuracy + " " + record.SlotName + @" \ " + record.Ship.Item1.Name + " " + record.Slot.Item1 + " " + record.AirCraft.Item1.AirCraftName + " 命中";
-                writer.WriteLine(text);
-                text = "+ " + record.AirCraft.Item1.Evasion + " " + record.SlotName + @" \ " + record.Ship.Item1.Name + " " + record.Slot.Item1 + " " + record.AirCraft.Item1.AirCraftName + " 回避";
-                writer.WriteLine(text);
-            }
-
-            writer.WriteLine();
-        }
-
-        private static void OutputAirCondition(StreamWriter writer, IEnumerable<ShipSlotInfo> shipSlotList, int airSuperiority)
-        {
-            writer.WriteLine("subject to");
-
-            foreach (var record in GetIEnumerable(shipSlotList))
-            {
-                var text = "+ " + record.AirSuperiorityPotential + " " + record.SlotName + @" \ " + record.Ship.Item1.Name + " " + record.Slot.Item1 + " " + record.AirCraft.Item1.AirCraftName;
-                writer.WriteLine(text);
-            }
-            writer.WriteLine(">= " + airSuperiority);
-            writer.WriteLine();
-        }
-
-        private static void OutputSlotCondition(StreamWriter writer, IEnumerable<ShipSlotInfo> shipSlotList)
-        {
-            foreach (var group in GetIEnumerable(shipSlotList).GroupBy(x => new { Ship = x.Ship.Item2, Slot = x.Slot.Item2 }))
-            {
-                foreach (var g in group)
-                {
-                    var text = "+ " + g.SlotName;
-                    writer.WriteLine(text);
-                }
-                writer.WriteLine("= 1");
-                writer.WriteLine();
-            }
-        }
-
-        private static void OutputStockCondition(StreamWriter writer, IEnumerable<ShipSlotInfo> shipSlotList)
-        {
-            foreach (var dic in _AirCraftLimits)
-            {
-                var list = GetIEnumerable(shipSlotList).Where(x => x.AirCraft.Item1 == dic.Key);
-                if (list.Any())
-                {
-                    foreach (var record in list)
-                    {
-                        writer.WriteLine("+ " + record.SlotName);
-                    }
-                    writer.WriteLine("<= " + dic.Value + @" \ 所持制限 " + dic.Key.Name);
-                    writer.WriteLine();
-                }
-            }
-        }
-
-        private static void OutputShipTypeCondition(StreamWriter writer, IEnumerable<ShipSlotInfo> shipSlotList)
-        {
-            if (GetIEnumerable(shipSlotList).Any(x => IsSeaplaneEquippable(x.Ship.Item1.Type)))
-            {
-                // 水上機制限数
-                foreach (var noEquipShipList in GetIEnumerable(shipSlotList)
-                    .Where(x => IsSeaplaneEquippable(x.Ship.Item1.Type) && x.AirCraft.Item1.AirCraftName != "装備なし")
-                    .GroupBy(y => y.Ship.Item2))
-                {
-                    foreach (var noEquipList in noEquipShipList)
-                    {
-                        writer.WriteLine("+ " + noEquipList.SlotName);
-                    }
-
-                    writer.WriteLine("<= " + Properties.Settings.Default.CruiserSlotNum);
-                    writer.WriteLine();
-                }
-            }
-        }
-
-        private static void OutputModeCondition(StreamWriter writer, IEnumerable<ShipSlotInfo> shipSlotList)
-        {
-            var infoList = GetIEnumerable(shipSlotList);
-            foreach (var info in shipSlotList.Where(x => x.Attack))
-            {
-                var list = infoList.Where(x => x.Ship.Item1.Name == info.ShipName && x.AirCraft.Item1.Attackable);
-                if (list.Any())
-                {
-                    foreach (var i in list)
-                    {
-                        var text = "+ " + i.SlotName + @" \ 攻撃機";
-                        writer.WriteLine(text);
-                    }
-                    writer.WriteLine(">= 1");
-                    writer.WriteLine();
-                }
-            }
-
-            foreach (var info in shipSlotList.Where(x => x.FirstSlotAttack))
-            {
-                var list = infoList.Where(x => x.Ship.Item1.Name == info.ShipName &&
-                    x.Slot.Item2 == 0 &&
-                    x.AirCraft.Item1.Attackable);
-
-                if (list.Any())
-                {
-                    foreach (var i in list)
-                    {
-                        var text = "+ " + i.SlotName + @" \ 1スロ目攻撃機";
-                        writer.WriteLine(text);
-                    }
-                    writer.WriteLine(">= 1");
-                    writer.WriteLine();
-                }
-            }
-
-            foreach (var info in shipSlotList.Where(x => x.OnlyAttacker))
-            {
-                foreach (var i in infoList.Where(x => x.Ship.Item1.Name == info.ShipName && x.AirCraft.Item1.Type == Consts.Fighter))
-                {
-                    var text = "+ " + i.SlotName + @" \ 攻撃機のみ";
-                    writer.WriteLine(text);
-                }
-                writer.WriteLine("= 0");
-                writer.WriteLine();
-            }
-
-            foreach (var info in shipSlotList.Where(x => x.AirCraftSetting.Any(y => y.Value != "未指定")))
-            {
-                foreach (var dic in info.AirCraftSetting.Where(z => z.Value != "未指定"))
-                {
-                    var v = infoList.Single(j => j.Ship.Item1.Name == info.ShipName && j.AirCraft.Item1.AirCraftName == dic.Value && j.Slot.Item2 == dic.Key);
-
-                    var text = "+ " + v.SlotName + @" = 1 \ 艦載機指定";
-                    writer.WriteLine(text);
-                    writer.WriteLine();
-                }
-            }
-
-            OutputEquipCondition(writer, shipSlotList);
-        }
-
-        private static void OutputEquipCondition(StreamWriter writer, IEnumerable<ShipSlotInfo> shipSlotList)
-        {
-            var infoList = GetIEnumerable(shipSlotList);
-            foreach (var info in shipSlotList.Where(x => x.Saiun))
-            {
-                var min = info.MinSlotNum;
-
-                var saiun = infoList.Where(x => x.Slot.Item1 == min && x.AirCraft.Item1.AirCraftName == "彩雲").First();
-                writer.WriteLine("+ " + saiun.SlotName + @" = 1 \ " + "彩雲");
-                writer.WriteLine();
-            }
-
-            foreach (var info in shipSlotList.Where(x => x.MaintenancePersonnel))
-            {
-                var min = info.MinSlotNum;
-
-                var saiun = infoList.Where(x => x.Slot.Item1 == min && x.AirCraft.Item1.AirCraftName == "熟練艦載機整備員").First();
-                writer.WriteLine("+ " + saiun.SlotName + @" = 1 \ " + "熟練艦載機整備員");
-                writer.WriteLine();
-            }
-
-            foreach (var info in shipSlotList.Where(x => x.MinimumSlot))
-            {
-                var min = info.MinSlotNum;
-                var list = infoList.Where(x => x.Slot.Item1 == min && (x.AirCraft.Item1.Type == Consts.TorpedoBomber || x.AirCraft.Item1.Type == Consts.DiveBomber));
-                if (list.Any())
-                {
-                    foreach (var i in list)
-                    {
-                        writer.WriteLine("+ " + i.SlotName + @" \ " + "最小スロット攻撃機");
-                    }
-                    writer.WriteLine("= 0");
-                    writer.WriteLine();
-                }
-            }
-        }
-
-        private static void OutputBinary(StreamWriter writer, IEnumerable<ShipSlotInfo> shipSlotList)
-        {
-            writer.WriteLine("binary");
-            foreach (var record in GetIEnumerable(shipSlotList))
-            {
-                writer.WriteLine(record.SlotName + @" \ " + record.Ship.Item1.Name + " " + record.Slot.Item1 + " " + record.AirCraft.Item1.AirCraftName);
-            }
-            writer.WriteLine();
-
-        }
-
-        private static void GenerateSolveFile(string dir)
-        {
-            using (var writer = new StreamWriter(Path.Combine(dir, "solve.txt"), false, new UTF8Encoding(false)))
-            {
-                writer.WriteLine("read slot.lp");
-                writer.WriteLine("optimize");
-                writer.WriteLine("display solution");
-                writer.WriteLine("quit");
-            }
-        }
-
-        private static List<string> CalcProcess(string dir)
-        {
-            var slotStringList = new List<string>();
-
-            var logFile = Path.Combine(dir, "result.log");
-
-            if (File.Exists(logFile))
-            {
-                File.Delete(logFile);
-            }
-
-            var psi = new ProcessStartInfo();
-
-            psi.FileName = Properties.Settings.Default.SolverPath;
-            psi.Arguments = "-b solve.txt" + " -l result.log";
-            psi.WorkingDirectory = dir;
-
-            var process = Process.Start(psi);
-
-            process.WaitForExit();
-
-            var log = Path.Combine(dir, "result.log");
-            var regex = new Regex(@"(?<slot>slot_\d+_\d_\d+).+");
-            using (var r = new StreamReader(log))
-            {
-                string line;
-                while ((line = r.ReadLine()) != null)
-                {
-                    var matches = regex.Matches(line);
-                    if (matches.Count > 0)
-                    {
-                        slotStringList.Add(matches[0].Groups["slot"].Value);
-                    }
-                }
-            }
-
-            return slotStringList;
-        }
-
-        private static void CalcResultViewProcess(List<string> slotStringList, IEnumerable<ShipSlotInfo> shipSlotList)
-        {
-            foreach (var generatorInfo in slotStringList.Select(x => GetIEnumerable(shipSlotList).First(y => y.SlotName == x)))
-            {
-                var ship = shipSlotList.First(x => x.ShipName == generatorInfo.Ship.Item1.Name);
-                if (generatorInfo.Slot.Item2 == 0)
-                {
-                    ship.Slot1 = generatorInfo.AirCraft.Item1;
-                }
-                else if (generatorInfo.Slot.Item2 == 1)
-                {
-                    ship.Slot2 = generatorInfo.AirCraft.Item1;
-                }
-                else if (generatorInfo.Slot.Item2 == 2)
-                {
-                    ship.Slot3 = generatorInfo.AirCraft.Item1;
-                }
-                else if (generatorInfo.Slot.Item2 == 3)
-                {
-                    ship.Slot4 = generatorInfo.AirCraft.Item1;
-                }
-            }
-        }
-
-        private static bool IsSeaplaneEquippable(String shipType)
+        /// <summary>
+        /// 水上機が装備可能かどうか取得
+        /// </summary>
+        /// <param name="shipType"></param>
+        /// <returns></returns>
+        private static bool IsSeaplaneEquippable(string shipType)
         {
             switch (shipType)
             {

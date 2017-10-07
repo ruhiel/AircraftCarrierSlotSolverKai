@@ -23,6 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -32,10 +33,17 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CsvHelper, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
       <HintPath>..\packages\CsvHelper.2.16.3.0\lib\net45\CsvHelper.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.OrTools.x86, Version=5.0.6170.24109, Culture=neutral, PublicKeyToken=fdef6fe93723b46c, processorArchitecture=x86">
+      <HintPath>..\packages\Google.OrTools.x86.5.0.6170.24109\lib\net40\Google.OrTools.x86.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Protobuf, Version=3.0.0.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Protobuf.3.0.0\lib\net45\Google.Protobuf.dll</HintPath>
     </Reference>
     <Reference Include="MahApps.Metro, Version=1.4.3.0, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
       <HintPath>..\packages\MahApps.Metro.1.4.3\lib\net45\MahApps.Metro.dll</HintPath>
@@ -129,12 +137,10 @@
     <Compile Include="Models\CSVRecords.cs" />
     <Compile Include="Models\Fleet.cs" />
     <Compile Include="Models\FleetMap.cs" />
-    <Compile Include="Models\GeneratorInfo.cs" />
     <Compile Include="Models\ShipInfo.cs" />
     <Compile Include="Models\ShipInfoMap.cs" />
     <Compile Include="Models\ShipInfoRecords.cs" />
     <Compile Include="Models\ShipSlotInfo.cs" />
-    <Compile Include="Models\SolverSetting.cs" />
     <Compile Include="ViewModels\AirCraftSettingViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\Messenger.cs" />

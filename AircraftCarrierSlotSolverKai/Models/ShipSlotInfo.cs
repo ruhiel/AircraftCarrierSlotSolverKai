@@ -7,6 +7,9 @@ namespace AircraftCarrierSlotSolverKai.Models
     public class ShipSlotInfo : BindableBase
     {
         private string _ShipName;
+
+        public ShipInfo ShipInfo { get; private set; }
+
         /// <summary>
         /// 艦名
         /// </summary>
@@ -98,6 +101,8 @@ namespace AircraftCarrierSlotSolverKai.Models
 
         public int MinSlotNum => new[] { Slot1Num, Slot2Num, Slot3Num, Slot4Num }.Min();
 
+        public int MinSlotIndex => new[] { Slot1Num, Slot2Num, Slot3Num, Slot4Num }.Select((slot, index) => (slot, index)).OrderByDescending(x => x.index).First(y => y.slot == MinSlotNum).index + 1;
+
         private bool _Attack;
         public bool Attack
         {
@@ -169,6 +174,8 @@ namespace AircraftCarrierSlotSolverKai.Models
             set { SetProperty(ref _SlotSetting4, value); }
         }
 
+        public IEnumerable<(AirCraft airCraft, int index)> SlotSettings => new AirCraft[] { SlotSetting1, SlotSetting2, SlotSetting3, SlotSetting4 }.Select((airCraft, index) => { (AirCraft airCraft, int index) tuple = (airCraft, index + 1); return tuple; });
+
         public Dictionary<int, string> AirCraftSetting
         {
             get
@@ -179,6 +186,7 @@ namespace AircraftCarrierSlotSolverKai.Models
 
         public ShipSlotInfo(ShipInfo shipInfo)
         {
+            ShipInfo = shipInfo;
             ShipName = shipInfo.Name;
             Slot1Num = shipInfo.Slot1Num;
             Slot2Num = shipInfo.Slot2Num;

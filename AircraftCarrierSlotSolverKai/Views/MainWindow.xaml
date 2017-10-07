@@ -44,6 +44,25 @@
                 <DataTrigger Binding="{Binding Slot1.Value.Type}" Value="{x:Static model:Consts.DiveBomber}">
                     <Setter Property="Foreground" Value="Red" />
                 </DataTrigger>
+                <DataTrigger Binding="{Binding Slot1.Value.Type}" Value="{x:Static model:Consts.ReconAircraft}">
+                    <Setter Property="Foreground" Value="Yellow" />
+                    <Setter Property="Background" Value="DarkGreen" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Slot1.Value.Type}" Value="{x:Static model:Consts.JetBomber}">
+                    <Setter Property="Foreground" Value="Orange" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Slot1.Value.Type}" Value="{x:Static model:Consts.ReconnaissanceSeaplane}">
+                    <Setter Property="Foreground" Value="LightGreen" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Slot1.Value.Type}" Value="{x:Static model:Consts.SeaplaneBomber}">
+                    <Setter Property="Foreground" Value="LightGreen" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Slot1.Value.Type}" Value="{x:Static model:Consts.SeaplaneFighter}">
+                    <Setter Property="Foreground" Value="LightGreen" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Slot1.Value.Type}" Value="{x:Static model:Consts.AviationPersonnel}">
+                    <Setter Property="Foreground" Value="Brown" />
+                </DataTrigger>
             </Style.Triggers>
         </Style>
         <Style x:Key="Slot2Style" TargetType="TextBlock">
@@ -56,6 +75,25 @@
                 </DataTrigger>
                 <DataTrigger Binding="{Binding Slot2.Value.Type}" Value="{x:Static model:Consts.DiveBomber}">
                     <Setter Property="Foreground" Value="Red" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Slot2.Value.Type}" Value="{x:Static model:Consts.ReconAircraft}">
+                    <Setter Property="Foreground" Value="Yellow" />
+                    <Setter Property="Background" Value="DarkGreen" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Slot2.Value.Type}" Value="{x:Static model:Consts.JetBomber}">
+                    <Setter Property="Foreground" Value="Orange" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Slot2.Value.Type}" Value="{x:Static model:Consts.ReconnaissanceSeaplane}">
+                    <Setter Property="Foreground" Value="LightGreen" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Slot2.Value.Type}" Value="{x:Static model:Consts.SeaplaneBomber}">
+                    <Setter Property="Foreground" Value="LightGreen" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Slot2.Value.Type}" Value="{x:Static model:Consts.SeaplaneFighter}">
+                    <Setter Property="Foreground" Value="LightGreen" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Slot2.Value.Type}" Value="{x:Static model:Consts.AviationPersonnel}">
+                    <Setter Property="Foreground" Value="Brown" />
                 </DataTrigger>
             </Style.Triggers>
         </Style>
@@ -70,6 +108,25 @@
                 <DataTrigger Binding="{Binding Slot3.Value.Type}" Value="{x:Static model:Consts.DiveBomber}">
                     <Setter Property="Foreground" Value="Red" />
                 </DataTrigger>
+                <DataTrigger Binding="{Binding Slot3.Value.Type}" Value="{x:Static model:Consts.ReconAircraft}">
+                    <Setter Property="Foreground" Value="Yellow" />
+                    <Setter Property="Background" Value="DarkGreen" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Slot3.Value.Type}" Value="{x:Static model:Consts.JetBomber}">
+                    <Setter Property="Foreground" Value="Orange" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Slot3.Value.Type}" Value="{x:Static model:Consts.ReconnaissanceSeaplane}">
+                    <Setter Property="Foreground" Value="LightGreen" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Slot3.Value.Type}" Value="{x:Static model:Consts.SeaplaneBomber}">
+                    <Setter Property="Foreground" Value="LightGreen" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Slot3.Value.Type}" Value="{x:Static model:Consts.SeaplaneFighter}">
+                    <Setter Property="Foreground" Value="LightGreen" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Slot3.Value.Type}" Value="{x:Static model:Consts.AviationPersonnel}">
+                    <Setter Property="Foreground" Value="Brown" />
+                </DataTrigger>
             </Style.Triggers>
         </Style>
         <Style x:Key="Slot4Style" TargetType="TextBlock">
@@ -83,8 +140,28 @@
                 <DataTrigger Binding="{Binding Slot4.Value.Type}" Value="{x:Static model:Consts.DiveBomber}">
                     <Setter Property="Foreground" Value="Red" />
                 </DataTrigger>
+                <DataTrigger Binding="{Binding Slot4.Value.Type}" Value="{x:Static model:Consts.ReconAircraft}">
+                    <Setter Property="Foreground" Value="Yellow" />
+                    <Setter Property="Background" Value="DarkGreen" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Slot4.Value.Type}" Value="{x:Static model:Consts.JetBomber}">
+                    <Setter Property="Foreground" Value="Orange" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Slot4.Value.Type}" Value="{x:Static model:Consts.ReconnaissanceSeaplane}">
+                    <Setter Property="Foreground" Value="LightGreen" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Slot4.Value.Type}" Value="{x:Static model:Consts.SeaplaneBomber}">
+                    <Setter Property="Foreground" Value="LightGreen" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Slot4.Value.Type}" Value="{x:Static model:Consts.SeaplaneFighter}">
+                    <Setter Property="Foreground" Value="LightGreen" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Slot4.Value.Type}" Value="{x:Static model:Consts.AviationPersonnel}">
+                    <Setter Property="Foreground" Value="Brown" />
+                </DataTrigger>
             </Style.Triggers>
         </Style>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibility"/>
     </Controls:MetroWindow.Resources>
     <Controls:MetroWindow.Flyouts>
         <Controls:FlyoutsControl>
@@ -153,7 +230,6 @@
     </Controls:MetroWindow.Flyouts>
     <Controls:MetroWindow.RightWindowCommands>
         <Controls:WindowCommands>
-            <Button Content="ソルバ設定" Command="{Binding SolverSettingCommand}" />
             <Button Content="艦載機設定" Command="{Binding AirCraftSettingCommand}"/>
         </Controls:WindowCommands>
     </Controls:MetroWindow.RightWindowCommands>
@@ -194,8 +270,11 @@
             <Button Content="編成削除" Command="{Binding PresetDeleteCommand}"/>
             <ComboBox ItemsSource="{Binding FleetList}" DisplayMemberPath="Name" SelectedItem="{Binding NowSelectFleet, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
         </WrapPanel>
+        <WrapPanel HorizontalAlignment="Center">
+            <Controls:ProgressRing Foreground="{DynamicResource AccentColorBrush}" Visibility="{Binding ProgressVisible.Value, Converter={StaticResource BoolToVisibility}}"/>
+        </WrapPanel>
         <WrapPanel Margin="5">
-            <DataGrid RowBackground="LightYellow" AlternatingRowBackground="#f0f0f0" ItemsSource="{Binding ShipSlotInfoList}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="True" CanUserSortColumns="False" Width="400">
+            <DataGrid Visibility="{Binding GridVisible.Value, Converter={StaticResource BoolToVisibility}}" RowBackground="LightYellow" AlternatingRowBackground="#f0f0f0" ItemsSource="{Binding ShipSlotInfoList}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="True" CanUserSortColumns="False" Width="400">
                 <DataGrid.CellStyle>
                     <Style TargetType="DataGridCell">
                         <Style.Triggers>

@@ -10,6 +10,9 @@ namespace AircraftCarrierSlotSolverKai.Models
     {
         public string Name { get; set; }
 
+        /// <summary>
+        /// 艦載機
+        /// </summary>
         public AirCraft AirCraft
         {
             get
@@ -31,6 +34,9 @@ namespace AircraftCarrierSlotSolverKai.Models
         /// </summary>
         public int Improvement { get; set; }
 
+        /// <summary>
+        /// 所持数
+        /// </summary>
         public int Value { get; set; }
     }
 }

@@ -100,11 +100,11 @@ namespace AircraftCarrierSlotSolverKai.Models
         /// 回避
         /// </summary>
         public int Evasion { get; set; }
-        public int Id { get; internal set; }
-        public int Armor { get; internal set; }
-        public int ASW { get; internal set; }
-        public int ViewRange { get; internal set; }
-        public int Luck { get; internal set; }
+        public int Id { get; set; }
+        public int Armor { get; set; }
+        public int ASW { get; set; }
+        public int ViewRange { get; set; }
+        public int Luck { get; set; }
 
         public AirCraft()
         {
@@ -125,6 +125,7 @@ namespace AircraftCarrierSlotSolverKai.Models
 
         public AirCraft(AirCraft source)
         {
+            Id = source?.Id ?? 0;
             Name = source?.Name ?? "装備なし";
             Type = source?.Type ?? "その他";
             AAValue = source?.AAValue ?? default(int);
@@ -137,6 +138,51 @@ namespace AircraftCarrierSlotSolverKai.Models
 
         public AirCraft(AirCraftSetting setting) : this(setting?.AirCraft)
         {
+        }
+
+        public int Power(int slotNum)
+        {
+            if (Type == Consts.DiveBomber)
+            {
+                var pow = 1 * (25 + Bomber * Math.Sqrt(slotNum));
+                return (int)Math.Floor(pow);
+            }
+            else if (Type == Consts.TorpedoBomber)
+            {
+                var pow = 1.15 * (25 + Torpedo * Math.Sqrt(slotNum));
+                return (int)Math.Floor(pow);
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        public int AirSuperiorityPotential(int slotNum)
+        {
+            if (Name == "装備なし")
+            {
+                return 0;
+            }
+
+            var air = AA * Math.Sqrt(slotNum);
+            double bonus = 0;
+            switch (Type)
+            {
+                case Consts.TorpedoBomber:
+                case Consts.DiveBomber:
+                case Consts.SeaplaneBomber:
+                    bonus = 3;
+                    break;
+                case Consts.Fighter:
+                case Consts.SeaplaneFighter:
+                    bonus = 25;
+                    break;
+                default:
+                    break;
+            }
+
+            return (int)Math.Floor(air + bonus);
         }
     }
 

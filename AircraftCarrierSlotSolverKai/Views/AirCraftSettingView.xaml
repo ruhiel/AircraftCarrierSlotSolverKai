@@ -41,6 +41,25 @@
                                         <DataTrigger Binding="{Binding Type}" Value="{x:Static model:Consts.DiveBomber}">
                                             <Setter Property="Foreground" Value="Red" />
                                         </DataTrigger>
+                                        <DataTrigger Binding="{Binding Type}" Value="{x:Static model:Consts.ReconAircraft}">
+                                            <Setter Property="Foreground" Value="Yellow" />
+                                            <Setter Property="Background" Value="DarkGreen" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Type}" Value="{x:Static model:Consts.JetBomber}">
+                                            <Setter Property="Foreground" Value="Orange" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Type}" Value="{x:Static model:Consts.ReconnaissanceSeaplane}">
+                                            <Setter Property="Foreground" Value="LightGreen" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Type}" Value="{x:Static model:Consts.SeaplaneBomber}">
+                                            <Setter Property="Foreground" Value="LightGreen" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Type}" Value="{x:Static model:Consts.SeaplaneFighter}">
+                                            <Setter Property="Foreground" Value="LightGreen" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Type}" Value="{x:Static model:Consts.AviationPersonnel}">
+                                            <Setter Property="Foreground" Value="Brown" />
+                                        </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </TextBlock.Style>
@@ -68,6 +87,25 @@
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding AirCraft.Type}" Value="{x:Static model:Consts.DiveBomber}">
                                     <Setter Property="Foreground" Value="Red" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding AirCraft.Type}" Value="{x:Static model:Consts.ReconAircraft}">
+                                    <Setter Property="Foreground" Value="Yellow" />
+                                    <Setter Property="Background" Value="DarkGreen" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding AirCraft.Type}" Value="{x:Static model:Consts.JetBomber}">
+                                    <Setter Property="Foreground" Value="Orange" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding AirCraft.Type}" Value="{x:Static model:Consts.ReconnaissanceSeaplane}">
+                                    <Setter Property="Foreground" Value="LightGreen" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding AirCraft.Type}" Value="{x:Static model:Consts.SeaplaneBomber}">
+                                    <Setter Property="Foreground" Value="LightGreen" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding AirCraft.Type}" Value="{x:Static model:Consts.SeaplaneFighter}">
+                                    <Setter Property="Foreground" Value="LightGreen" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding AirCraft.Type}" Value="{x:Static model:Consts.AviationPersonnel}">
+                                    <Setter Property="Foreground" Value="Brown" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
