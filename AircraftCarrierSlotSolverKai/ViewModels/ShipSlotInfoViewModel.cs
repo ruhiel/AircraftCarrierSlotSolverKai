@@ -74,6 +74,14 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
 
         public ReactiveCommand SlotSetting4ReSetCommand { get; } = new ReactiveCommand();
 
+        public ReactiveProperty<bool> SeplaneFighterNumEnable { get; } = new ReactiveProperty<bool>(false);
+
+        public ReactiveProperty<int> SeplaneFighterNum { get; } = new ReactiveProperty<int>(0);
+
+        public bool IsCruiser => ShipSlotInfo.ShipInfo.Type.Contains("巡洋艦");
+
+        public bool IsCV => ShipSlotInfo.ShipInfo.Type.Contains("空母");
+
         private ShipSlotInfoViewModel(ShipSlotInfo info)
         {
             ShipSlotInfo = info;

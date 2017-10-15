@@ -69,10 +69,6 @@
             </ComboBox>
             <Button Content="追加" Command="{Binding AddCommand}"/>
         </WrapPanel>
-        <WrapPanel HorizontalAlignment="Left" Margin="5">
-            <TextBlock Text="巡洋艦に積む水上機数" FontSize="10" VerticalAlignment="Center"/>
-            <Controls:NumericUpDown Minimum="0" Maximum="4" Value="{Binding Source={x:Static p:Settings.Default}, Path=CruiserSlotNum, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
-        </WrapPanel>
         <DataGrid ItemsSource="{Binding AirCraftSettings}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserSortColumns="False" CanUserDeleteRows="True" HorizontalScrollBarVisibility="Auto" Height="500">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="艦載機" Binding="{Binding AirCraft.Name}" IsReadOnly="True" Width="170">
