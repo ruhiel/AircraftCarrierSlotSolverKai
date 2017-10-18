@@ -12,7 +12,7 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
     {
         public ShipSlotInfo ShipSlotInfo { get; private set; }
 
-        public ReactiveProperty<string> ShipName { get; private set; }
+        public ReadOnlyReactiveProperty<string> ShipName { get; private set; }
 
         public ReactiveProperty<AirCraft> Slot1 { get; private set; }
 
@@ -78,7 +78,7 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
         {
             ShipSlotInfo = info;
 
-            ShipName = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.ShipName);
+            ShipName = info.ObserveProperty(x => x.ShipName).ToReadOnlyReactiveProperty();
 
             Slot1 = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.Slot1);
 
