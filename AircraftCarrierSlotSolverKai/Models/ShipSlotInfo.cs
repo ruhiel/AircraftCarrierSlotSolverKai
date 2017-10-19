@@ -183,6 +183,18 @@ namespace AircraftCarrierSlotSolverKai.Models
                 return new Dictionary<int, string> { { 0, SlotSetting1?.AirCraftName ?? "未指定" }, { 1, SlotSetting2?.AirCraftName ?? "未指定" }, { 2, SlotSetting3?.AirCraftName ?? "未指定" }, { 3, SlotSetting4?.AirCraftName ?? "未指定" } };
             }
         }
+        private bool _SeaplaneFighterNumEnable;
+        public bool SeaplaneFighterNumEnable
+        {
+            get { return _SeaplaneFighterNumEnable; }
+            set { SetProperty(ref _SeaplaneFighterNumEnable, value); }
+        }
+        private int _SeaplaneFighterNum;
+        public int SeaplaneFighterNum
+        {
+            get { return _SeaplaneFighterNum; }
+            set { SetProperty(ref _SeaplaneFighterNum, value); }
+        }
 
         public ShipSlotInfo(ShipInfo shipInfo)
         {
