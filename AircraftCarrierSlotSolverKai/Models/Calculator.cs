@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -44,6 +45,9 @@ namespace AircraftCarrierSlotSolverKai.Models
 
                 // 制約条件(艦載機設定)
                 AirCraftSettingConstraints(solver, variables, shipSlotInfos);
+
+                // 制約条件(装備種)
+                AirCraftTypeConstraints(solver, variables, shipSlotInfos);
 
                 // 目的関数
                 SetGoal(solver, variables);
@@ -330,6 +334,41 @@ namespace AircraftCarrierSlotSolverKai.Models
         }
 
         /// <summary>
+        /// 制約条件(装備種)
+        /// </summary>
+        /// <param name="solver"></param>
+        /// <param name="variables"></param>
+        /// <param name="shipSlotInfos"></param>
+        private static void AirCraftTypeConstraints(Solver solver, List<Variable> variables, IEnumerable<ShipSlotInfo> shipSlotInfos)
+        {
+            // 空母系
+            SetAirCraftTypeConstraints(solver, variables, shipSlotInfos, x => x.ShipInfo.Type.Contains("空母"), new[] { "艦上攻撃機", "艦上戦闘機", "艦上爆撃機", "艦上偵察機", "航空要員", "噴式戦闘爆撃機"});
+
+            // 噴式戦闘爆撃機
+            SetAirCraftTypeConstraints(solver, variables, shipSlotInfos, x => !Regex.IsMatch(x.ShipInfo.Name, "(翔鶴|瑞鶴)改二甲"), new[] { "噴式戦闘爆撃機" }, false);
+
+            // 巡洋艦、戦艦
+            SetAirCraftTypeConstraints(solver, variables, shipSlotInfos, x => new [] { "航空巡洋艦", "航空戦艦" }.Contains(x.ShipInfo.Type), new [] { "水上爆撃機", "水上戦闘機" });
+        }
+
+        private static void SetAirCraftTypeConstraints(Solver solver, List<Variable> variables, IEnumerable<ShipSlotInfo> shipSlotInfos, Func<ShipSlotInfo, bool> predicate, IEnumerable<string> airCraftTypes, bool airCraftUnMatch = true)
+        {
+            // 巡洋艦、戦艦
+            foreach (var shipslotinfo in shipSlotInfos.Where(predicate))
+            {
+                var constraint = solver.MakeConstraint(double.NegativeInfinity, 0);
+
+                foreach (var info in GetInfoListFromVariables(variables)
+                                        .Where(x => x.shipId == shipslotinfo.ShipInfo.ID)
+                                        .Select(y => (y.variable, AirCraftRecords.Instance.Records.First(z => z.Id == y.airCraftId)))
+                                        .Where(i => airCraftUnMatch ^ airCraftTypes.Contains(i.Item2.Type)))
+                {
+                    constraint.SetCoefficient(info.variable, 1);
+                }
+            }
+        }
+
+        /// <summary>
         /// 艦載機取得
         /// </summary>
         /// <param name="airCraftId"></param>
@@ -382,67 +421,10 @@ namespace AircraftCarrierSlotSolverKai.Models
         private static List<Variable> CreateVariable(Solver solver, IEnumerable<ShipSlotInfo> shipSlotInfos) => 
                                 shipSlotInfos.SelectMany(shipSlotInfo =>
                                     AirCraftSettingRecords.Instance.Records
-                                        .Where(x => Equippable(shipSlotInfo.ShipInfo, x.AirCraft))
                                         .Select(y => (shipSlotInfo, y)))
                                         .SelectMany(z => Enumerable.Range(1, z.shipSlotInfo.ShipInfo.SlotNum)
                                         .Select(slotIndex => (z.shipSlotInfo, z.y, slotIndex)))
                                         .Select(i => solver.MakeBoolVar($"_{i.shipSlotInfo.ShipInfo.ID}_{i.y.AirCraft.Id}_{i.y.AirCraft.Improvement}_{i.slotIndex}"))
                                         .ToList();
-
-        /// <summary>
-        /// 装備可能かどうか取得
-        /// </summary>
-        /// <param name="ship"></param>
-        /// <param name="airCraft"></param>
-        /// <returns></returns>
-        private static bool Equippable(ShipInfo ship, AirCraft airCraft)
-        {
-            Func<AirCraft, bool> predicate;
-
-            if (IsSeaplaneEquippable(ship.Type))
-            {
-                if (ship.Type.Contains("航空"))
-                {
-                    predicate = (x) => x.Type == Consts.ReconnaissanceSeaplane || x.Type == Consts.SeaplaneBomber || x.Type == Consts.SeaplaneFighter || x.Type == Consts.AviationPersonnel || x.AirCraftName == "装備なし";
-                }
-                else
-                {
-                    predicate = (x) => x.Type == Consts.ReconnaissanceSeaplane || x.Type == Consts.SeaplaneBomber || x.Type == Consts.SeaplaneFighter || x.AirCraftName == "装備なし";
-                }
-            }
-            else if (ship.Type == "揚陸艦")
-            {
-                predicate = (x) => x.Type == Consts.Fighter || x.AirCraftName == "装備なし";
-            }
-            else if (ship.Type == "補給艦")
-            {
-                predicate = (x) => x.Type == Consts.TorpedoBomber || x.AirCraftName == "装備なし";
-            }
-            else
-            {
-                predicate = (x) => x.Type == Consts.TorpedoBomber || x.Type == Consts.DiveBomber || x.Type == Consts.Fighter || x.Type == Consts.JetBomber || x.Type == Consts.ReconAircraft || x.Type == Consts.AviationPersonnel || x.AirCraftName == "装備なし";
-            }
-
-            return predicate(airCraft);
-        }
-
-        /// <summary>
-        /// 水上機が装備可能かどうか取得
-        /// </summary>
-        /// <param name="shipType"></param>
-        /// <returns></returns>
-        private static bool IsSeaplaneEquippable(string shipType)
-        {
-            switch (shipType)
-            {
-                case "航空巡洋艦":
-                case "水上機母艦":
-                case "航空戦艦":
-                case "潜水空母":
-                    return true;
-                default:
-                    return false;
-            }
-        }
     }
 }

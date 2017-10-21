@@ -218,8 +218,12 @@
                         <GroupBox Visibility="{Binding IsCruiser, Converter={StaticResource BoolToVisibility}}">
                             <StackPanel>
                                 <WrapPanel>
-                                    <CheckBox Name="SeplaneFighterNumEnableCheckBox" IsChecked="{Binding SeaplaneFighterNumEnable.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="水上戦闘艦の数を制限する"/>
+                                    <CheckBox Name="SeplaneFighterNumEnableCheckBox" IsChecked="{Binding SeaplaneFighterNumEnable.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="水上戦闘機の数を制限する"/>
                                     <Controls:NumericUpDown Name="SeplaneFighterNumUpDown" Value="{Binding SeaplaneFighterNum.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Minimum="0" Maximum="4" Speedup="True" InterceptMouseWheel="True"/>
+                                </WrapPanel>
+                                <WrapPanel>
+                                    <CheckBox Name="SeplaneBomberNumEnableCheckBox" IsChecked="{Binding SeaplaneBomberNumEnable.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="水上爆撃機の数を制限する"/>
+                                    <Controls:NumericUpDown Name="SeplaneBomberNumUpDown" Value="{Binding SeaplaneBomberNum.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Minimum="0" Maximum="4" Speedup="True" InterceptMouseWheel="True"/>
                                 </WrapPanel>
                             </StackPanel>
                         </GroupBox>

@@ -78,6 +78,10 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
 
         public ReactiveProperty<int> SeaplaneFighterNum { get; private set; }
 
+        public ReactiveProperty<bool> SeaplaneBomberNumEnable { get; private set; }
+
+        public ReactiveProperty<int> SeaplaneBomberNum { get; private set; }
+
         public bool IsCruiser => ShipSlotInfo.ShipInfo.Type.Contains("巡洋艦");
 
         public bool IsCV => ShipSlotInfo.ShipInfo.Type.Contains("空母");
@@ -127,6 +131,10 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
             SeaplaneFighterNumEnable = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.SeaplaneFighterNumEnable);
 
             SeaplaneFighterNum = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.SeaplaneFighterNum);
+
+            SeaplaneBomberNumEnable = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.SeaplaneBomberNumEnable);
+
+            SeaplaneBomberNum = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.SeaplaneBomberNum);
 
             SlotSetting1SetCommand.Subscribe(_ => 
             {

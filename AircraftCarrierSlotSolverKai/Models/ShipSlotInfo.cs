@@ -196,6 +196,20 @@ namespace AircraftCarrierSlotSolverKai.Models
             set { SetProperty(ref _SeaplaneFighterNum, value); }
         }
 
+        private bool _SeaplaneBomberNumEnable;
+        public bool SeaplaneBomberNumEnable
+        {
+            get => _SeaplaneBomberNumEnable;
+            set => SetProperty(ref _SeaplaneBomberNumEnable, value);
+        }
+
+        private int _SeaplaneBomberNum;
+        public int SeaplaneBomberNum
+        {
+            get { return _SeaplaneBomberNum; }
+            set { SetProperty(ref _SeaplaneBomberNum, value); }
+        }
+
         public ShipSlotInfo(ShipInfo shipInfo)
         {
             ShipInfo = shipInfo;
