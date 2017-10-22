@@ -19,7 +19,7 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
 
         public ObservableCollection<ShipInfo> ShipList { get; set; } = new ObservableCollection<ShipInfo>();
 
-        public List<Area> AreaList => AreaRecords.Instance.Records;
+        public IEnumerable<Area> AreaList => AreaRecords.Instance.Records;
 
         public ShipInfo NowSelectShip { get; set; }
 
