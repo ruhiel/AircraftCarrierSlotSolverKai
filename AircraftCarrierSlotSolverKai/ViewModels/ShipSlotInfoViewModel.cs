@@ -86,6 +86,8 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
 
         public ReactiveProperty<int> EquipSlotNum { get; private set; }
 
+        public ReactiveProperty<bool> AutoMaintenancePersonnel { get; private set; }
+
         public bool IsSpecialAttacks => ShipSlotInfo.ShipInfo.Type.Contains("戦艦") || ShipSlotInfo.ShipInfo.Type.Contains("巡洋艦");
 
         public bool IsCV => ShipSlotInfo.ShipInfo.Type.Contains("空母");
@@ -145,6 +147,8 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
             EquipSlotNumEnable = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.EquipSlotNumEnable);
 
             EquipSlotNum = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.EquipSlotNum);
+
+            AutoMaintenancePersonnel = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.AutoMaintenancePersonnel);
 
             SlotSetting1SetCommand.Subscribe(_ => 
             {

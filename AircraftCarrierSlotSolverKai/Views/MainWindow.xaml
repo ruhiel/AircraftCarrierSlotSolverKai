@@ -225,6 +225,9 @@
                                     <CheckBox Name="SeplaneBomberNumEnableCheckBox" IsChecked="{Binding SeaplaneBomberNumEnable.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="水上爆撃機の数を制限する"/>
                                     <Controls:NumericUpDown Name="SeplaneBomberNumUpDown" Value="{Binding SeaplaneBomberNum.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Minimum="0" Maximum="4" Speedup="True" InterceptMouseWheel="True"/>
                                 </WrapPanel>
+                                <WrapPanel>
+                                    <CheckBox Name="AutoMaintenancePersonnelCheckBox" IsChecked="{Binding AutoMaintenancePersonnel.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="指定しない限り航空要員を積まない"/>
+                                </WrapPanel>
                             </StackPanel>
                         </GroupBox>
                         <!-- その他艦種設定 -->

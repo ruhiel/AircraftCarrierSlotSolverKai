@@ -104,7 +104,7 @@ namespace AircraftCarrierSlotSolverKai.Models
                 {
                     var constraint = solver.MakeConstraint(1, 1);
 
-                    var info = GetInfoListFromVariables(variables).First(x => 
+                    var info = GetInfoListFromVariables(variables).First(x =>
                                                                     x.shipId == shipSlotInfo.ShipInfo.ID &&
                                                                     x.airCraftId == airCraftInfos.airCraft.Id &&
                                                                     x.improvement == airCraftInfos.airCraft.Improvement &&
@@ -114,11 +114,12 @@ namespace AircraftCarrierSlotSolverKai.Models
                 }
             }
 
+            // 水上戦闘機
             foreach (var shipSlotInfo in shipSlotInfos.Where(x => x.SeaplaneFighterNumEnable))
             {
                 var constraint = solver.MakeConstraint(double.NegativeInfinity, shipSlotInfo.SeaplaneFighterNum);
 
-                foreach(var info in GetInfoListFromVariables(variables).Where(x => x.shipId == shipSlotInfo.ShipInfo.ID)
+                foreach (var info in GetInfoListFromVariables(variables).Where(x => x.shipId == shipSlotInfo.ShipInfo.ID)
                                                                             .Select(y => (y.variable, AirCraftRecords.Instance.Records.First(z => z.Id == y.airCraftId)))
                                                                             .Where(i => i.Item2.Type.Equals("水上戦闘機")))
                 {
@@ -126,6 +127,7 @@ namespace AircraftCarrierSlotSolverKai.Models
                 }
             }
 
+            // 水上爆撃機
             foreach (var shipSlotInfo in shipSlotInfos.Where(x => x.SeaplaneBomberNumEnable))
             {
                 var constraint = solver.MakeConstraint(double.NegativeInfinity, shipSlotInfo.SeaplaneBomberNum);
@@ -138,11 +140,29 @@ namespace AircraftCarrierSlotSolverKai.Models
                 }
             }
 
+            // その他艦種用スロット装備数
             foreach (var shipSlotInfo in shipSlotInfos.Where(x => x.EquipSlotNumEnable))
             {
                 var constraint = solver.MakeConstraint(double.NegativeInfinity, shipSlotInfo.EquipSlotNum);
 
                 foreach (var info in GetInfoListFromVariables(variables).Where(x => x.shipId == shipSlotInfo.ShipInfo.ID))
+                {
+                    constraint.SetCoefficient(info.variable, 1);
+                }
+            }
+
+            // 航空要員自動設定
+            foreach (var shipSlotInfo in shipSlotInfos.Where(x => x.AutoMaintenancePersonnel))
+            {
+                var settings = shipSlotInfo.SlotSettings.Where(x => x.airCraft != null);
+
+                var count = settings.Any() ? settings.Select(x => AirCraftRecords.Instance.Records.First(y => y.Id == x.airCraft.Id)).Count(z => z.Type.Equals("航空要員")) : 0;
+
+                var constraint = solver.MakeConstraint(double.NegativeInfinity, count);
+
+                foreach (var info in GetInfoListFromVariables(variables).Where(x => x.shipId == shipSlotInfo.ShipInfo.ID)
+                                                                           .Select(y => (y.variable, AirCraftRecords.Instance.Records.First(z => z.Id == y.airCraftId)))
+                                                                           .Where(i => i.Item2.Type.Equals("航空要員")))
                 {
                     constraint.SetCoefficient(info.variable, 1);
                 }
