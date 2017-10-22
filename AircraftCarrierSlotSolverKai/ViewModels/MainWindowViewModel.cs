@@ -32,7 +32,7 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
 
         public ObservableCollection<ShipSlotInfoViewModel> ShipSlotInfoList { get; set; }
 
-        public ObservableCollection<Fleet> FleetList => Models.FleetList.Instance;
+        public ObservableCollection<Fleet> FleetList => Models.FleetList.Instance.Records;
 
         public ReactiveCommand ShipAddCommand { get; } = new ReactiveCommand();
 
@@ -85,6 +85,7 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
 
             EnsureCommand.Subscribe(_ => TargetAirSuperiorityPotential.Value = (NowSelectArea == null ? TargetAirSuperiorityPotential.Value : (int.Parse(Properties.Settings.Default.MarginAirSuperiorityPotential) + NowSelectArea.AirSuperiorityPotential * 3).ToString()));
 
+            // 編成追加
             PresetCommand.Subscribe(_ =>
             {
                 var dialog = new PresetRegisterView();
@@ -94,6 +95,7 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
                 Models.FleetList.Instance.Add(dialog.FleetName, int.Parse(TargetAirSuperiorityPotential.Value), ShipSlotInfoList.Select(x => x.ShipSlotInfo));
             });
 
+            // 編成展開
             PresetViewCommand.Subscribe(_ =>
             {
                 if (NowSelectFleet == null)
@@ -103,24 +105,9 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
 
                 ShipSlotInfoList.Clear();
 
-                var ships = new[] 
+                foreach(var ship in NowSelectFleet.ShipSlotInfo)
                 {
-                    new { Name = NowSelectFleet.Ship1Name, Slot1 = new {Name = NowSelectFleet.Ship1Slot1, Improvement = NowSelectFleet.Ship1Slot1Improvement}, Slot2 = new {Name = NowSelectFleet.Ship1Slot2, Improvement = NowSelectFleet.Ship1Slot2Improvement}, Slot3 = new {Name = NowSelectFleet.Ship1Slot3, Improvement = NowSelectFleet.Ship1Slot3Improvement}, Slot4 = new {Name = NowSelectFleet.Ship1Slot4, Improvement = NowSelectFleet.Ship1Slot4Improvement} },
-                    new { Name = NowSelectFleet.Ship2Name, Slot1 = new {Name = NowSelectFleet.Ship2Slot1, Improvement = NowSelectFleet.Ship2Slot1Improvement}, Slot2 = new {Name = NowSelectFleet.Ship2Slot2, Improvement = NowSelectFleet.Ship2Slot2Improvement}, Slot3 = new {Name = NowSelectFleet.Ship2Slot3, Improvement = NowSelectFleet.Ship2Slot3Improvement}, Slot4 = new {Name = NowSelectFleet.Ship2Slot4, Improvement = NowSelectFleet.Ship2Slot4Improvement} },
-                    new { Name = NowSelectFleet.Ship3Name, Slot1 = new {Name = NowSelectFleet.Ship3Slot1, Improvement = NowSelectFleet.Ship3Slot1Improvement}, Slot2 = new {Name = NowSelectFleet.Ship3Slot2, Improvement = NowSelectFleet.Ship3Slot2Improvement}, Slot3 = new {Name = NowSelectFleet.Ship3Slot3, Improvement = NowSelectFleet.Ship3Slot3Improvement}, Slot4 = new {Name = NowSelectFleet.Ship3Slot4, Improvement = NowSelectFleet.Ship3Slot4Improvement} },
-                    new { Name = NowSelectFleet.Ship4Name, Slot1 = new {Name = NowSelectFleet.Ship4Slot1, Improvement = NowSelectFleet.Ship4Slot1Improvement}, Slot2 = new {Name = NowSelectFleet.Ship4Slot2, Improvement = NowSelectFleet.Ship4Slot2Improvement}, Slot3 = new {Name = NowSelectFleet.Ship4Slot3, Improvement = NowSelectFleet.Ship4Slot3Improvement}, Slot4 = new {Name = NowSelectFleet.Ship4Slot4, Improvement = NowSelectFleet.Ship4Slot4Improvement} },
-                    new { Name = NowSelectFleet.Ship5Name, Slot1 = new {Name = NowSelectFleet.Ship5Slot1, Improvement = NowSelectFleet.Ship5Slot1Improvement}, Slot2 = new {Name = NowSelectFleet.Ship5Slot2, Improvement = NowSelectFleet.Ship5Slot2Improvement}, Slot3 = new {Name = NowSelectFleet.Ship5Slot3, Improvement = NowSelectFleet.Ship5Slot3Improvement}, Slot4 = new {Name = NowSelectFleet.Ship5Slot4, Improvement = NowSelectFleet.Ship5Slot4Improvement} },
-                    new { Name = NowSelectFleet.Ship6Name, Slot1 = new {Name = NowSelectFleet.Ship6Slot1, Improvement = NowSelectFleet.Ship6Slot1Improvement}, Slot2 = new {Name = NowSelectFleet.Ship6Slot2, Improvement = NowSelectFleet.Ship6Slot2Improvement}, Slot3 = new {Name = NowSelectFleet.Ship6Slot3, Improvement = NowSelectFleet.Ship6Slot3Improvement}, Slot4 = new {Name = NowSelectFleet.Ship6Slot4, Improvement = NowSelectFleet.Ship6Slot4Improvement} }
-                };
-                
-                foreach(var ship in ships.Where(x => !string.IsNullOrEmpty(x.Name)))
-                {
-                    var slot1 = AirCraftSettingRecords.Instance.Records.FirstOrDefault(x => x.Name == ship.Slot1.Name && x.Improvement == ship.Slot1.Improvement);
-                    var slot2 = AirCraftSettingRecords.Instance.Records.FirstOrDefault(x => x.Name == ship.Slot2.Name && x.Improvement == ship.Slot2.Improvement);
-                    var slot3 = AirCraftSettingRecords.Instance.Records.FirstOrDefault(x => x.Name == ship.Slot3.Name && x.Improvement == ship.Slot3.Improvement);
-                    var slot4 = AirCraftSettingRecords.Instance.Records.FirstOrDefault(x => x.Name == ship.Slot4.Name && x.Improvement == ship.Slot4.Improvement);
-
-                    var vm = new ShipSlotInfoViewModel(ShipInfoRecords.Instance.Records.First(x => x.Name == ship.Name), new AirCraft(slot1), new AirCraft(slot2), new AirCraft(slot3), new AirCraft(slot4));
+                    var vm = new ShipSlotInfoViewModel(ship);
 
                     ShipSlotInfoList.Add(vm);
                 }
@@ -132,8 +119,7 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
             {
                 Models.FleetList.Instance.Remove(NowSelectFleet);
 
-                Models.FleetList.Instance.Save();
-
+                /// TODO:
                 NowSelectFleet = null;
             });
 

@@ -3,56 +3,58 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ZeroFormatter;
 
 namespace AircraftCarrierSlotSolverKai.Models
 {
+    [ZeroFormattable]
     public class ShipInfo
     {
         /// <summary>
         /// ID
         /// </summary>
-        public int ID { get; set; }
+        [Index(0)] public virtual int ID { get; set; }
         /// <summary>
         /// 艦名
         /// </summary>
-        public string Name { get; set; }
+        [Index(1)] public virtual string Name { get; set; }
         /// <summary>
         /// 艦種
         /// </summary>
-        public string Type { get; set; }
+        [Index(2)] public virtual string Type { get; set; }
         /// <summary>
         /// 火力
         /// </summary>
-        public int FirePower { get; set; }
+        [Index(3)] public virtual int FirePower { get; set; }
         /// <summary>
         /// スロット数
         /// </summary>
-        public int SlotNum { get; set; }
+        [Index(4)] public virtual int SlotNum { get; set; }
         /// <summary>
         /// スロット数1
         /// </summary>
-        public int Slot1Num { get; set; }
+        [Index(5)] public virtual int Slot1Num { get; set; }
         /// <summary>
         /// スロット数2
         /// </summary>
-        public int Slot2Num { get; set; }
+        [Index(6)] public virtual int Slot2Num { get; set; }
         /// <summary>
         /// スロット数3
         /// </summary>
-        public int Slot3Num { get; set; }
+        [Index(7)] public virtual int Slot3Num { get; set; }
         /// <summary>
         /// スロット数4
         /// </summary>
-        public int Slot4Num { get; set; }
+        [Index(8)] public virtual int Slot4Num { get; set; }
         /// <summary>
         /// スロット数リスト
         /// </summary>
-        public int[] Slots => new int[] { Slot1Num, Slot2Num, Slot3Num, Slot4Num };
+        [IgnoreFormat] public virtual int[] Slots => new int[] { Slot1Num, Slot2Num, Slot3Num, Slot4Num };
 
         /// <summary>
         /// 改装前
         /// </summary>
-        public string Prev { get; set; }
+        [Index(10)] public virtual string Prev { get; set; }
     }
 
 }

@@ -94,7 +94,7 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
 
         public bool IsEtc => !IsSpecialAttacks && !IsCV;
 
-        private ShipSlotInfoViewModel(ShipSlotInfo info)
+        public ShipSlotInfoViewModel(ShipSlotInfo info)
         {
             ShipSlotInfo = info;
 
