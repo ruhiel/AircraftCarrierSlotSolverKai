@@ -214,8 +214,8 @@
                                 </StackPanel>
                             </StackPanel>
                         </GroupBox>
-                        <!-- 巡洋艦設定 -->
-                        <GroupBox Visibility="{Binding IsCruiser, Converter={StaticResource BoolToVisibility}}">
+                        <!-- 昼戦弾着観測射撃設定 -->
+                        <GroupBox Visibility="{Binding IsSpecialAttacks, Converter={StaticResource BoolToVisibility}}">
                             <StackPanel>
                                 <WrapPanel>
                                     <CheckBox Name="SeplaneFighterNumEnableCheckBox" IsChecked="{Binding SeaplaneFighterNumEnable.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="水上戦闘機の数を制限する"/>
@@ -224,6 +224,15 @@
                                 <WrapPanel>
                                     <CheckBox Name="SeplaneBomberNumEnableCheckBox" IsChecked="{Binding SeaplaneBomberNumEnable.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="水上爆撃機の数を制限する"/>
                                     <Controls:NumericUpDown Name="SeplaneBomberNumUpDown" Value="{Binding SeaplaneBomberNum.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Minimum="0" Maximum="4" Speedup="True" InterceptMouseWheel="True"/>
+                                </WrapPanel>
+                            </StackPanel>
+                        </GroupBox>
+                        <!-- その他艦種設定 -->
+                        <GroupBox Visibility="{Binding IsEtc, Converter={StaticResource BoolToVisibility}}">
+                            <StackPanel>
+                                <WrapPanel>
+                                    <CheckBox Name="EquipSlotNumEnableCheckBox" IsChecked="{Binding EquipSlotNumEnable.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="装備数を制限する"/>
+                                    <Controls:NumericUpDown Name="EquipSlotNumUpDown" Value="{Binding EquipSlotNum.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Minimum="0" Maximum="4" Speedup="True" InterceptMouseWheel="True"/>
                                 </WrapPanel>
                             </StackPanel>
                         </GroupBox>

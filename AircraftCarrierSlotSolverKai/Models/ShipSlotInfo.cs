@@ -209,6 +209,14 @@ namespace AircraftCarrierSlotSolverKai.Models
             get { return _SeaplaneBomberNum; }
             set { SetProperty(ref _SeaplaneBomberNum, value); }
         }
+        private bool _EquipSlotNumEnable;
+
+        public bool EquipSlotNumEnable { get => _EquipSlotNumEnable; set => SetProperty(ref _EquipSlotNumEnable, value); }
+
+        private int _EquipSlotNum;
+
+        public int EquipSlotNum { get => _EquipSlotNum; set => SetProperty(ref _EquipSlotNum, value); }
+
 
         public ShipSlotInfo(ShipInfo shipInfo)
         {

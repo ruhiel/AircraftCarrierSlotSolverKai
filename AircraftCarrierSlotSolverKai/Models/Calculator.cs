@@ -113,6 +113,40 @@ namespace AircraftCarrierSlotSolverKai.Models
                     constraint.SetCoefficient(info.variable, 1);
                 }
             }
+
+            foreach (var shipSlotInfo in shipSlotInfos.Where(x => x.SeaplaneFighterNumEnable))
+            {
+                var constraint = solver.MakeConstraint(double.NegativeInfinity, shipSlotInfo.SeaplaneFighterNum);
+
+                foreach(var info in GetInfoListFromVariables(variables).Where(x => x.shipId == shipSlotInfo.ShipInfo.ID)
+                                                                            .Select(y => (y.variable, AirCraftRecords.Instance.Records.First(z => z.Id == y.airCraftId)))
+                                                                            .Where(i => i.Item2.Type.Equals("水上戦闘機")))
+                {
+                    constraint.SetCoefficient(info.variable, 1);
+                }
+            }
+
+            foreach (var shipSlotInfo in shipSlotInfos.Where(x => x.SeaplaneBomberNumEnable))
+            {
+                var constraint = solver.MakeConstraint(double.NegativeInfinity, shipSlotInfo.SeaplaneBomberNum);
+
+                foreach (var info in GetInfoListFromVariables(variables).Where(x => x.shipId == shipSlotInfo.ShipInfo.ID)
+                                                                            .Select(y => (y.variable, AirCraftRecords.Instance.Records.First(z => z.Id == y.airCraftId)))
+                                                                            .Where(i => i.Item2.Type.Equals("水上爆撃機")))
+                {
+                    constraint.SetCoefficient(info.variable, 1);
+                }
+            }
+
+            foreach (var shipSlotInfo in shipSlotInfos.Where(x => x.EquipSlotNumEnable))
+            {
+                var constraint = solver.MakeConstraint(double.NegativeInfinity, shipSlotInfo.EquipSlotNum);
+
+                foreach (var info in GetInfoListFromVariables(variables).Where(x => x.shipId == shipSlotInfo.ShipInfo.ID))
+                {
+                    constraint.SetCoefficient(info.variable, 1);
+                }
+            }
         }
 
         /// <summary>
@@ -348,7 +382,7 @@ namespace AircraftCarrierSlotSolverKai.Models
                 { "艦上偵察機" , x => x.ShipInfo.Type.Contains("空母") },
                 { "艦上爆撃機" , x => x.ShipInfo.Type.Contains("空母") },
                 { "航空要員" , x => x.ShipInfo.Type.Contains("空母") || new []{"航空戦艦", "航空巡洋艦"}.Contains(x.ShipInfo.Type) || new[]{ "由良改二", "Zara due", "速吸", "Commandant Teste", "秋津洲改" }.Any(y => x.ShipInfo.Name.Contains(y)) },
-                { "水上偵察機" , x => x.ShipInfo.Type.Contains("空母") },
+                { "水上偵察機" , x => x.ShipInfo.Type.Contains("戦艦") || x.ShipInfo.Type.Contains("巡洋艦")},
                 { "水上戦闘機" , x => x.ShipInfo.Type.Contains("空母") || new []{"水上機母艦", "航空戦艦", "航空巡洋艦", "潜水空母"}.Contains(x.ShipInfo.Type) || new [] {"Zara due", "Italia", "Roma改", "長門", "陸奥", "大和", "武蔵"}.Any(y => x.ShipInfo.Name.Contains(y)) },
                 { "水上爆撃機" , x => new []{"水上機母艦", "航空戦艦", "航空巡洋艦", "潜水空母", "補給艦"}.Contains(x.ShipInfo.Type) || new [] {"Zara due", "Italia", "Roma改"}.Any(y => x.ShipInfo.Name.Contains(y)) },
                 { "噴式戦闘爆撃機" , x => Regex.IsMatch(x.ShipInfo.Name, "(翔鶴|瑞鶴)改二甲") },
