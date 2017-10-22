@@ -180,6 +180,43 @@ namespace AircraftCarrierSlotSolverKai.Models
                 return new Dictionary<int, string> { { 0, SlotSetting1?.AirCraftName ?? "未指定" }, { 1, SlotSetting2?.AirCraftName ?? "未指定" }, { 2, SlotSetting3?.AirCraftName ?? "未指定" }, { 3, SlotSetting4?.AirCraftName ?? "未指定" } };
             }
         }
+        private bool _SeaplaneFighterNumEnable = true;
+        public bool SeaplaneFighterNumEnable
+        {
+            get { return _SeaplaneFighterNumEnable; }
+            set { SetProperty(ref _SeaplaneFighterNumEnable, value); }
+        }
+        private int _SeaplaneFighterNum = 0;
+        public int SeaplaneFighterNum
+        {
+            get { return _SeaplaneFighterNum; }
+            set { SetProperty(ref _SeaplaneFighterNum, value); }
+        }
+
+        private bool _SeaplaneBomberNumEnable = true;
+        public bool SeaplaneBomberNumEnable
+        {
+            get => _SeaplaneBomberNumEnable;
+            set => SetProperty(ref _SeaplaneBomberNumEnable, value);
+        }
+
+        private int _SeaplaneBomberNum = 1;
+        public int SeaplaneBomberNum
+        {
+            get { return _SeaplaneBomberNum; }
+            set { SetProperty(ref _SeaplaneBomberNum, value); }
+        }
+        private bool _EquipSlotNumEnable;
+
+        public bool EquipSlotNumEnable { get => _EquipSlotNumEnable; set => SetProperty(ref _EquipSlotNumEnable, value); }
+
+        private int _EquipSlotNum;
+
+        public int EquipSlotNum { get => _EquipSlotNum; set => SetProperty(ref _EquipSlotNum, value); }
+        
+        private bool _AutoMaintenancePersonnel = true;
+
+        public bool AutoMaintenancePersonnel { get => _AutoMaintenancePersonnel; set => SetProperty(ref _AutoMaintenancePersonnel, value); }
 
         public ShipSlotInfo(ShipInfo shipInfo)
         {

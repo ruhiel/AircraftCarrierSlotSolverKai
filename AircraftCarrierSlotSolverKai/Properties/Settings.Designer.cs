@@ -26,18 +26,6 @@ namespace AircraftCarrierSlotSolverKai.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int CruiserSlotNum {
-            get {
-                return ((int)(this["CruiserSlotNum"]));
-            }
-            set {
-                this["CruiserSlotNum"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public string MarginAirSuperiorityPotential {
             get {
                 return ((string)(this["MarginAirSuperiorityPotential"]));

@@ -74,6 +74,26 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
 
         public ReactiveCommand SlotSetting4ReSetCommand { get; } = new ReactiveCommand();
 
+        public ReactiveProperty<bool> SeaplaneFighterNumEnable { get; private set; }
+
+        public ReactiveProperty<int> SeaplaneFighterNum { get; private set; }
+
+        public ReactiveProperty<bool> SeaplaneBomberNumEnable { get; private set; }
+
+        public ReactiveProperty<int> SeaplaneBomberNum { get; private set; }
+
+        public ReactiveProperty<bool> EquipSlotNumEnable { get; private set; }
+
+        public ReactiveProperty<int> EquipSlotNum { get; private set; }
+
+        public ReactiveProperty<bool> AutoMaintenancePersonnel { get; private set; }
+
+        public bool IsSpecialAttacks => ShipSlotInfo.ShipInfo.Type.Contains("戦艦") || ShipSlotInfo.ShipInfo.Type.Contains("巡洋艦");
+
+        public bool IsCV => ShipSlotInfo.ShipInfo.Type.Contains("空母");
+
+        public bool IsEtc => !IsSpecialAttacks && !IsCV;
+
         private ShipSlotInfoViewModel(ShipSlotInfo info)
         {
             ShipSlotInfo = info;
@@ -115,6 +135,20 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
             SlotSetting3 = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.SlotSetting3);
 
             SlotSetting4 = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.SlotSetting4);
+
+            SeaplaneFighterNumEnable = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.SeaplaneFighterNumEnable);
+
+            SeaplaneFighterNum = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.SeaplaneFighterNum);
+
+            SeaplaneBomberNumEnable = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.SeaplaneBomberNumEnable);
+
+            SeaplaneBomberNum = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.SeaplaneBomberNum);
+
+            EquipSlotNumEnable = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.EquipSlotNumEnable);
+
+            EquipSlotNum = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.EquipSlotNum);
+
+            AutoMaintenancePersonnel = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.AutoMaintenancePersonnel);
 
             SlotSetting1SetCommand.Subscribe(_ => 
             {

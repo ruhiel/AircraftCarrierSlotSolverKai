@@ -18,10 +18,7 @@ namespace AircraftCarrierSlotSolverKai.Models
             }
         }
 
-        public void Add(AirCraft airCraft)
-        {
-            Add(new AirCraftSetting() { Name = airCraft.Name, Improvement = 0, Value = 1 });
-        }
+        public void Add(AirCraft airCraft) => Add(new AirCraftSetting() { Name = airCraft.Name, Improvement = 0, Value = 1 });
 
         public void Save()
         {
