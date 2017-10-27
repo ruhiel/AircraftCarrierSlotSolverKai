@@ -73,7 +73,7 @@ namespace AircraftCarrierSlotSolverKai.Models
                 {
                     try
                     {
-                        connection.Execute("delete from fleet where id=@id", nowSelectFleet, tran);
+                        connection.Execute("delete from fleet where id=@ID", nowSelectFleet, tran);
                         tran.Commit();
 
                         Records.Remove(nowSelectFleet);
