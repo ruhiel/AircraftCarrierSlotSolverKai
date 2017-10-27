@@ -8,10 +8,10 @@ namespace AircraftCarrierSlotSolverKai.Models
 {
     public class Fleet
     {
-        public int ID { get; set; }
+        public long ID { get; set; }
         public string Name { get; set; }
         public int AirSuperiorityPotential { get; set; }
-        public byte[] FleetBin { get; set; }
+        public byte[] Organization { get; set; }
         public IEnumerable<ShipSlotInfo> ShipSlotInfo { get; set; }
     }
 }

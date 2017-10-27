@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dapper;
+using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Linq;
@@ -15,30 +16,17 @@ namespace AircraftCarrierSlotSolverKai.Models
         {
             get
             {
-                var list = new List<Area>();
-                using (var con = new SQLiteConnection(ConnectionString))
+                var config = new SQLiteConnectionStringBuilder()
                 {
-                    con.Open();
+                    DataSource = DataSource
+                };
+                using (var connection = new SQLiteConnection(config.ToString()))
+                {
+                    connection.Open();
+                    var list = connection.Query<Area>(@"select * from area");
 
-                    using (var cmd = con.CreateCommand())
-                    {
-                        cmd.CommandText = @"SELECT 海域, 敵制空値 FROM area";
-
-                        using (var reader = cmd.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                list.Add(new Area()
-                                {
-                                    Name = reader.GetString(0),
-                                    AirSuperiorityPotential = reader.GetInt32(1)
-                                });
-                            }
-                        }
-                    }
+                    return list;
                 }
-
-                return list;
             }
         }
     }

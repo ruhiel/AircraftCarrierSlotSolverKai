@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dapper;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.SQLite;
@@ -18,93 +19,69 @@ namespace AircraftCarrierSlotSolverKai.Models
         private FleetList()
         {
             Records = new ObservableCollection<Fleet>();
-            using (var con = new SQLiteConnection(ConnectionString))
+
+            using (var connection = GetConnection())
             {
-                con.Open();
-
-                using (var cmd = con.CreateCommand())
+                connection.Open();
+                foreach(var fleet in connection.Query<Fleet>(@"select * from fleet"))
                 {
-                    cmd.CommandText = @"SELECT ID, 艦隊名, 制空値, 編成 FROM fleet ORDER BY ID";
+                    fleet.ShipSlotInfo = ZeroFormatterSerializer.Deserialize<Fleets>(fleet.Organization).List;
 
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            var fleet = new Fleet()
-                            {
-                                ID = reader.GetInt32(0),
-                                Name = reader.GetString(1),
-                                AirSuperiorityPotential = reader.GetInt32(2)
-                            };
-
-                            var bin = (byte[])reader.GetValue(3);
-
-                            fleet.FleetBin = bin;
-
-                            fleet.ShipSlotInfo = ZeroFormatterSerializer.Deserialize<Fleets>(bin).List;
-
-                            Records.Add(fleet);
-                        }
-                    }
+                    Records.Add(fleet);
                 }
             }
         }
 
         public void Add(string fleetName, int airSuperiorityPotential, IEnumerable<ShipSlotInfo> shipSlotInfos)
         {
-            using (var con = new SQLiteConnection(ConnectionString))
+            using (var connection = GetConnection())
             {
-                var fleet = new Fleet()
+                connection.Open();
+                using (var tran = connection.BeginTransaction())
                 {
-                    Name = fleetName,
-                    AirSuperiorityPotential = airSuperiorityPotential,
-                    FleetBin = ZeroFormatterSerializer.Serialize(new Fleets()
+                    try
                     {
-                        List = shipSlotInfos.ToList(),
-                    }),
-                    ShipSlotInfo = shipSlotInfos
-                };
+                        var fleet = new Fleet()
+                        {
+                            Name = fleetName,
+                            AirSuperiorityPotential = airSuperiorityPotential,
+                            Organization = ZeroFormatterSerializer.Serialize(new Fleets()
+                            {
+                                List = shipSlotInfos.ToList(),
+                            }),
+                            ShipSlotInfo = shipSlotInfos
+                        };
+                        connection.Execute("insert into fleet(name, air_superiority_potential, organization) values (@Name, @AirSuperiorityPotential, @Organization)", fleet, tran);
+                        tran.Commit();
 
-                con.Open();
-
-                using (var cmd = con.CreateCommand())
-                {
-                    cmd.CommandText = "INSERT INTO fleet (艦隊名, 制空値, 編成) VALUES (@name, @airSuperiorityPotential, @bin)";
-                    cmd.Parameters.Add(new SQLiteParameter("@name", fleet.Name));
-                    cmd.Parameters.Add(new SQLiteParameter("@airSuperiorityPotential", fleet.AirSuperiorityPotential));
-                    cmd.Parameters.Add(new SQLiteParameter("@bin", fleet.FleetBin));
-
-                    cmd.ExecuteNonQuery();
-                }
-
-                using (var cmd = con.CreateCommand())
-                {
-                    cmd.CommandText = "SELECT last_insert_rowid() FROM fleet";
-                    using (var reader = cmd.ExecuteReader())
+                        Records.Add(fleet);
+                    }
+                    catch (Exception)
                     {
-                        reader.Read();
-                        fleet.ID = reader.GetInt32(0);
+                        tran.Rollback();
                     }
                 }
-
-                Records.Add(fleet);
             }
         }
 
         public void Remove(Fleet nowSelectFleet)
         {
-            Records.Remove(nowSelectFleet);
-
-            using (var con = new SQLiteConnection(ConnectionString))
+            using (var connection = GetConnection())
             {
-                con.Open();
-
-                using (var cmd = con.CreateCommand())
+                connection.Open();
+                using (var tran = connection.BeginTransaction())
                 {
-                    cmd.CommandText = $"DELETE FROM fleet WHERE ID = @id";
-                    cmd.Parameters.Add(new SQLiteParameter("@id", nowSelectFleet.ID));
+                    try
+                    {
+                        connection.Execute("delete from fleet where id=@id", nowSelectFleet, tran);
+                        tran.Commit();
 
-                    cmd.ExecuteNonQuery();
+                        Records.Remove(nowSelectFleet);
+                    }
+                    catch (Exception)
+                    {
+                        tran.Rollback();
+                    }
                 }
             }
         }
