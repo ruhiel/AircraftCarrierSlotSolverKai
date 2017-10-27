@@ -23,9 +23,7 @@ namespace AircraftCarrierSlotSolverKai.Models
                 using (var connection = new SQLiteConnection(config.ToString()))
                 {
                     connection.Open();
-                    var list = connection.Query<Area>(@"select * from area");
-
-                    return list;
+                    return connection.Query<Area>(@"select * from area");
                 }
             }
         }
