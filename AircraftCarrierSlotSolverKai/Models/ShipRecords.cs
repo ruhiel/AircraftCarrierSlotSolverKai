@@ -10,11 +10,9 @@ namespace AircraftCarrierSlotSolverKai.Models
     {
         public static ShipRecords Instance = new ShipRecords();
 
-        private ShipRecords() : base(x => x
-                    .OrderBy(y => string.IsNullOrEmpty(y.PrevRemodel))
-                    .ThenBy(z => z.ID))
+        private ShipRecords() : base(x => x.OrderBy(y => string.IsNullOrEmpty(y.PrevRemodel))
+                                        .ThenBy(z => z.ID))
         {
-
         }
     }
 }

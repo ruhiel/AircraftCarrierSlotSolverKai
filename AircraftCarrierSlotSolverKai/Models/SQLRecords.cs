@@ -24,7 +24,7 @@ namespace AircraftCarrierSlotSolverKai.Models
 
         protected string TableName => typeof(T).Name.ToLower();
 
-        protected SQLRecords(Func<IEnumerable<T>, IEnumerable<T>> keySelector = null)
+        protected SQLRecords(Func<IEnumerable<T>, IEnumerable<T>> func = null)
         {
             DefaultTypeMap.MatchNamesWithUnderscores = true;
 
@@ -34,7 +34,7 @@ namespace AircraftCarrierSlotSolverKai.Models
 
                 var query = connection.Query<T>($"select * from {TableName}");
 
-                var result = keySelector == null ? query : keySelector(query);
+                var result = func == null ? query : func(query);
 
                 foreach (var record in result)
                 {
