@@ -117,9 +117,8 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
 
             PresetDeleteCommand.Subscribe(_ =>
             {
-                Models.FleetRecords.Instance.Remove(NowSelectFleet);
+                FleetRecords.Instance.Remove(NowSelectFleet);
 
-                /// TODO:
                 NowSelectFleet = null;
             });
 
@@ -129,13 +128,9 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
             {
                 ShipList.Clear();
 
-                foreach (var item in ShipRecords.Instance.Records.Where(x => null == type ? true : x.Shiptype == type.ID)
-                    .Select(y => new { ID = y.ID, PrevRemodel = string.IsNullOrEmpty(y.PrevRemodel), Ship = y })
-                    .OrderBy(z => z.PrevRemodel)
-                    .ThenBy(i => i.ID)
-                    )
+                foreach (var item in ShipRecords.Instance.Records.Where(x => type == null ? true : x.Shiptype == type.ID))
                 {
-                    ShipList.Add(item.Ship);
+                    ShipList.Add(item);
                 }
             });
         }

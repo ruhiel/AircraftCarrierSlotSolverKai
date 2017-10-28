@@ -1,6 +1,9 @@
 ﻿using Dapper;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.SQLite;
+using System.Linq;
 
 namespace AircraftCarrierSlotSolverKai.Models
 {
@@ -19,14 +22,21 @@ namespace AircraftCarrierSlotSolverKai.Models
             return new SQLiteConnection(config.ToString());
         }
 
-        protected SQLRecords()
+        protected string TableName => typeof(T).Name.ToLower();
+
+        protected SQLRecords(Func<IEnumerable<T>, IEnumerable<T>> keySelector = null)
         {
             DefaultTypeMap.MatchNamesWithUnderscores = true;
 
             using (var connection = GetConnection())
             {
                 connection.Open();
-                foreach (var record in connection.Query<T>($"select * from {typeof(T).Name.ToLower()}"))
+
+                var query = connection.Query<T>($"select * from {TableName}");
+
+                var result = keySelector == null ? query : keySelector(query);
+
+                foreach (var record in result)
                 {
                     Records.Add(record);
                 }

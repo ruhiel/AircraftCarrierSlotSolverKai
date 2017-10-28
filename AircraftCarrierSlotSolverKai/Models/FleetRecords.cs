@@ -41,7 +41,7 @@ namespace AircraftCarrierSlotSolverKai.Models
                             }),
                             ShipSlotInfo = shipSlotInfos
                         };
-                        connection.Execute($"insert into fleet (name, air_superiority_potential, organization) values (@{nameof(fleet.Name)}, @{nameof(fleet.AirSuperiorityPotential)}, @{nameof(fleet.Organization)})", fleet, tran);
+                        connection.Execute($"insert into {TableName} (name, air_superiority_potential, organization) values (@{nameof(fleet.Name)}, @{nameof(fleet.AirSuperiorityPotential)}, @{nameof(fleet.Organization)})", fleet, tran);
                         tran.Commit();
 
                         Records.Add(fleet);
