@@ -32,7 +32,7 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
 
         public ObservableCollection<ShipSlotInfoViewModel> ShipSlotInfoList { get; set; }
 
-        public ObservableCollection<Fleet> FleetList => Models.FleetList.Instance.Records;
+        public ObservableCollection<Fleet> FleetList => Models.FleetRecords.Instance.Records;
 
         public ReactiveCommand ShipAddCommand { get; } = new ReactiveCommand();
 
@@ -92,7 +92,7 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
 
                 dialog.ShowDialog();
 
-                Models.FleetList.Instance.Add(dialog.FleetName, int.Parse(TargetAirSuperiorityPotential.Value), ShipSlotInfoList.Select(x => x.ShipSlotInfo));
+                Models.FleetRecords.Instance.Add(dialog.FleetName, int.Parse(TargetAirSuperiorityPotential.Value), ShipSlotInfoList.Select(x => x.ShipSlotInfo));
             });
 
             // 編成展開
@@ -117,7 +117,7 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
 
             PresetDeleteCommand.Subscribe(_ =>
             {
-                Models.FleetList.Instance.Remove(NowSelectFleet);
+                Models.FleetRecords.Instance.Remove(NowSelectFleet);
 
                 /// TODO:
                 NowSelectFleet = null;

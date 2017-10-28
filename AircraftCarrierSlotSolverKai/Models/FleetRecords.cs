@@ -10,11 +10,11 @@ using ZeroFormatter;
 
 namespace AircraftCarrierSlotSolverKai.Models
 {
-    public class FleetList : SQLRecords<Fleet>
+    public class FleetRecords : SQLRecords<Fleet>
     {
-        public static FleetList Instance = new FleetList();
+        public static FleetRecords Instance = new FleetRecords();
 
-        private FleetList() : base()
+        private FleetRecords() : base()
         {
             foreach(var fleet in Records)
             {
