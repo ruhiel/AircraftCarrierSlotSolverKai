@@ -8,7 +8,15 @@ namespace AircraftCarrierSlotSolverKai.Models
 {
     public class AirCraftSetting
     {
-        public string Name { get; set; }
+        /// <summary>
+        /// ID
+        /// </summary>
+        public int AircraftId { get; set; }
+
+        /// <summary>
+        /// 艦載機名
+        /// </summary>
+        public string Name => AirCraft.Name;
 
         /// <summary>
         /// 艦載機
@@ -17,7 +25,7 @@ namespace AircraftCarrierSlotSolverKai.Models
         {
             get
             {
-                var aircraft = new AirCraft(AirCraftRecords.Instance.Records.SingleOrDefault(x => x.Name == Name));
+                var aircraft = new AirCraft(AirCraftRecords.Instance.Records.SingleOrDefault(x => x.Id == AircraftId));
                 if(aircraft == null)
                 {
                     return null;

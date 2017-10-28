@@ -18,7 +18,12 @@ namespace AircraftCarrierSlotSolverKai.Models
         /// <summary>
         /// 種別
         /// </summary>
-        [Index(1)] public virtual string Type { get; set; }
+        [IgnoreFormat] public virtual string Type => AirCraftTypeRecords.Instance.Records.First(x => x.Id == AircraftType).Name;
+
+        /// <summary>
+        /// 種別ID
+        /// </summary>
+        [Index(1)] public virtual int AircraftType { get; set; }
 
         /// <summary>
         /// 火力
@@ -132,10 +137,10 @@ namespace AircraftCarrierSlotSolverKai.Models
         {
         }
 
-        public AirCraft(string name, string type, int firePower = 0, int aa = 0, int bomber = 0, int torpedo = 0, int accuracy = 0, int evasion = 0, int improvement = 0)
+        public AirCraft(string name, int type, int firePower = 0, int aa = 0, int bomber = 0, int torpedo = 0, int accuracy = 0, int evasion = 0, int improvement = 0)
         {
             Name = name;
-            Type = type;
+            AircraftType = type;
             AAValue = aa;
             Bomber = bomber;
             Torpedo = torpedo;
@@ -148,7 +153,7 @@ namespace AircraftCarrierSlotSolverKai.Models
         {
             Id = source?.Id ?? 0;
             Name = source?.Name ?? "装備なし";
-            Type = source?.Type ?? "その他";
+            AircraftType = source?.AircraftType ?? 0;
             AAValue = source?.AAValue ?? default(int);
             Bomber = source?.Bomber ?? default(int);
             Torpedo = source?.Torpedo ?? default(int);

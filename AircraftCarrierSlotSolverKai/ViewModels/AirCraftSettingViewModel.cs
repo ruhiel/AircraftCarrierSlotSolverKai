@@ -12,7 +12,7 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
 
         public AirCraft NowSelectAirCraft { get; set; }
 
-        public ObservableCollection<AirCraftSetting> AirCraftSettings => AirCraftSettingList.Instance;
+        public ObservableCollection<AirCraftSetting> AirCraftSettings => AirCraftSettingRecords.Instance.Records;
 
         public ReactiveCommand AddCommand { get; private set; }
 
@@ -22,11 +22,11 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
         {
             AddCommand = new ReactiveCommand();
 
-            AddCommand.Subscribe(_ => AirCraftSettingList.Instance.Add(NowSelectAirCraft));
+            AddCommand.Subscribe(_ => AirCraftSettingRecords.Instance.Add(NowSelectAirCraft));
 
             AirCraftSettingSaveCommand = new ReactiveCommand();
 
-            AirCraftSettingSaveCommand.Subscribe(_ => AirCraftSettingList.Instance.Save());
+            AirCraftSettingSaveCommand.Subscribe(_ => AirCraftSettingRecords.Instance.Save());
         }
     }
 }

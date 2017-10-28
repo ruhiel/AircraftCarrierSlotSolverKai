@@ -425,7 +425,7 @@ namespace AircraftCarrierSlotSolverKai.Models
         /// <param name="airCraftId"></param>
         /// <param name="improvement"></param>
         /// <returns></returns>
-        private static AirCraft GetAirCraft(int airCraftId, int improvement) => AirCraftSettingRecords.Instance.Records.Find(x => x.AirCraft.Id == airCraftId && x.AirCraft.Improvement == improvement).AirCraft;
+        private static AirCraft GetAirCraft(int airCraftId, int improvement) => AirCraftSettingRecords.Instance.Records.ToList().Find(x => x.AirCraft.Id == airCraftId && x.AirCraft.Improvement == improvement).AirCraft;
 
         /// <summary>
         /// スロット数取得

@@ -116,6 +116,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\AirCraftType.cs" />
+    <Compile Include="Models\AirCraftTypeRecords.cs" />
     <Compile Include="Models\Consts.cs" />
     <Compile Include="Models\FleetList.cs" />
     <Compile Include="Models\Fleets.cs" />
@@ -141,8 +143,6 @@
     <Compile Include="Models\AirCraft.cs" />
     <Compile Include="Models\AirCraftRecords.cs" />
     <Compile Include="Models\AirCraftSetting.cs" />
-    <Compile Include="Models\AirCraftSettingList.cs" />
-    <Compile Include="Models\AirCraftSettingMap.cs" />
     <Compile Include="Models\AirCraftSettingRecords.cs" />
     <Compile Include="Models\Area.cs" />
     <Compile Include="Models\AreaRecords.cs" />

@@ -52,9 +52,9 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
 
         public AirCraftSetting NowSelectSlotSetting { get; set; }
 
-        public ObservableCollection<AirCraftSetting> AirCraftList { get; set; } = new ObservableCollection<AirCraftSetting>(AirCraftSettingList.Instance);
+        public ObservableCollection<AirCraftSetting> AirCraftList { get; private set; } = new ObservableCollection<AirCraftSetting>();
 
-        public IEnumerable<string> AirCraftTypeList => AirCraftSettingList.Instance.Select(x => x.AirCraft.Type).OrderBy(y => y).Distinct();
+        public IEnumerable<string> AirCraftTypeList => AirCraftTypeRecords.Instance.Records.Select(x => x.Name);
 
         public ReactiveProperty<string> NowSelectAirCraftType { get; set; } = new ReactiveProperty<string>();
 
@@ -193,7 +193,7 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
             NowSelectAirCraftType.Subscribe(type =>
             {
                 AirCraftList.Clear();
-                foreach (var item in AirCraftSettingList.Instance.Where(x => string.IsNullOrEmpty(type) || x.AirCraft.Type == type))
+                foreach (var item in AirCraftSettingRecords.Instance.Records.Where(x => string.IsNullOrEmpty(type) || x.AirCraft.Type == type))
                 {
                     AirCraftList.Add(item);
                 }

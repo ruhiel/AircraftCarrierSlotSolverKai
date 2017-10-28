@@ -6,12 +6,17 @@ using System.Threading.Tasks;
 
 namespace AircraftCarrierSlotSolverKai.Models
 {
-    public class AirCraftSettingRecords : CSVRecords<AirCraftSetting, AirCraftSettingMap>
+    public class AirCraftSettingRecords : SQLRecords<AirCraftSetting>
     {
         public static AirCraftSettingRecords Instance = new AirCraftSettingRecords();
 
-        public AirCraftSettingRecords(string fileName = "aircraftsetting.csv") : base(fileName)
+        internal object Add(AirCraft nowSelectAirCraft)
         {
+            return null;
+        }
+        internal object Save()
+        {
+            return null;
         }
     }
 }
