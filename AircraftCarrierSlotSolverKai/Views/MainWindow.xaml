@@ -176,7 +176,7 @@
                                 <StackPanel>
                                     <WrapPanel HorizontalAlignment="Left">
                                         <ComboBox IsEnabled="{Binding IsChecked, ElementName=AirCraftDesignationRadio}" Name="SlotComboBox" Width="170" ItemsSource="{Binding AirCraftList}" DisplayMemberPath="AirCraft.AirCraftName" SelectedItem="{Binding NowSelectSlotSetting, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
-                                        <ComboBox IsEnabled="{Binding IsChecked, ElementName=AirCraftDesignationRadio}" Name="SlotTypeComboBox" Width="100" ItemsSource="{Binding AirCraftTypeList}" SelectedItem="{Binding NowSelectAirCraftType.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
+                                        <ComboBox IsEnabled="{Binding IsChecked, ElementName=AirCraftDesignationRadio}" Name="SlotTypeComboBox" Width="100" DisplayMemberPath="Name" ItemsSource="{Binding AirCraftTypeList}" SelectedItem="{Binding NowSelectAirCraftType.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
                                     </WrapPanel>
                                     <Border Style="{StaticResource BorderStyle}">
                                         <WrapPanel>

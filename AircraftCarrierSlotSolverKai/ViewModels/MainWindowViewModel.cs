@@ -129,9 +129,13 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
             {
                 ShipList.Clear();
 
-                foreach (var item in ShipRecords.Instance.Records.Where(x => null == type ? true : x.Shiptype == type.ID))
+                foreach (var item in ShipRecords.Instance.Records.Where(x => null == type ? true : x.Shiptype == type.ID)
+                    .Select(y => new { ID = y.ID, PrevRemodel = string.IsNullOrEmpty(y.PrevRemodel), Ship = y })
+                    .OrderBy(z => z.PrevRemodel)
+                    .ThenBy(i => i.ID)
+                    )
                 {
-                    ShipList.Add(item);
+                    ShipList.Add(item.Ship);
                 }
             });
         }
