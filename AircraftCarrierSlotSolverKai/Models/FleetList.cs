@@ -10,25 +10,15 @@ using ZeroFormatter;
 
 namespace AircraftCarrierSlotSolverKai.Models
 {
-    public class FleetList : SQLRecords
+    public class FleetList : SQLRecords<Fleet>
     {
         public static FleetList Instance = new FleetList();
 
-        public ObservableCollection<Fleet> Records { get; set; }
-
-        private FleetList()
+        private FleetList() : base()
         {
-            Records = new ObservableCollection<Fleet>();
-
-            using (var connection = GetConnection())
+            foreach(var fleet in Records)
             {
-                connection.Open();
-                foreach(var fleet in connection.Query<Fleet>(@"select * from fleet"))
-                {
-                    fleet.ShipSlotInfo = ZeroFormatterSerializer.Deserialize<Fleets>(fleet.Organization).List;
-
-                    Records.Add(fleet);
-                }
+                fleet.ShipSlotInfo = ZeroFormatterSerializer.Deserialize<Fleets>(fleet.Organization).List;
             }
         }
 
@@ -51,7 +41,7 @@ namespace AircraftCarrierSlotSolverKai.Models
                             }),
                             ShipSlotInfo = shipSlotInfos
                         };
-                        connection.Execute("insert into fleet(name, air_superiority_potential, organization) values (@Name, @AirSuperiorityPotential, @Organization)", fleet, tran);
+                        connection.Execute($"insert into fleet (name, air_superiority_potential, organization) values (@{nameof(fleet.Name)}, @{nameof(fleet.AirSuperiorityPotential)}, @{nameof(fleet.Organization)})", fleet, tran);
                         tran.Commit();
 
                         Records.Add(fleet);
@@ -73,7 +63,7 @@ namespace AircraftCarrierSlotSolverKai.Models
                 {
                     try
                     {
-                        connection.Execute("delete from fleet where id=@ID", nowSelectFleet, tran);
+                        connection.Execute($"delete from fleet where id = @{nameof(nowSelectFleet.ID)}", nowSelectFleet, tran);
                         tran.Commit();
 
                         Records.Remove(nowSelectFleet);

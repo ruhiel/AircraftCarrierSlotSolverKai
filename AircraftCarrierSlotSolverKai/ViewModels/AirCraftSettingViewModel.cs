@@ -8,7 +8,7 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
 {
     public class AirCraftSettingViewModel
     {
-        public List<AirCraft> AirCraftList => AirCraftRecords.Instance.Records;
+        public IEnumerable<AirCraft> AirCraftList => AirCraftRecords.Instance.Records;
 
         public AirCraft NowSelectAirCraft { get; set; }
 

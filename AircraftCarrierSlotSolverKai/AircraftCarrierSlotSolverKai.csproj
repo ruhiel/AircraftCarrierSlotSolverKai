@@ -139,7 +139,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\AirCraft.cs" />
-    <Compile Include="Models\AirCraftMap.cs" />
     <Compile Include="Models\AirCraftRecords.cs" />
     <Compile Include="Models\AirCraftSetting.cs" />
     <Compile Include="Models\AirCraftSettingList.cs" />

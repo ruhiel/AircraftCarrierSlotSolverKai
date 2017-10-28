@@ -8,24 +8,8 @@ using System.Threading.Tasks;
 
 namespace AircraftCarrierSlotSolverKai.Models
 {
-    public class AreaRecords : SQLRecords
+    public class AreaRecords : SQLRecords<Area>
     {
         public static AreaRecords Instance = new AreaRecords();
-
-        public IEnumerable<Area> Records
-        {
-            get
-            {
-                var config = new SQLiteConnectionStringBuilder()
-                {
-                    DataSource = DataSource
-                };
-                using (var connection = new SQLiteConnection(config.ToString()))
-                {
-                    connection.Open();
-                    return connection.Query<Area>(@"select * from area");
-                }
-            }
-        }
     }
 }

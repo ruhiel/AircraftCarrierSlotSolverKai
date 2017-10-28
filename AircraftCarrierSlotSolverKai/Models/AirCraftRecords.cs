@@ -6,12 +6,8 @@ using System.Threading.Tasks;
 
 namespace AircraftCarrierSlotSolverKai.Models
 {
-    public class AirCraftRecords : CSVRecords<AirCraft, AirCraftMap>
+    public class AirCraftRecords : SQLRecords<AirCraft>
     {
         public static AirCraftRecords Instance = new AirCraftRecords();
-
-        private AirCraftRecords(string fileName = "air.csv") : base(fileName)
-        {
-        }
     }
 }
