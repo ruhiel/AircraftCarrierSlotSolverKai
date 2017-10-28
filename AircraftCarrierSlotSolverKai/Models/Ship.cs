@@ -8,7 +8,7 @@ using ZeroFormatter;
 namespace AircraftCarrierSlotSolverKai.Models
 {
     [ZeroFormattable]
-    public class ShipInfo
+    public class Ship
     {
         /// <summary>
         /// ID

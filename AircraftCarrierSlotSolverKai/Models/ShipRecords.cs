@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 
 namespace AircraftCarrierSlotSolverKai.Models
 {
-    public class ShipInfoRecords : CSVRecords<ShipInfo, ShipInfoMap>
+    public class ShipRecords : CSVRecords<Ship, ShipInfoMap>
     {
-        public static ShipInfoRecords Instance = new ShipInfoRecords();
+        public static ShipRecords Instance = new ShipRecords();
 
-        public override List<ShipInfo> GetList(List<ShipInfo> list)
+        public override List<Ship> GetList(List<Ship> list)
         {
             var types = list.Select(x => x.Type).Distinct().Select((type, idx) => new { type, idx });
 
             return list.Where(x => x.Prev != "-").OrderBy(y => types.First(z => z.type == y.Type).idx).ToList();
         }
 
-        private ShipInfoRecords(string fileName = "slots.csv") : base(fileName)
+        private ShipRecords(string fileName = "slots.csv") : base(fileName)
         {
         }
     }

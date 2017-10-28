@@ -13,15 +13,15 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
 {
     public class MainWindowViewModel
     {
-        public IEnumerable<string> ShipTypeList => ShipInfoRecords.Instance.Records.Select(x => x.Type).Distinct().OrderBy(y => Consts.ShipTypeOrder[y]);
+        public IEnumerable<string> ShipTypeList => ShipRecords.Instance.Records.Select(x => x.Type).Distinct().OrderBy(y => Consts.ShipTypeOrder[y]);
 
         public ReactiveProperty<string> NowSelectShipType { get; set; } = new ReactiveProperty<string>("正規空母");
 
-        public ObservableCollection<ShipInfo> ShipList { get; set; } = new ObservableCollection<ShipInfo>();
+        public ObservableCollection<Ship> ShipList { get; set; } = new ObservableCollection<Ship>();
 
         public IEnumerable<Area> AreaList => AreaRecords.Instance.Records;
 
-        public ShipInfo NowSelectShip { get; set; }
+        public Ship NowSelectShip { get; set; }
 
         public Area NowSelectArea { get; set; }
 
@@ -129,7 +129,7 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
             {
                 ShipList.Clear();
 
-                foreach (var item in ShipInfoRecords.Instance.Records.Where(x => string.IsNullOrEmpty(type) ? true : x.Type == type))
+                foreach (var item in ShipRecords.Instance.Records.Where(x => string.IsNullOrEmpty(type) ? true : x.Type == type))
                 {
                     ShipList.Add(item);
                 }

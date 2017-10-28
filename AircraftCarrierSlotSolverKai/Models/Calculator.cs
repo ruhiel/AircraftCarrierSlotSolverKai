@@ -435,7 +435,7 @@ namespace AircraftCarrierSlotSolverKai.Models
         /// <returns></returns>
         private static int GetSlotNum(int shipId, int slotIndex)
         {
-            var ship = ShipInfoRecords.Instance.Records.Find(x => x.ID == shipId);
+            var ship = ShipRecords.Instance.Records.Find(x => x.ID == shipId);
             switch(slotIndex)
             {
                 case 1:

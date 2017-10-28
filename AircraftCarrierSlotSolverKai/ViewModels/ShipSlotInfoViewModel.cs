@@ -200,9 +200,9 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
             });
         }
 
-        public ShipSlotInfoViewModel(ShipInfo shipInfo) : this(new ShipSlotInfo(shipInfo)) {}
+        public ShipSlotInfoViewModel(Ship shipInfo) : this(new ShipSlotInfo(shipInfo)) {}
 
-        public ShipSlotInfoViewModel(ShipInfo shipInfo, AirCraft Slot1, AirCraft Slot2, AirCraft Slot3, AirCraft Slot4) : this(new ShipSlotInfo(shipInfo))
+        public ShipSlotInfoViewModel(Ship shipInfo, AirCraft Slot1, AirCraft Slot2, AirCraft Slot3, AirCraft Slot4) : this(new ShipSlotInfo(shipInfo))
         {
             ShipSlotInfo.Slot1 = Slot1;
             ShipSlotInfo.Slot2 = Slot2;

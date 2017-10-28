@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AircraftCarrierSlotSolverKai.Models
 {
-    public class ShipInfoMap : CsvClassMap<ShipInfo>
+    public class ShipInfoMap : CsvClassMap<Ship>
     {
         public ShipInfoMap()
         {
