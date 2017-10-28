@@ -21,7 +21,11 @@ namespace AircraftCarrierSlotSolverKai.Models
         /// <summary>
         /// 艦種
         /// </summary>
-        [Index(2)] public virtual string Type { get; set; }
+        [IgnoreFormat] public virtual string Type => ShipTypeRecords.Instance.Records.First(x => x.ID == Shiptype).Name;
+        /// <summary>
+        /// 艦種ID
+        /// </summary>
+        [Index(2)] public virtual int Shiptype { get; set; }
         /// <summary>
         /// 火力
         /// </summary>
@@ -54,7 +58,7 @@ namespace AircraftCarrierSlotSolverKai.Models
         /// <summary>
         /// 改装前
         /// </summary>
-        [Index(10)] public virtual string Prev { get; set; }
+        [Index(10)] public virtual string PrevRemodel { get; set; }
     }
 
 }

@@ -121,6 +121,8 @@
     <Compile Include="Models\Consts.cs" />
     <Compile Include="Models\FleetRecords.cs" />
     <Compile Include="Models\Fleets.cs" />
+    <Compile Include="Models\ShipType.cs" />
+    <Compile Include="Models\ShipTypeRecords.cs" />
     <Compile Include="Models\SQLRecords.cs" />
     <Compile Include="ViewModels\IntAttribute.cs" />
     <Compile Include="ViewModels\PresetRegisterViewModel.cs" />
@@ -149,7 +151,6 @@
     <Compile Include="Models\CSVRecords.cs" />
     <Compile Include="Models\Fleet.cs" />
     <Compile Include="Models\Ship.cs" />
-    <Compile Include="Models\ShipInfoMap.cs" />
     <Compile Include="Models\ShipRecords.cs" />
     <Compile Include="Models\ShipSlotInfo.cs" />
     <Compile Include="ViewModels\AirCraftSettingViewModel.cs" />

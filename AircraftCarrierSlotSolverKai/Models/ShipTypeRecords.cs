@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace AircraftCarrierSlotSolverKai.Models
 {
-    public class ShipRecords : SQLRecords<Ship>
+    public class ShipTypeRecords : SQLRecords<ShipType>
     {
-        public static ShipRecords Instance = new ShipRecords();
+        public static ShipTypeRecords Instance = new ShipTypeRecords();
     }
 }
