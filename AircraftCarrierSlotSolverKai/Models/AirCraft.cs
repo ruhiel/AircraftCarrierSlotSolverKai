@@ -81,7 +81,7 @@ namespace AircraftCarrierSlotSolverKai.Models
         /// 艦載機名称(改修値付き)
         /// </summary>
         [IgnoreFormat]
-        public virtual string AirCraftName
+        public virtual string FullName
         {
             get
             {
@@ -152,7 +152,7 @@ namespace AircraftCarrierSlotSolverKai.Models
         public AirCraft(AirCraft source)
         {
             Id = source?.Id ?? 0;
-            Name = source?.Name ?? "装備なし";
+            Name = source?.Name;
             AircraftType = source?.AircraftType ?? 0;
             AAValue = source?.AAValue ?? default(int);
             Bomber = source?.Bomber ?? default(int);
@@ -160,6 +160,11 @@ namespace AircraftCarrierSlotSolverKai.Models
             Accuracy = source?.Accuracy ?? default(int);
             Evasion = source?.Evasion ?? default(int);
             Improvement = source?.Improvement ?? default(int);
+        }
+
+        public AirCraft(int id, int improvement) : this(AirCraftRecords.Instance.Records.First(x => x.Id == id))
+        {
+            Improvement = improvement;
         }
 
         public AirCraft(AirCraftSetting setting) : this(setting?.AirCraft)
@@ -186,11 +191,6 @@ namespace AircraftCarrierSlotSolverKai.Models
 
         public int AirSuperiorityPotential(int slotNum)
         {
-            if (Name == "装備なし")
-            {
-                return 0;
-            }
-
             var air = AA * Math.Sqrt(slotNum);
             double bonus = 0;
             switch (Type)

@@ -20,12 +20,12 @@ namespace AircraftCarrierSlotSolverKai.Models
             get { return ShipInfo.Name; }
         }
 
-        private AirCraft _Slot1;
+        private AirCraftInfo _Slot1;
         /// <summary>
         /// 第一スロット艦載機
         /// </summary>
         [Index(1)]
-        public virtual AirCraft Slot1
+        public virtual AirCraftInfo Slot1
         {
             get { return _Slot1; }
             set { SetProperty(ref _Slot1, value); }
@@ -42,12 +42,12 @@ namespace AircraftCarrierSlotSolverKai.Models
             set { SetProperty(ref _Slot1Num, value); }
         }
 
-        private AirCraft _Slot2;
+        private AirCraftInfo _Slot2;
         /// <summary>
         /// 第二スロット艦載機
         /// </summary>
         [Index(3)]
-        public virtual AirCraft Slot2
+        public virtual AirCraftInfo Slot2
         {
             get { return _Slot2; }
             set { SetProperty(ref _Slot2, value); }
@@ -64,12 +64,12 @@ namespace AircraftCarrierSlotSolverKai.Models
             set { SetProperty(ref _Slot2Num, value); }
         }
 
-        private AirCraft _Slot3;
+        private AirCraftInfo _Slot3;
         /// <summary>
         /// 第三スロット艦載機
         /// </summary>
         [Index(5)]
-        public virtual AirCraft Slot3
+        public virtual AirCraftInfo Slot3
         {
             get { return _Slot3; }
             set { SetProperty(ref _Slot3, value); }
@@ -86,12 +86,12 @@ namespace AircraftCarrierSlotSolverKai.Models
             set { SetProperty(ref _Slot3Num, value); }
         }
 
-        private AirCraft _Slot4;
+        private AirCraftInfo _Slot4;
         /// <summary>
         /// 第四スロット艦載機
         /// </summary>
         [Index(7)]
-        public virtual AirCraft Slot4
+        public virtual AirCraftInfo Slot4
         {
             get { return _Slot4; }
             set { SetProperty(ref _Slot4, value); }
@@ -157,33 +157,33 @@ namespace AircraftCarrierSlotSolverKai.Models
             set { SetProperty(ref _OnlyAttacker, value); }
         }
 
-        private AirCraft _SlotSetting1;
+        private AirCraftInfo _SlotSetting1;
         [Index(15)]
-        public virtual AirCraft SlotSetting1
+        public virtual AirCraftInfo SlotSetting1
         {
             get { return _SlotSetting1; }
             set { SetProperty(ref _SlotSetting1, value); }
         }
 
-        private AirCraft _SlotSetting2;
+        private AirCraftInfo _SlotSetting2;
         [Index(16)]
-        public virtual AirCraft SlotSetting2
+        public virtual AirCraftInfo SlotSetting2
         {
             get { return _SlotSetting2; }
             set { SetProperty(ref _SlotSetting2, value); }
         }
 
-        private AirCraft _SlotSetting3;
+        private AirCraftInfo _SlotSetting3;
         [Index(17)]
-        public virtual AirCraft SlotSetting3
+        public virtual AirCraftInfo SlotSetting3
         {
             get { return _SlotSetting3; }
             set { SetProperty(ref _SlotSetting3, value); }
         }
 
-        private AirCraft _SlotSetting4;
+        private AirCraftInfo _SlotSetting4;
         [Index(18)]
-        public virtual AirCraft SlotSetting4
+        public virtual AirCraftInfo SlotSetting4
         {
             get { return _SlotSetting4; }
             set { SetProperty(ref _SlotSetting4, value); }
@@ -237,14 +237,14 @@ namespace AircraftCarrierSlotSolverKai.Models
         public int MinSlotIndex => new[] { Slot1Num, Slot2Num, Slot3Num, Slot4Num }.Select((slot, index) => (slot, index)).OrderByDescending(x => x.index).First(y => y.slot == MinSlotNum).index + 1;
 
         [IgnoreFormat]
-        public IEnumerable<(AirCraft airCraft, int index)> SlotSettings => new AirCraft[] { SlotSetting1, SlotSetting2, SlotSetting3, SlotSetting4 }.Select((airCraft, index) => { (AirCraft airCraft, int index) tuple = (airCraft, index + 1); return tuple; });
+        public IEnumerable<(AirCraft airCraft, int index)> SlotSettings => new AirCraft[] { SlotSetting1?.AirCraft, SlotSetting2?.AirCraft, SlotSetting3?.AirCraft, SlotSetting4?.AirCraft }.Select((airCraft, index) => { (AirCraft airCraft, int index) tuple = (airCraft, index + 1); return tuple; });
 
         [IgnoreFormat]
         public Dictionary<int, string> AirCraftSetting
         {
             get
             {
-                return new Dictionary<int, string> { { 0, SlotSetting1?.AirCraftName ?? "未指定" }, { 1, SlotSetting2?.AirCraftName ?? "未指定" }, { 2, SlotSetting3?.AirCraftName ?? "未指定" }, { 3, SlotSetting4?.AirCraftName ?? "未指定" } };
+                return new Dictionary<int, string> { { 0, SlotSetting1?.AirCraft.FullName ?? "未指定" }, { 1, SlotSetting2?.AirCraft.FullName ?? "未指定" }, { 2, SlotSetting3?.AirCraft.FullName ?? "未指定" }, { 3, SlotSetting4?.AirCraft.FullName ?? "未指定" } };
             }
         }
 
