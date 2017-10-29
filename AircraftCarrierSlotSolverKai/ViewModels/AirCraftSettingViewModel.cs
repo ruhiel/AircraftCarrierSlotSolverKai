@@ -3,6 +3,7 @@ using Reactive.Bindings;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System;
+using AircraftCarrierSlotSolverKai.Models.Records;
 
 namespace AircraftCarrierSlotSolverKai.ViewModels
 {

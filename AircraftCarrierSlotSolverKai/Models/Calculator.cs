@@ -1,4 +1,5 @@
-﻿using Google.OrTools.LinearSolver;
+﻿using AircraftCarrierSlotSolverKai.Models.Records;
+using Google.OrTools.LinearSolver;
 using System;
 using System.Collections.Generic;
 using System.Linq;

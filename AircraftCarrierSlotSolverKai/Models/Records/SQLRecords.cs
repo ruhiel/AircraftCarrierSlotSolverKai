@@ -5,7 +5,7 @@ using System.Collections.ObjectModel;
 using System.Data.SQLite;
 using System.Linq;
 
-namespace AircraftCarrierSlotSolverKai.Models
+namespace AircraftCarrierSlotSolverKai.Models.Records
 {
     public class SQLRecords<T>
     {

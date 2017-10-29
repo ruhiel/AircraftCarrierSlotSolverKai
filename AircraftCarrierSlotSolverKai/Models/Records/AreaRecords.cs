@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AircraftCarrierSlotSolverKai.Models
+namespace AircraftCarrierSlotSolverKai.Models.Records
 {
     public class AreaRecords : SQLRecords<Area>
     {

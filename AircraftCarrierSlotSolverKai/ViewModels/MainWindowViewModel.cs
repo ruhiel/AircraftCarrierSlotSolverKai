@@ -8,6 +8,7 @@ using Prism.Events;
 using AircraftCarrierSlotSolverKai.Views;
 using Reactive.Bindings.Extensions;
 using System.Reactive.Linq;
+using AircraftCarrierSlotSolverKai.Models.Records;
 
 namespace AircraftCarrierSlotSolverKai.ViewModels
 {
@@ -32,7 +33,7 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
 
         public ObservableCollection<ShipSlotInfoViewModel> ShipSlotInfoList { get; set; }
 
-        public ObservableCollection<Fleet> FleetList => Models.FleetRecords.Instance.Records;
+        public ObservableCollection<Fleet> FleetList => FleetRecords.Instance.Records;
 
         public ReactiveCommand ShipAddCommand { get; } = new ReactiveCommand();
 
@@ -92,7 +93,7 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
 
                 dialog.ShowDialog();
 
-                Models.FleetRecords.Instance.Add(dialog.FleetName, int.Parse(TargetAirSuperiorityPotential.Value), ShipSlotInfoList.Select(x => x.ShipSlotInfo));
+                FleetRecords.Instance.Add(dialog.FleetName, int.Parse(TargetAirSuperiorityPotential.Value), ShipSlotInfoList.Select(x => x.ShipSlotInfo));
             });
 
             // 編成展開

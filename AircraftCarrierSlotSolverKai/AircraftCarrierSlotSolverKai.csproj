@@ -118,13 +118,13 @@
     </ApplicationDefinition>
     <Compile Include="Models\AirCraftInfo.cs" />
     <Compile Include="Models\AirCraftType.cs" />
-    <Compile Include="Models\AirCraftTypeRecords.cs" />
+    <Compile Include="Models\Records\AirCraftTypeRecords.cs" />
     <Compile Include="Models\Consts.cs" />
-    <Compile Include="Models\FleetRecords.cs" />
+    <Compile Include="Models\Records\FleetRecords.cs" />
     <Compile Include="Models\Fleets.cs" />
     <Compile Include="Models\ShipType.cs" />
-    <Compile Include="Models\ShipTypeRecords.cs" />
-    <Compile Include="Models\SQLRecords.cs" />
+    <Compile Include="Models\Records\ShipTypeRecords.cs" />
+    <Compile Include="Models\Records\SQLRecords.cs" />
     <Compile Include="ViewModels\IntAttribute.cs" />
     <Compile Include="ViewModels\PresetRegisterViewModel.cs" />
     <Compile Include="Views\PresetRegisterView.xaml.cs">
@@ -143,16 +143,16 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\AirCraft.cs" />
-    <Compile Include="Models\AirCraftRecords.cs" />
+    <Compile Include="Models\Records\AirCraftRecords.cs" />
     <Compile Include="Models\AirCraftSetting.cs" />
-    <Compile Include="Models\AirCraftSettingRecords.cs" />
+    <Compile Include="Models\Records\AirCraftSettingRecords.cs" />
     <Compile Include="Models\Area.cs" />
-    <Compile Include="Models\AreaRecords.cs" />
+    <Compile Include="Models\Records\AreaRecords.cs" />
     <Compile Include="Models\Calculator.cs" />
-    <Compile Include="Models\CSVRecords.cs" />
+    <Compile Include="Models\Records\CSVRecords.cs" />
     <Compile Include="Models\Fleet.cs" />
     <Compile Include="Models\Ship.cs" />
-    <Compile Include="Models\ShipRecords.cs" />
+    <Compile Include="Models\Records\ShipRecords.cs" />
     <Compile Include="Models\ShipSlotInfo.cs" />
     <Compile Include="ViewModels\AirCraftSettingViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />

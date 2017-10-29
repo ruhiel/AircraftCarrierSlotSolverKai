@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ZeroFormatter;
 
-namespace AircraftCarrierSlotSolverKai.Models
+namespace AircraftCarrierSlotSolverKai.Models.Records
 {
     public class FleetRecords : SQLRecords<Fleet>
     {
