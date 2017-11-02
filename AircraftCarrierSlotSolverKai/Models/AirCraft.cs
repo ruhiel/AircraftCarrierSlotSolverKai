@@ -1,87 +1,87 @@
 ﻿using AircraftCarrierSlotSolverKai.Models.Records;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ZeroFormatter;
 
 namespace AircraftCarrierSlotSolverKai.Models
 {
-    [ZeroFormattable]
+    [JsonObject]
     public class AirCraft
     {
         /// <summary>
         /// 名称
         /// </summary>
-        [Index(0)] public virtual string Name { get; set; }
+        [JsonProperty] public string Name { get; set; }
 
         /// <summary>
         /// 種別
         /// </summary>
-        [IgnoreFormat] public virtual string Type => AirCraftTypeRecords.Instance.Records.First(x => x.Id == AircraftType).Name;
+        [JsonIgnore] public string Type => AirCraftTypeRecords.Instance.Records.First(x => x.Id == AircraftType).Name;
 
         /// <summary>
         /// 種別ID
         /// </summary>
-        [Index(1)] public virtual int AircraftType { get; set; }
+        [JsonProperty] public int AircraftType { get; set; }
 
         /// <summary>
         /// 火力
         /// </summary>
-        [Index(2)] public virtual int FirePower { get; set; }
+        [JsonProperty] public int FirePower { get; set; }
 
         /// <summary>
         /// 改修値
         /// </summary>
-        [Index(3)] public virtual int Improvement { get; set; } = 0;
+        [JsonProperty] public int Improvement { get; set; } = 0;
 
         /// <summary>
         /// 対空
         /// </summary>
-        [Index(4)] public virtual int AAValue { get; set; }
+        [JsonProperty] public int AAValue { get; set; }
 
         /// <summary>
         /// 爆装
         /// </summary>
-        [Index(5)] public virtual int Bomber { get; set; }
+        [JsonProperty] public int Bomber { get; set; }
         /// <summary>
         /// 雷装
         /// </summary>
-        [Index(6)] public virtual int Torpedo { get; set; }
+        [JsonProperty] public int Torpedo { get; set; }
         /// <summary>
         /// 命中
         /// </summary>
-        [Index(7)] public virtual int Accuracy { get; set; }
+        [JsonProperty] public int Accuracy { get; set; }
         /// <summary>
         /// 回避
         /// </summary>
-        [Index(8)] public virtual int Evasion { get; set; }
+        [JsonProperty] public int Evasion { get; set; }
         /// <summary>
         /// ID
         /// </summary>
-        [Index(9)] public virtual int Id { get; set; }
+        [JsonProperty] public int Id { get; set; }
         /// <summary>
         /// 装甲
         /// </summary>
-        [Index(10)] public virtual int Armor { get; set; }
+        [JsonProperty] public int Armor { get; set; }
         /// <summary>
         /// 対潜
         /// </summary>
-        [Index(11)] public virtual int ASW { get; set; }
+        [JsonProperty] public int ASW { get; set; }
         /// <summary>
         /// 索敵
         /// </summary>
-        [Index(12)] public virtual int ViewRange { get; set; }
+        [JsonProperty] public int ViewRange { get; set; }
         /// <summary>
         /// 運
         /// </summary>
-        [Index(13)] public virtual int Luck { get; set; }
+        [JsonProperty] public int Luck { get; set; }
 
         /// <summary>
         /// 艦載機名称(改修値付き)
         /// </summary>
-        [IgnoreFormat]
+        [JsonIgnore]
         public virtual string FullName
         {
             get
@@ -90,7 +90,7 @@ namespace AircraftCarrierSlotSolverKai.Models
             }
         }
 
-        [IgnoreFormat]
+        [JsonIgnore]
         public virtual int TypeOrder
         {
             get
@@ -111,13 +111,13 @@ namespace AircraftCarrierSlotSolverKai.Models
         /// <summary>
         /// 攻撃可能か
         /// </summary>
-        [IgnoreFormat] public virtual bool Attackable => Type == Consts.TorpedoBomber || Type == Consts.DiveBomber;
+        [JsonIgnore] public virtual bool Attackable => Type == Consts.TorpedoBomber || Type == Consts.DiveBomber;
 
 
         /// <summary>
         /// 対空値
         /// </summary>
-        [IgnoreFormat]
+        [JsonIgnore]
         public virtual int AA
         {
             get

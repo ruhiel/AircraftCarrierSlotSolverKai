@@ -1,65 +1,65 @@
 ﻿using AircraftCarrierSlotSolverKai.Models.Records;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ZeroFormatter;
 
 namespace AircraftCarrierSlotSolverKai.Models
 {
-    [ZeroFormattable]
+    [JsonObject]
     public class Ship
     {
         /// <summary>
         /// ID
         /// </summary>
-        [Index(0)] public virtual int ID { get; set; }
+        [JsonProperty] public int ID { get; set; }
         /// <summary>
         /// 艦名
         /// </summary>
-        [Index(1)] public virtual string Name { get; set; }
+        [JsonProperty] public string Name { get; set; }
         /// <summary>
         /// 艦種
         /// </summary>
-        [IgnoreFormat] public virtual string Type => ShipTypeRecords.Instance.Records.First(x => x.ID == Shiptype).Name;
+        [JsonIgnore] public string Type => ShipTypeRecords.Instance.Records.First(x => x.ID == Shiptype).Name;
         /// <summary>
         /// 艦種ID
         /// </summary>
-        [Index(2)] public virtual int Shiptype { get; set; }
+        [JsonProperty] public int Shiptype { get; set; }
         /// <summary>
         /// 火力
         /// </summary>
-        [Index(3)] public virtual int FirePower { get; set; }
+        [JsonProperty] public int FirePower { get; set; }
         /// <summary>
         /// スロット数
         /// </summary>
-        [Index(4)] public virtual int SlotNum { get; set; }
+        [JsonProperty] public int SlotNum { get; set; }
         /// <summary>
         /// スロット数1
         /// </summary>
-        [Index(5)] public virtual int Slot1Num { get; set; }
+        [JsonProperty] public int Slot1Num { get; set; }
         /// <summary>
         /// スロット数2
         /// </summary>
-        [Index(6)] public virtual int Slot2Num { get; set; }
+        [JsonProperty] public int Slot2Num { get; set; }
         /// <summary>
         /// スロット数3
         /// </summary>
-        [Index(7)] public virtual int Slot3Num { get; set; }
+        [JsonProperty] public int Slot3Num { get; set; }
         /// <summary>
         /// スロット数4
         /// </summary>
-        [Index(8)] public virtual int Slot4Num { get; set; }
+        [JsonProperty] public int Slot4Num { get; set; }
         /// <summary>
         /// スロット数リスト
         /// </summary>
-        [IgnoreFormat] public virtual int[] Slots => new int[] { Slot1Num, Slot2Num, Slot3Num, Slot4Num };
+        [JsonIgnore] public int[] Slots => new int[] { Slot1Num, Slot2Num, Slot3Num, Slot4Num };
 
         /// <summary>
         /// 改装前
         /// </summary>
-        [Index(10)] public virtual string PrevRemodel { get; set; }
+        [JsonProperty] public string PrevRemodel { get; set; }
     }
 
 }

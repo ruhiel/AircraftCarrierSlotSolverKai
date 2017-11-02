@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -6,7 +7,6 @@ using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ZeroFormatter;
 
 namespace AircraftCarrierSlotSolverKai.Models.Records
 {
@@ -18,7 +18,7 @@ namespace AircraftCarrierSlotSolverKai.Models.Records
         {
             foreach(var fleet in Records)
             {
-                fleet.ShipSlotInfo = ZeroFormatterSerializer.Deserialize<Fleets>(fleet.Organization).List;
+                fleet.ShipSlotInfo = JsonConvert.DeserializeObject<Fleets>(fleet.Organization).List;
             }
         }
 
@@ -35,7 +35,7 @@ namespace AircraftCarrierSlotSolverKai.Models.Records
                         {
                             Name = fleetName,
                             AirSuperiorityPotential = airSuperiorityPotential,
-                            Organization = ZeroFormatterSerializer.Serialize(new Fleets()
+                            Organization = JsonConvert.SerializeObject(new Fleets()
                             {
                                 List = shipSlotInfos.ToList(),
                             }),
