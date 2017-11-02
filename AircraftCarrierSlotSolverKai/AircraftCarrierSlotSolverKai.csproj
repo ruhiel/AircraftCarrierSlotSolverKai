@@ -118,7 +118,6 @@
     <Compile Include="Models\Records\AirCraftTypeRecords.cs" />
     <Compile Include="Models\Consts.cs" />
     <Compile Include="Models\Records\FleetRecords.cs" />
-    <Compile Include="Models\Fleets.cs" />
     <Compile Include="Models\ShipType.cs" />
     <Compile Include="Models\Records\ShipTypeRecords.cs" />
     <Compile Include="Models\Records\SQLRecords.cs" />

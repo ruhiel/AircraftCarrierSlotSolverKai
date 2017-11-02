@@ -18,7 +18,7 @@ namespace AircraftCarrierSlotSolverKai.Models.Records
         {
             foreach(var fleet in Records)
             {
-                fleet.ShipSlotInfo = JsonConvert.DeserializeObject<Fleets>(fleet.Organization).List;
+                fleet.ShipSlotInfo = JsonConvert.DeserializeObject<IEnumerable<ShipSlotInfo>>(fleet.Organization);
             }
         }
 
@@ -35,10 +35,7 @@ namespace AircraftCarrierSlotSolverKai.Models.Records
                         {
                             Name = fleetName,
                             AirSuperiorityPotential = airSuperiorityPotential,
-                            Organization = JsonConvert.SerializeObject(new Fleets()
-                            {
-                                List = shipSlotInfos.ToList(),
-                            }),
+                            Organization = JsonConvert.SerializeObject(shipSlotInfos),
                             ShipSlotInfo = shipSlotInfos
                         };
                         connection.Execute($"insert into {TableName} (name, air_superiority_potential, organization) values (@{nameof(fleet.Name)}, @{nameof(fleet.AirSuperiorityPotential)}, @{nameof(fleet.Organization)})", fleet, tran);
