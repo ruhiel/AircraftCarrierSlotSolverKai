@@ -33,7 +33,7 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
 
         public ObservableCollection<ShipSlotInfoViewModel> ShipSlotInfoList { get; set; }
 
-        public ObservableCollection<Fleet> FleetList => FleetRecords.Instance.Records;
+        public ObservableCollection<Fleet> FleetList { get; set; } = new ObservableCollection<Fleet>();
 
         public ReactiveCommand ShipAddCommand { get; } = new ReactiveCommand();
 
@@ -54,6 +54,10 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
         public ReactiveProperty<bool> GridVisible { get; } = new ReactiveProperty<bool>(true);
 
         public ReactiveProperty<bool> ProgressVisible { get; }
+
+        public IEnumerable<World> WorldListWithDummy => WorldRecords.Instance.WithDummyList;
+
+        public ReactiveProperty<World> NowSelectFleetWorld { get; set; } = new ReactiveProperty<World>(WorldRecords.Instance.WithDummyList.First());
 
         public MainWindowViewModel()
         {
@@ -93,7 +97,10 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
 
                 dialog.ShowDialog();
 
-                FleetRecords.Instance.Add(dialog.FleetName, int.Parse(TargetAirSuperiorityPotential.Value), ShipSlotInfoList.Select(x => x.ShipSlotInfo));
+                if(dialog.Result)
+                {
+                    FleetRecords.Instance.Add(dialog.FleetName, int.Parse(TargetAirSuperiorityPotential.Value), ShipSlotInfoList.Select(x => x.ShipSlotInfo), dialog.WorldId);
+                }
             });
 
             // 編成展開
@@ -134,7 +141,21 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
                     ShipList.Add(item);
                 }
             });
+
+            NowSelectFleetWorld.Subscribe(world =>
+            {
+                FleetList.Clear();
+
+                foreach (var item in FleetRecords.Instance.Records.Where(x => world.ID == -1 ? true : x.World == world.ID))
+                {
+                    FleetList.Add(item);
+                }
+            });
+
+            FleetRecords.Instance.Records.CollectionChanged += Records_CollectionChanged;
         }
+
+        private void Records_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) => NowSelectFleetWorld.Value = WorldRecords.Instance.WithDummyList.First();
 
         ~MainWindowViewModel()
         {

@@ -118,9 +118,11 @@
     <Compile Include="Models\Records\AirCraftTypeRecords.cs" />
     <Compile Include="Models\Consts.cs" />
     <Compile Include="Models\Records\FleetRecords.cs" />
+    <Compile Include="Models\Records\WorldRecords.cs" />
     <Compile Include="Models\ShipType.cs" />
     <Compile Include="Models\Records\ShipTypeRecords.cs" />
     <Compile Include="Models\Records\SQLRecords.cs" />
+    <Compile Include="Models\World.cs" />
     <Compile Include="ViewModels\IntAttribute.cs" />
     <Compile Include="ViewModels\PresetRegisterViewModel.cs" />
     <Compile Include="Views\PresetRegisterView.xaml.cs">

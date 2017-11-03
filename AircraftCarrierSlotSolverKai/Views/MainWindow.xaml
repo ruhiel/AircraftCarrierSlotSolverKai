@@ -296,7 +296,14 @@
             <Button Content="編成登録" Command="{Binding PresetCommand}"/>
             <Button Content="編成展開" Command="{Binding PresetViewCommand}"/>
             <Button Content="編成削除" Command="{Binding PresetDeleteCommand}"/>
-            <ComboBox ItemsSource="{Binding FleetList}" DisplayMemberPath="Name" SelectedItem="{Binding NowSelectFleet, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
+            <ComboBox ItemsSource="{Binding FleetList}" DisplayMemberPath="Name" SelectedItem="{Binding NowSelectFleet, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="150" Height="25" Margin="5"/>
+            <ComboBox ItemsSource="{Binding WorldListWithDummy}" SelectedItem="{Binding NowSelectFleetWorld.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="100" Height="25">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}" Margin="2.5"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
         </WrapPanel>
         <WrapPanel HorizontalAlignment="Center">
             <Controls:ProgressRing Foreground="{DynamicResource AccentColorBrush}" Visibility="{Binding ProgressVisible.Value, Converter={StaticResource BoolToVisibility}}"/>

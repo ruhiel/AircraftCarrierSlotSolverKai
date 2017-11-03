@@ -13,5 +13,6 @@ namespace AircraftCarrierSlotSolverKai.Models
         public int AirSuperiorityPotential { get; set; }
         public string Organization { get; set; }
         public IEnumerable<ShipSlotInfo> ShipSlotInfo { get; set; }
+        public long? World { get; set; }
     }
 }
