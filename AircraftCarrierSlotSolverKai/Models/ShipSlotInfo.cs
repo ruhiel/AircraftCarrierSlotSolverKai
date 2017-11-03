@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using AircraftCarrierSlotSolverKai.Models.Records;
+using Newtonsoft.Json;
 using Prism.Mvvm;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,16 +10,16 @@ namespace AircraftCarrierSlotSolverKai.Models
     public class ShipSlotInfo : BindableBase
     {
         [JsonProperty]
-        public Ship ShipInfo { get; set; }
+        public int ShipId { get; set; }
+
+        [JsonIgnore]
+        public Ship ShipInfo => ShipRecords.Instance.Records.First(x => x.ID == ShipId);
 
         /// <summary>
         /// 艦名
         /// </summary>
         [JsonIgnore]
-        public string ShipName
-        {
-            get { return ShipInfo.Name; }
-        }
+        public string ShipName => ShipInfo.Name;
 
         private AirCraftInfo _Slot1;
         /// <summary>
@@ -31,16 +32,11 @@ namespace AircraftCarrierSlotSolverKai.Models
             set { SetProperty(ref _Slot1, value); }
         }
 
-        private int _Slot1Num;
         /// <summary>
         /// 第一スロット数
         /// </summary>
-        [JsonProperty]
-        public int Slot1Num
-        {
-            get { return _Slot1Num; }
-            set { SetProperty(ref _Slot1Num, value); }
-        }
+        [JsonIgnore]
+        public int Slot1Num => ShipInfo.Slot1Num;
 
         private AirCraftInfo _Slot2;
         /// <summary>
@@ -53,16 +49,11 @@ namespace AircraftCarrierSlotSolverKai.Models
             set { SetProperty(ref _Slot2, value); }
         }
 
-        private int _Slot2Num;
         /// <summary>
         /// 第二スロット数
         /// </summary>
-        [JsonProperty]
-        public int Slot2Num
-        {
-            get { return _Slot2Num; }
-            set { SetProperty(ref _Slot2Num, value); }
-        }
+        [JsonIgnore]
+        public int Slot2Num => ShipInfo.Slot2Num;
 
         private AirCraftInfo _Slot3;
         /// <summary>
@@ -75,16 +66,11 @@ namespace AircraftCarrierSlotSolverKai.Models
             set { SetProperty(ref _Slot3, value); }
         }
 
-        private int _Slot3Num;
         /// <summary>
         /// 第三スロット数
         /// </summary>
-        [JsonProperty]
-        public int Slot3Num
-        {
-            get { return _Slot3Num; }
-            set { SetProperty(ref _Slot3Num, value); }
-        }
+        [JsonIgnore]
+        public int Slot3Num => ShipInfo.Slot3Num;
 
         private AirCraftInfo _Slot4;
         /// <summary>
@@ -97,16 +83,11 @@ namespace AircraftCarrierSlotSolverKai.Models
             set { SetProperty(ref _Slot4, value); }
         }
 
-        private int _Slot4Num;
         /// <summary>
         /// 第四スロット数
         /// </summary>
-        [JsonProperty]
-        public int Slot4Num
-        {
-            get { return _Slot4Num; }
-            set { SetProperty(ref _Slot4Num, value); }
-        }
+        [JsonIgnore]
+        public int Slot4Num => ShipInfo.Slot4Num;
 
         private bool _Attack;
         [JsonProperty]
@@ -248,18 +229,9 @@ namespace AircraftCarrierSlotSolverKai.Models
             }
         }
 
-        public ShipSlotInfo()
+        public ShipSlotInfo(int shipId)
         {
-
-        }
-
-        public ShipSlotInfo(Ship shipInfo)
-        {
-            ShipInfo = shipInfo;
-            Slot1Num = shipInfo.Slot1Num;
-            Slot2Num = shipInfo.Slot2Num;
-            Slot3Num = shipInfo.Slot3Num;
-            Slot4Num = shipInfo.Slot4Num;
+            ShipId = shipId;
         }
     }
 }

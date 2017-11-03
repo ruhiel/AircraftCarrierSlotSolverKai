@@ -331,19 +331,19 @@
                             <DataTemplate>
                                 <StackPanel>
                                     <WrapPanel>
-                                        <TextBlock Width="15" Margin="3" Text="{Binding Slot1Num.Value}"/>
+                                        <TextBlock Width="15" Margin="3" Text="{Binding Slot1Num}"/>
                                         <TextBlock Style="{StaticResource Slot1Style}" Margin="3" Text="{Binding Slot1.Value.AirCraft.FullName}"/>
                                     </WrapPanel>
                                     <WrapPanel>
-                                        <TextBlock Width="15" Margin="3" Text="{Binding Slot2Num.Value}"/>
+                                        <TextBlock Width="15" Margin="3" Text="{Binding Slot2Num}"/>
                                         <TextBlock Style="{StaticResource Slot2Style}" Margin="3" Text="{Binding Slot2.Value.AirCraft.FullName}"/>
                                     </WrapPanel>
                                     <WrapPanel>
-                                        <TextBlock Width="15" Margin="3" Text="{Binding Slot3Num.Value}"/>
+                                        <TextBlock Width="15" Margin="3" Text="{Binding Slot3Num}"/>
                                         <TextBlock Style="{StaticResource Slot3Style}" Margin="3" Text="{Binding Slot3.Value.AirCraft.FullName}"/>
                                     </WrapPanel>
                                     <WrapPanel>
-                                        <TextBlock Width="15" Margin="3" Text="{Binding Slot4Num.Value}"/>
+                                        <TextBlock Width="15" Margin="3" Text="{Binding Slot4Num}"/>
                                         <TextBlock Style="{StaticResource Slot4Style}" Margin="3" Text="{Binding Slot4.Value.AirCraft.FullName}"/>
                                     </WrapPanel>
                                 </StackPanel>

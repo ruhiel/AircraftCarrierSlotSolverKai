@@ -23,13 +23,13 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
 
         public ReactiveProperty<AirCraftInfo> Slot4 { get; private set; }
 
-        public ReactiveProperty<int> Slot1Num { get; private set; }
+        public int Slot1Num => ShipSlotInfo.Slot1Num;
 
-        public ReactiveProperty<int> Slot2Num { get; private set; }
+        public int Slot2Num => ShipSlotInfo.Slot2Num;
 
-        public ReactiveProperty<int> Slot3Num { get; private set; }
+        public int Slot3Num => ShipSlotInfo.Slot3Num;
 
-        public ReactiveProperty<int> Slot4Num { get; private set; }
+        public int Slot4Num => ShipSlotInfo.Slot4Num;
 
         public ReactiveProperty<bool> Attack { get; private set; }
 
@@ -108,14 +108,6 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
             Slot3 = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.Slot3);
 
             Slot4 = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.Slot4);
-
-            Slot1Num = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.Slot1Num);
-
-            Slot2Num = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.Slot2Num);
-
-            Slot3Num = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.Slot3Num);
-
-            Slot4Num = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.Slot4Num);
 
             Attack = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.Attack);
 
@@ -201,6 +193,6 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
             });
         }
 
-        public ShipSlotInfoViewModel(Ship shipInfo) : this(new ShipSlotInfo(shipInfo)) {}
+        public ShipSlotInfoViewModel(Ship shipInfo) : this(new ShipSlotInfo(shipInfo.ID)) {}
     }
 }
