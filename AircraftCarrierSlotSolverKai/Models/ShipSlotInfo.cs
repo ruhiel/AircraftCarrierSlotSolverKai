@@ -147,7 +147,7 @@ namespace AircraftCarrierSlotSolverKai.Models
         }
 
         [JsonProperty]
-        public CVCI CVCIType { get; set; }
+        public List<CVCI> CVCIType { get; set; }
 
         private AirCraftInfo _SlotSetting1;
         [JsonProperty]
@@ -243,6 +243,7 @@ namespace AircraftCarrierSlotSolverKai.Models
         public ShipSlotInfo(int shipId)
         {
             ShipId = shipId;
+            CVCIType = new List<CVCI>(CVCIRecords.Instance.Records);
         }
     }
 }

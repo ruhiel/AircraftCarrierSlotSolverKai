@@ -174,7 +174,7 @@ namespace AircraftCarrierSlotSolverKai.Models
             foreach (var shipSlotInfo in shipSlotInfos.Where(x => x.CVCI))
             {
                 // 種別取得
-                var type = shipSlotInfo.CVCIType?.Type ?? CIType.DIVE_BOMBER_TORPEDO_BOMBER;
+                var type = shipSlotInfo.CVCIType.FirstOrDefault(x => x.IsSelected)?.Type ?? CIType.DIVE_BOMBER_TORPEDO_BOMBER;
 
                 // 艦上爆撃機
                 if(type.HasFlag(CIType.DIVE_BOMBER) || type.HasFlag(CIType.DIVE_BOMBER2))

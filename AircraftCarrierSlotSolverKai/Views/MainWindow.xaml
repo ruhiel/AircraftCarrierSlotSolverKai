@@ -290,11 +290,37 @@
                                 <CheckBox Name="MinimumSlotCheckBox" IsEnabled="{Binding IsChecked, ElementName=AirCraftSettingRadio}" IsChecked="{Binding MinimumSlot.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="攻撃機を最小スロットに積まない" Margin="5" />
                                 <CheckBox Name="FirstSlotAttackCheckBox" IsEnabled="{Binding IsChecked, ElementName=AirCraftSettingRadio}" IsChecked="{Binding FirstSlotAttack.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="攻撃機を第一スロットに積む" Margin="5" />
                                 <CheckBox Name="OnlyAttackerCheckBox" IsEnabled="{Binding IsChecked, ElementName=AirCraftSettingRadio}" IsChecked="{Binding OnlyAttacker.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="攻撃機のみ積む" Margin="5" />
-                                <!-- 戦爆連合カットイン -->
-                                <WrapPanel Margin="5,0,0,0">
-                                    <CheckBox Name="CVCIEnableCheckBox" IsChecked="{Binding CVCI.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="戦爆連合カットイン"/>
-                                    <ComboBox Margin="5,0,0,0" ItemsSource="{Binding CVCIList}" DisplayMemberPath="Name" SelectedItem="{Binding NowSelectCVCI.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="150"/>
-                                </WrapPanel>
+                                <GroupBox>
+                                    <!-- 戦爆連合カットイン -->
+                                    <StackPanel Margin="5,0,0,0">
+                                        <CheckBox Name="CVCIEnableCheckBox" IsChecked="{Binding CVCI.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="戦爆連合カットイン"/>
+
+                                        <ListBox ItemsSource="{Binding CVCIList}" Margin="0,10,0,10" BorderThickness="0" Background="Transparent">
+                                            <ListBox.ItemContainerStyle>
+                                                <Style TargetType="{x:Type ListBoxItem}">
+                                                    <Setter Property="IsSelected" Value="{Binding Path=IsSelected, Mode=TwoWay}" />
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="ListBoxItem">
+                                                                <ContentPresenter/>
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </ListBox.ItemContainerStyle>
+                                            <ListBox.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <StackPanel/>
+                                                </ItemsPanelTemplate>
+                                            </ListBox.ItemsPanel>
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <RadioButton Content="{Binding Name}" IsChecked="{Binding Path=IsSelected, Mode=TwoWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}}" Margin="0,5,0,5"/>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+                                    </StackPanel>
+                                </GroupBox>
                             </StackPanel>
                         </GroupBox>
                     </StackPanel>

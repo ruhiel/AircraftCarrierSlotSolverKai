@@ -95,7 +95,7 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
 
         public bool IsEtc => !IsSpecialAttacks && !IsCV;
 
-        public IEnumerable<CVCI> CVCIList => CVCIRecords.Instance.Records;
+        public IEnumerable<CVCI> CVCIList => ShipSlotInfo.CVCIType;
 
         public ReactiveProperty<CVCI> NowSelectCVCI { get; set; }
 
@@ -151,7 +151,16 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
 
             CVCI = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.CVCI);
 
-            NowSelectCVCI = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.CVCIType);
+            CVCI.Subscribe((flag) =>
+            {
+                if(!flag)
+                {
+                    foreach (var item in ShipSlotInfo.CVCIType)
+                    {
+                        item.IsSelected = false;
+                    }
+                }
+            });
 
             SlotSetting1SetCommand.Subscribe(_ => 
             {
