@@ -137,6 +137,13 @@ namespace AircraftCarrierSlotSolverKai.Models
             get { return _OnlyAttacker; }
             set { SetProperty(ref _OnlyAttacker, value); }
         }
+        private bool _CVCI;
+        [JsonProperty]
+        public bool CVCI
+        {
+            get { return _CVCI; }
+            set { SetProperty(ref _CVCI, value); }
+        }
 
         private AirCraftInfo _SlotSetting1;
         [JsonProperty]
