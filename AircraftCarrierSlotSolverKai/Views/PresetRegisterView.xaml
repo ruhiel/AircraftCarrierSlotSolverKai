@@ -7,7 +7,7 @@
         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:vm="clr-namespace:AircraftCarrierSlotSolverKai.ViewModels"
         mc:Ignorable="d"
-        Title="艦隊名登録" Height="120" Width="300"
+        Title="艦隊名登録" Height="148.5" Width="356"
         GlowBrush="{DynamicResource AccentColorBrush}"
         BorderThickness="1"
         ShowMaxRestoreButton="False">
@@ -16,8 +16,18 @@
     </Controls:MetroWindow.DataContext>
     <StackPanel Margin="10">
         <WrapPanel HorizontalAlignment="Center">
-            <TextBox Width="250" Text="{Binding FleetName.Value}" Controls:TextBoxHelper.Watermark="艦隊名を入力" Controls:TextBoxHelper.ClearTextButton="True"/>
+            <TextBox Width="220" Text="{Binding FleetName.Value}" Controls:TextBoxHelper.Watermark="艦隊名を入力" Controls:TextBoxHelper.ClearTextButton="True"/>
+            <ComboBox ItemsSource="{Binding WorldList}" SelectedItem="{Binding NowSelectWorld, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="100">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}" Margin="2.5"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
         </WrapPanel>
-        <Button Margin="5,10,0,0" Name="OKButton" Content="OK" Click="OKButton_Click"/>
+        <WrapPanel HorizontalAlignment="Center" Margin="10">
+            <Button Margin="5,10,0,0" Name="OKButton" Content="OK" Click="OKButton_Click" Width="100"/>
+            <Button Margin="5,10,0,0" Name="CancelButton" Content="キャンセル" Click="CancelButton_Click" Width="100"/>
+        </WrapPanel>
     </StackPanel>
 </Controls:MetroWindow>

@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace AircraftCarrierSlotSolverKai.Models
+namespace AircraftCarrierSlotSolverKai.Models.Records
 {
     public class CSVRecords<T, U> where U : CsvClassMap
     {

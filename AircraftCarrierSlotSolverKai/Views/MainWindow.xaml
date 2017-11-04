@@ -34,128 +34,128 @@
         </Style>
         <Style x:Key="Slot1Style" TargetType="TextBlock">
             <Style.Triggers>
-                <DataTrigger Binding="{Binding Slot1.Value.Type}" Value="{x:Static model:Consts.Fighter}">
+                <DataTrigger Binding="{Binding Slot1.Value.AirCraft.Type}" Value="{x:Static model:Consts.Fighter}">
                     <Setter Property="Foreground" Value="Green" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Slot1.Value.Type}" Value="{x:Static model:Consts.TorpedoBomber}">
+                <DataTrigger Binding="{Binding Slot1.Value.AirCraft.Type}" Value="{x:Static model:Consts.TorpedoBomber}">
                     <Setter Property="Foreground" Value="Blue" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Slot1.Value.Type}" Value="{x:Static model:Consts.DiveBomber}">
+                <DataTrigger Binding="{Binding Slot1.Value.AirCraft.Type}" Value="{x:Static model:Consts.DiveBomber}">
                     <Setter Property="Foreground" Value="Red" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Slot1.Value.Type}" Value="{x:Static model:Consts.ReconAircraft}">
+                <DataTrigger Binding="{Binding Slot1.Value.AirCraft.Type}" Value="{x:Static model:Consts.ReconAircraft}">
                     <Setter Property="Foreground" Value="Yellow" />
                     <Setter Property="Background" Value="DarkGreen" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Slot1.Value.Type}" Value="{x:Static model:Consts.JetBomber}">
+                <DataTrigger Binding="{Binding Slot1.Value.AirCraft.Type}" Value="{x:Static model:Consts.JetBomber}">
                     <Setter Property="Foreground" Value="Orange" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Slot1.Value.Type}" Value="{x:Static model:Consts.ReconnaissanceSeaplane}">
+                <DataTrigger Binding="{Binding Slot1.Value.AirCraft.Type}" Value="{x:Static model:Consts.ReconnaissanceSeaplane}">
                     <Setter Property="Foreground" Value="LightGreen" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Slot1.Value.Type}" Value="{x:Static model:Consts.SeaplaneBomber}">
+                <DataTrigger Binding="{Binding Slot1.Value.AirCraft.Type}" Value="{x:Static model:Consts.SeaplaneBomber}">
                     <Setter Property="Foreground" Value="LightGreen" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Slot1.Value.Type}" Value="{x:Static model:Consts.SeaplaneFighter}">
+                <DataTrigger Binding="{Binding Slot1.Value.AirCraft.Type}" Value="{x:Static model:Consts.SeaplaneFighter}">
                     <Setter Property="Foreground" Value="LightGreen" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Slot1.Value.Type}" Value="{x:Static model:Consts.AviationPersonnel}">
+                <DataTrigger Binding="{Binding Slot1.Value.AirCraft.Type}" Value="{x:Static model:Consts.AviationPersonnel}">
                     <Setter Property="Foreground" Value="Brown" />
                 </DataTrigger>
             </Style.Triggers>
         </Style>
         <Style x:Key="Slot2Style" TargetType="TextBlock">
             <Style.Triggers>
-                <DataTrigger Binding="{Binding Slot2.Value.Type}" Value="{x:Static model:Consts.Fighter}">
+                <DataTrigger Binding="{Binding Slot2.Value.AirCraft.Type}" Value="{x:Static model:Consts.Fighter}">
                     <Setter Property="Foreground" Value="Green" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Slot2.Value.Type}" Value="{x:Static model:Consts.TorpedoBomber}">
+                <DataTrigger Binding="{Binding Slot2.Value.AirCraft.Type}" Value="{x:Static model:Consts.TorpedoBomber}">
                     <Setter Property="Foreground" Value="Blue" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Slot2.Value.Type}" Value="{x:Static model:Consts.DiveBomber}">
+                <DataTrigger Binding="{Binding Slot2.Value.AirCraft.Type}" Value="{x:Static model:Consts.DiveBomber}">
                     <Setter Property="Foreground" Value="Red" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Slot2.Value.Type}" Value="{x:Static model:Consts.ReconAircraft}">
+                <DataTrigger Binding="{Binding Slot2.Value.AirCraft.Type}" Value="{x:Static model:Consts.ReconAircraft}">
                     <Setter Property="Foreground" Value="Yellow" />
                     <Setter Property="Background" Value="DarkGreen" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Slot2.Value.Type}" Value="{x:Static model:Consts.JetBomber}">
+                <DataTrigger Binding="{Binding Slot2.Value.AirCraft.Type}" Value="{x:Static model:Consts.JetBomber}">
                     <Setter Property="Foreground" Value="Orange" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Slot2.Value.Type}" Value="{x:Static model:Consts.ReconnaissanceSeaplane}">
+                <DataTrigger Binding="{Binding Slot2.Value.AirCraft.Type}" Value="{x:Static model:Consts.ReconnaissanceSeaplane}">
                     <Setter Property="Foreground" Value="LightGreen" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Slot2.Value.Type}" Value="{x:Static model:Consts.SeaplaneBomber}">
+                <DataTrigger Binding="{Binding Slot2.Value.AirCraft.Type}" Value="{x:Static model:Consts.SeaplaneBomber}">
                     <Setter Property="Foreground" Value="LightGreen" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Slot2.Value.Type}" Value="{x:Static model:Consts.SeaplaneFighter}">
+                <DataTrigger Binding="{Binding Slot2.Value.AirCraft.Type}" Value="{x:Static model:Consts.SeaplaneFighter}">
                     <Setter Property="Foreground" Value="LightGreen" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Slot2.Value.Type}" Value="{x:Static model:Consts.AviationPersonnel}">
+                <DataTrigger Binding="{Binding Slot2.Value.AirCraft.Type}" Value="{x:Static model:Consts.AviationPersonnel}">
                     <Setter Property="Foreground" Value="Brown" />
                 </DataTrigger>
             </Style.Triggers>
         </Style>
         <Style x:Key="Slot3Style" TargetType="TextBlock">
             <Style.Triggers>
-                <DataTrigger Binding="{Binding Slot3.Value.Type}" Value="{x:Static model:Consts.Fighter}">
+                <DataTrigger Binding="{Binding Slot3.Value.AirCraft.Type}" Value="{x:Static model:Consts.Fighter}">
                     <Setter Property="Foreground" Value="Green" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Slot3.Value.Type}" Value="{x:Static model:Consts.TorpedoBomber}">
+                <DataTrigger Binding="{Binding Slot3.Value.AirCraft.Type}" Value="{x:Static model:Consts.TorpedoBomber}">
                     <Setter Property="Foreground" Value="Blue" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Slot3.Value.Type}" Value="{x:Static model:Consts.DiveBomber}">
+                <DataTrigger Binding="{Binding Slot3.Value.AirCraft.Type}" Value="{x:Static model:Consts.DiveBomber}">
                     <Setter Property="Foreground" Value="Red" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Slot3.Value.Type}" Value="{x:Static model:Consts.ReconAircraft}">
+                <DataTrigger Binding="{Binding Slot3.Value.AirCraft.Type}" Value="{x:Static model:Consts.ReconAircraft}">
                     <Setter Property="Foreground" Value="Yellow" />
                     <Setter Property="Background" Value="DarkGreen" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Slot3.Value.Type}" Value="{x:Static model:Consts.JetBomber}">
+                <DataTrigger Binding="{Binding Slot3.Value.AirCraft.Type}" Value="{x:Static model:Consts.JetBomber}">
                     <Setter Property="Foreground" Value="Orange" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Slot3.Value.Type}" Value="{x:Static model:Consts.ReconnaissanceSeaplane}">
+                <DataTrigger Binding="{Binding Slot3.Value.AirCraft.Type}" Value="{x:Static model:Consts.ReconnaissanceSeaplane}">
                     <Setter Property="Foreground" Value="LightGreen" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Slot3.Value.Type}" Value="{x:Static model:Consts.SeaplaneBomber}">
+                <DataTrigger Binding="{Binding Slot3.Value.AirCraft.Type}" Value="{x:Static model:Consts.SeaplaneBomber}">
                     <Setter Property="Foreground" Value="LightGreen" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Slot3.Value.Type}" Value="{x:Static model:Consts.SeaplaneFighter}">
+                <DataTrigger Binding="{Binding Slot3.Value.AirCraft.Type}" Value="{x:Static model:Consts.SeaplaneFighter}">
                     <Setter Property="Foreground" Value="LightGreen" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Slot3.Value.Type}" Value="{x:Static model:Consts.AviationPersonnel}">
+                <DataTrigger Binding="{Binding Slot3.Value.AirCraft.Type}" Value="{x:Static model:Consts.AviationPersonnel}">
                     <Setter Property="Foreground" Value="Brown" />
                 </DataTrigger>
             </Style.Triggers>
         </Style>
         <Style x:Key="Slot4Style" TargetType="TextBlock">
             <Style.Triggers>
-                <DataTrigger Binding="{Binding Slot4.Value.Type}" Value="{x:Static model:Consts.Fighter}">
+                <DataTrigger Binding="{Binding Slot4.Value.AirCraft.Type}" Value="{x:Static model:Consts.Fighter}">
                     <Setter Property="Foreground" Value="Green" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Slot4.Value.Type}" Value="{x:Static model:Consts.TorpedoBomber}">
+                <DataTrigger Binding="{Binding Slot4.Value.AirCraft.Type}" Value="{x:Static model:Consts.TorpedoBomber}">
                     <Setter Property="Foreground" Value="Blue" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Slot4.Value.Type}" Value="{x:Static model:Consts.DiveBomber}">
+                <DataTrigger Binding="{Binding Slot4.Value.AirCraft.Type}" Value="{x:Static model:Consts.DiveBomber}">
                     <Setter Property="Foreground" Value="Red" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Slot4.Value.Type}" Value="{x:Static model:Consts.ReconAircraft}">
+                <DataTrigger Binding="{Binding Slot4.Value.AirCraft.Type}" Value="{x:Static model:Consts.ReconAircraft}">
                     <Setter Property="Foreground" Value="Yellow" />
                     <Setter Property="Background" Value="DarkGreen" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Slot4.Value.Type}" Value="{x:Static model:Consts.JetBomber}">
+                <DataTrigger Binding="{Binding Slot4.Value.AirCraft.Type}" Value="{x:Static model:Consts.JetBomber}">
                     <Setter Property="Foreground" Value="Orange" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Slot4.Value.Type}" Value="{x:Static model:Consts.ReconnaissanceSeaplane}">
+                <DataTrigger Binding="{Binding Slot4.Value.AirCraft.Type}" Value="{x:Static model:Consts.ReconnaissanceSeaplane}">
                     <Setter Property="Foreground" Value="LightGreen" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Slot4.Value.Type}" Value="{x:Static model:Consts.SeaplaneBomber}">
+                <DataTrigger Binding="{Binding Slot4.Value.AirCraft.Type}" Value="{x:Static model:Consts.SeaplaneBomber}">
                     <Setter Property="Foreground" Value="LightGreen" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Slot4.Value.Type}" Value="{x:Static model:Consts.SeaplaneFighter}">
+                <DataTrigger Binding="{Binding Slot4.Value.AirCraft.Type}" Value="{x:Static model:Consts.SeaplaneFighter}">
                     <Setter Property="Foreground" Value="LightGreen" />
                 </DataTrigger>
-                <DataTrigger Binding="{Binding Slot4.Value.Type}" Value="{x:Static model:Consts.AviationPersonnel}">
+                <DataTrigger Binding="{Binding Slot4.Value.AirCraft.Type}" Value="{x:Static model:Consts.AviationPersonnel}">
                     <Setter Property="Foreground" Value="Brown" />
                 </DataTrigger>
             </Style.Triggers>
@@ -211,19 +211,19 @@
                             <StackPanel>
                                 <StackPanel>
                                     <WrapPanel HorizontalAlignment="Left">
-                                        <ComboBox ItemContainerStyle="{StaticResource SlotComboBoxStyle}"  IsEnabled="{Binding IsChecked, ElementName=AirCraftDesignationRadio}" Name="SlotComboBox" Width="170" ItemsSource="{Binding AirCraftList}" SelectedItem="{Binding NowSelectSlotSetting, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5">
+                                        <ComboBox IsEnabled="{Binding IsChecked, ElementName=AirCraftDesignationRadio}" Name="SlotComboBox" Width="170" ItemsSource="{Binding AirCraftList}" SelectedItem="{Binding NowSelectSlotSetting, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5" ItemContainerStyle="{StaticResource SlotComboBoxStyle}">
                                             <ComboBox.ItemTemplate>
                                                 <DataTemplate>
-                                                    <TextBlock Text="{Binding AirCraft.AirCraftName}" Margin="3"/>
+                                                    <TextBlock Text="{Binding AirCraft.FullName}" Margin="3"/>
                                                 </DataTemplate>
                                             </ComboBox.ItemTemplate>
                                         </ComboBox>
-                                        <ComboBox IsEnabled="{Binding IsChecked, ElementName=AirCraftDesignationRadio}" Name="SlotTypeComboBox" Width="100" ItemsSource="{Binding AirCraftTypeList}" SelectedItem="{Binding NowSelectAirCraftType.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
+                                        <ComboBox IsEnabled="{Binding IsChecked, ElementName=AirCraftDesignationRadio}" Name="SlotTypeComboBox" Width="100" DisplayMemberPath="Name" ItemsSource="{Binding AirCraftTypeList}" SelectedItem="{Binding NowSelectAirCraftType.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
                                     </WrapPanel>
                                     <Border Style="{StaticResource BorderStyle}">
                                         <WrapPanel>
                                             <TextBlock Width="15" Margin="2,0,0,0" VerticalAlignment="Center" FontSize="12" Text="{Binding Slot1Num.Value}"/>
-                                            <TextBlock Margin="5,0,0,0" Width="215" VerticalAlignment="Center" FontSize="12" Text="{Binding SlotSetting1.Value.AirCraftName}"/>
+                                            <TextBlock Margin="5,0,0,0" Width="215" VerticalAlignment="Center" FontSize="12" Text="{Binding SlotSetting1.Value.AirCraft.FullName}"/>
                                             <Button Command="{Binding SlotSetting1SetCommand}" Width="30" Height="30" Margin="0,0,5,0" Style="{DynamicResource AccentedSquareButtonStyle}" Content="＋" FontSize="12"/>
                                             <Button Command="{Binding SlotSetting1ReSetCommand}" Width="30" Height="30" Margin="0" Content="×" FontSize="12"/>
                                         </WrapPanel>
@@ -231,7 +231,7 @@
                                     <Border Style="{StaticResource BorderStyle}">
                                         <WrapPanel>
                                             <TextBlock Width="15" Margin="2,0,0,0" VerticalAlignment="Center" FontSize="12" Text="{Binding Slot2Num.Value}"/>
-                                            <TextBlock Margin="5,0,0,0" Width="215" VerticalAlignment="Center" FontSize="12" Text="{Binding SlotSetting2.Value.AirCraftName}"/>
+                                            <TextBlock Margin="5,0,0,0" Width="215" VerticalAlignment="Center" FontSize="12" Text="{Binding SlotSetting2.Value.AirCraft.FullName}"/>
                                             <Button Command="{Binding SlotSetting2SetCommand}" Width="30" Height="30" Margin="0,0,5,0" Style="{DynamicResource AccentedSquareButtonStyle}" Content="＋" FontSize="12"/>
                                             <Button Command="{Binding SlotSetting2ReSetCommand}" Width="30" Height="30" Margin="0" Content="×" FontSize="12"/>
                                         </WrapPanel>
@@ -239,7 +239,7 @@
                                     <Border Style="{StaticResource BorderStyle}">
                                         <WrapPanel>
                                             <TextBlock Width="15" Margin="2,0,0,0" VerticalAlignment="Center" FontSize="12" Text="{Binding Slot3Num.Value}"/>
-                                            <TextBlock Margin="5,0,0,0" Width="215" VerticalAlignment="Center" FontSize="12" Text="{Binding SlotSetting3.Value.AirCraftName}"/>
+                                            <TextBlock Margin="5,0,0,0" Width="215" VerticalAlignment="Center" FontSize="12" Text="{Binding SlotSetting3.Value.AirCraft.FullName}"/>
                                             <Button Command="{Binding SlotSetting3SetCommand}" Width="30" Height="30" Margin="0,0,5,0" Style="{DynamicResource AccentedSquareButtonStyle}" Content="＋" FontSize="12"/>
                                             <Button Command="{Binding SlotSetting3ReSetCommand}" Width="30" Height="30" Margin="0" Content="×" FontSize="12"/>
                                         </WrapPanel>
@@ -247,7 +247,7 @@
                                     <Border Style="{StaticResource BorderStyle}">
                                         <WrapPanel>
                                             <TextBlock Width="15" Margin="2,0,0,0" VerticalAlignment="Center" FontSize="12" Text="{Binding Slot4Num.Value}"/>
-                                            <TextBlock Margin="5,0,0,0" Width="215" VerticalAlignment="Center" FontSize="12" Text="{Binding SlotSetting4.Value.AirCraftName}"/>
+                                            <TextBlock Margin="5,0,0,0" Width="215" VerticalAlignment="Center" FontSize="12" Text="{Binding SlotSetting4.Value.AirCraft.FullName}"/>
                                             <Button Command="{Binding SlotSetting4SetCommand}" Width="30" Height="30" Margin="0,0,5,0" Style="{DynamicResource AccentedSquareButtonStyle}" Content="＋" FontSize="12"/>
                                             <Button Command="{Binding SlotSetting4ReSetCommand}" Width="30" Height="30" Margin="0" Content="×" FontSize="12"/>
                                         </WrapPanel>
@@ -304,7 +304,7 @@
     </Controls:MetroWindow.RightWindowCommands>
     <StackPanel>
         <WrapPanel Margin="5">
-            <ComboBox ItemsSource="{Binding ShipTypeList}" SelectedItem="{Binding NowSelectShipType.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="90" Margin="0,0,5,0"/>
+            <ComboBox ItemsSource="{Binding ShipTypeList}" DisplayMemberPath="Name" SelectedItem="{Binding NowSelectShipType.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="90" Margin="0,0,5,0"/>
             <ComboBox ItemsSource="{Binding ShipList}" SelectedItem="{Binding NowSelectShip, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="120" Margin="0,0,10,0">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
@@ -338,7 +338,14 @@
             <Button Content="編成登録" Command="{Binding PresetCommand}"/>
             <Button Content="編成展開" Command="{Binding PresetViewCommand}"/>
             <Button Content="編成削除" Command="{Binding PresetDeleteCommand}"/>
-            <ComboBox ItemsSource="{Binding FleetList}" DisplayMemberPath="Name" SelectedItem="{Binding NowSelectFleet, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="5"/>
+            <ComboBox ItemsSource="{Binding FleetList}" DisplayMemberPath="Name" SelectedItem="{Binding NowSelectFleet, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="150" Height="25" Margin="5"/>
+            <ComboBox ItemsSource="{Binding WorldListWithDummy}" SelectedItem="{Binding NowSelectFleetWorld.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="100" Height="25">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}" Margin="2.5"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
         </WrapPanel>
         <WrapPanel HorizontalAlignment="Center">
             <Controls:ProgressRing Foreground="{DynamicResource AccentColorBrush}" Visibility="{Binding ProgressVisible.Value, Converter={StaticResource BoolToVisibility}}"/>
@@ -373,20 +380,20 @@
                             <DataTemplate>
                                 <StackPanel>
                                     <WrapPanel>
-                                        <TextBlock Width="15" Margin="3" Text="{Binding Slot1Num.Value}"/>
-                                        <TextBlock Style="{StaticResource Slot1Style}" Margin="3" Text="{Binding Slot1.Value.AirCraftName}"/>
+                                        <TextBlock Width="15" Margin="3" Text="{Binding Slot1Num}"/>
+                                        <TextBlock Style="{StaticResource Slot1Style}" Margin="3" Text="{Binding Slot1.Value.AirCraft.FullName}"/>
                                     </WrapPanel>
                                     <WrapPanel>
-                                        <TextBlock Width="15" Margin="3" Text="{Binding Slot2Num.Value}"/>
-                                        <TextBlock Style="{StaticResource Slot2Style}" Margin="3" Text="{Binding Slot2.Value.AirCraftName}"/>
+                                        <TextBlock Width="15" Margin="3" Text="{Binding Slot2Num}"/>
+                                        <TextBlock Style="{StaticResource Slot2Style}" Margin="3" Text="{Binding Slot2.Value.AirCraft.FullName}"/>
                                     </WrapPanel>
                                     <WrapPanel>
-                                        <TextBlock Width="15" Margin="3" Text="{Binding Slot3Num.Value}"/>
-                                        <TextBlock Style="{StaticResource Slot3Style}" Margin="3" Text="{Binding Slot3.Value.AirCraftName}"/>
+                                        <TextBlock Width="15" Margin="3" Text="{Binding Slot3Num}"/>
+                                        <TextBlock Style="{StaticResource Slot3Style}" Margin="3" Text="{Binding Slot3.Value.AirCraft.FullName}"/>
                                     </WrapPanel>
                                     <WrapPanel>
-                                        <TextBlock Width="15" Margin="3" Text="{Binding Slot4Num.Value}"/>
-                                        <TextBlock Style="{StaticResource Slot4Style}" Margin="3" Text="{Binding Slot4.Value.AirCraftName}"/>
+                                        <TextBlock Width="15" Margin="3" Text="{Binding Slot4Num}"/>
+                                        <TextBlock Style="{StaticResource Slot4Style}" Margin="3" Text="{Binding Slot4.Value.AirCraft.FullName}"/>
                                     </WrapPanel>
                                 </StackPanel>
                             </DataTemplate>

@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace AircraftCarrierSlotSolverKai.Models
 {
-    public class Area
+    public class World
     {
         public long ID { get; set; }
         public string Name { get; set; }
-        public int AirSuperiorityPotential { get; set; }
+        public string Text { get; set; }
+        public bool? Extra { get; set; }
     }
 }

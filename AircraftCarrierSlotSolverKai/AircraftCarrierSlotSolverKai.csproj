@@ -13,6 +13,8 @@
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -39,6 +41,9 @@
     <Reference Include="CsvHelper, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
       <HintPath>..\packages\CsvHelper.2.16.3.0\lib\net45\CsvHelper.dll</HintPath>
     </Reference>
+    <Reference Include="Dapper, Version=1.50.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.1.50.4-alpha1-00070\lib\net451\Dapper.dll</HintPath>
+    </Reference>
     <Reference Include="Google.OrTools.x86, Version=5.0.6170.24109, Culture=neutral, PublicKeyToken=fdef6fe93723b46c, processorArchitecture=x86">
       <HintPath>..\packages\Google.OrTools.x86.5.0.6170.24109\lib\net40\Google.OrTools.x86.dll</HintPath>
     </Reference>
@@ -47,6 +52,9 @@
     </Reference>
     <Reference Include="MahApps.Metro, Version=1.4.3.0, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
       <HintPath>..\packages\MahApps.Metro.1.4.3\lib\net45\MahApps.Metro.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Prism, Version=6.2.0.0, Culture=neutral, PublicKeyToken=91a96d2a154366d8, processorArchitecture=MSIL">
       <HintPath>..\packages\Prism.Core.6.2.0\lib\net45\Prism.dll</HintPath>
@@ -60,6 +68,9 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.SQLite, Version=1.0.105.2, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SQLite.Core.1.0.105.2\lib\net451\System.Data.SQLite.dll</HintPath>
+    </Reference>
     <Reference Include="System.Reactive.Core, Version=3.0.1000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Reactive.Core.3.1.1\lib\net45\System.Reactive.Core.dll</HintPath>
     </Reference>
@@ -102,10 +113,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\AirCraftInfo.cs" />
+    <Compile Include="Models\AirCraftType.cs" />
+    <Compile Include="Models\Records\AirCraftTypeRecords.cs" />
     <Compile Include="Models\Consts.cs" />
-    <Compile Include="Models\FleetList.cs" />
-    <Compile Include="Models\FleetRecords.cs" />
-    <Compile Include="Models\FleetShip.cs" />
+    <Compile Include="Models\Records\FleetRecords.cs" />
+    <Compile Include="Models\Records\WorldRecords.cs" />
+    <Compile Include="Models\ShipType.cs" />
+    <Compile Include="Models\Records\ShipTypeRecords.cs" />
+    <Compile Include="Models\Records\SQLRecords.cs" />
+    <Compile Include="Models\World.cs" />
     <Compile Include="ViewModels\IntAttribute.cs" />
     <Compile Include="ViewModels\PresetRegisterViewModel.cs" />
     <Compile Include="Views\PresetRegisterView.xaml.cs">
@@ -124,22 +141,16 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\AirCraft.cs" />
-    <Compile Include="Models\AirCraftMap.cs" />
-    <Compile Include="Models\AirCraftRecords.cs" />
+    <Compile Include="Models\Records\AirCraftRecords.cs" />
     <Compile Include="Models\AirCraftSetting.cs" />
-    <Compile Include="Models\AirCraftSettingList.cs" />
-    <Compile Include="Models\AirCraftSettingMap.cs" />
-    <Compile Include="Models\AirCraftSettingRecords.cs" />
+    <Compile Include="Models\Records\AirCraftSettingRecords.cs" />
     <Compile Include="Models\Area.cs" />
-    <Compile Include="Models\AreaMap.cs" />
-    <Compile Include="Models\AreaRecords.cs" />
+    <Compile Include="Models\Records\AreaRecords.cs" />
     <Compile Include="Models\Calculator.cs" />
-    <Compile Include="Models\CSVRecords.cs" />
+    <Compile Include="Models\Records\CSVRecords.cs" />
     <Compile Include="Models\Fleet.cs" />
-    <Compile Include="Models\FleetMap.cs" />
-    <Compile Include="Models\ShipInfo.cs" />
-    <Compile Include="Models\ShipInfoMap.cs" />
-    <Compile Include="Models\ShipInfoRecords.cs" />
+    <Compile Include="Models\Ship.cs" />
+    <Compile Include="Models\Records\ShipRecords.cs" />
     <Compile Include="Models\ShipSlotInfo.cs" />
     <Compile Include="ViewModels\AirCraftSettingViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
@@ -179,6 +190,7 @@
     <None Include="CSV\aircraftsetting.csv" />
     <None Include="CSV\area.csv" />
     <None Include="CSV\slots.csv" />
+    <None Include="DB\solver.db" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -193,6 +205,14 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "$(ProjectDir)CSV\*.csv" "$(TargetDir)"</PostBuildEvent>
+    <PostBuildEvent>copy "$(ProjectDir)CSV\*.csv" "$(TargetDir)"
+copy "$(ProjectDir)DB\*.db" "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
+  <Import Project="..\packages\System.Data.SQLite.Core.1.0.105.2\build\net451\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.105.2\build\net451\System.Data.SQLite.Core.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>このプロジェクトは、このコンピューター上にない NuGet パッケージを参照しています。それらのパッケージをダウンロードするには、[NuGet パッケージの復元] を使用します。詳細については、http://go.microsoft.com/fwlink/?LinkID=322105 を参照してください。見つからないファイルは {0} です。</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\System.Data.SQLite.Core.1.0.105.2\build\net451\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.Data.SQLite.Core.1.0.105.2\build\net451\System.Data.SQLite.Core.targets'))" />
+  </Target>
 </Project>

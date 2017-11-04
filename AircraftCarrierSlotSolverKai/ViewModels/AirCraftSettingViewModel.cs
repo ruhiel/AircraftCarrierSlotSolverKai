@@ -3,16 +3,17 @@ using Reactive.Bindings;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System;
+using AircraftCarrierSlotSolverKai.Models.Records;
 
 namespace AircraftCarrierSlotSolverKai.ViewModels
 {
     public class AirCraftSettingViewModel
     {
-        public List<AirCraft> AirCraftList => AirCraftRecords.Instance.Records;
+        public IEnumerable<AirCraft> AirCraftList => AirCraftRecords.Instance.Records;
 
         public AirCraft NowSelectAirCraft { get; set; }
 
-        public ObservableCollection<AirCraftSetting> AirCraftSettings => AirCraftSettingList.Instance;
+        public ObservableCollection<AirCraftSetting> AirCraftSettings => AirCraftSettingRecords.Instance.Records;
 
         public ReactiveCommand AddCommand { get; private set; }
 
@@ -22,11 +23,11 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
         {
             AddCommand = new ReactiveCommand();
 
-            AddCommand.Subscribe(_ => AirCraftSettingList.Instance.Add(NowSelectAirCraft));
+            AddCommand.Subscribe(_ => AirCraftSettingRecords.Instance.Add(NowSelectAirCraft));
 
             AirCraftSettingSaveCommand = new ReactiveCommand();
 
-            AirCraftSettingSaveCommand.Subscribe(_ => AirCraftSettingList.Instance.Save());
+            AirCraftSettingSaveCommand.Subscribe(_ => AirCraftSettingRecords.Instance.Save());
         }
     }
 }

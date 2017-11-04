@@ -28,9 +28,16 @@ namespace AircraftCarrierSlotSolverKai.Views
 
         public string FleetName => ((PresetRegisterViewModel)DataContext).FleetName.Value;
 
+        public long? WorldId => ((PresetRegisterViewModel)DataContext).NowSelectWorld?.ID;
+
+        public bool Result { get; private set; } = false;
+
         private void OKButton_Click(object sender, RoutedEventArgs e)
         {
+            Result = true;
             Close();
         }
+
+        private void CancelButton_Click(object sender, RoutedEventArgs e) => Close();
     }
 }

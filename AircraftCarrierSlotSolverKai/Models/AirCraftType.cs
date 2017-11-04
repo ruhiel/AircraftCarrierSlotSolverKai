@@ -6,11 +6,16 @@ using System.Threading.Tasks;
 
 namespace AircraftCarrierSlotSolverKai.Models
 {
-    public class AirCraftSetting : AirCraftInfo
+    public class AirCraftType
     {
         /// <summary>
-        /// 所持数
+        /// ID
         /// </summary>
-        public int Value { get; set; }
+        public int Id { get; set; }
+
+        /// <summary>
+        /// 艦載機種別名
+        /// </summary>
+        public string Name { get; set; }
     }
 }
