@@ -179,9 +179,8 @@ namespace AircraftCarrierSlotSolverKai.Models
                 {
                     var constraint = solver.MakeConstraint(type.HasFlag(CIType.DIVE_BOMBER) ? 1 : 2, double.PositiveInfinity);
 
-                    foreach (var info in GetInfoListFromVariables(variables).Where(x => x.shipId == shipSlotInfo.ShipInfo.ID)
-                                                                           .Select(y => (y.variable, AirCraftRecords.Instance.Records.First(z => z.Id == y.airCraftId)))
-                                                                           .Where(i => i.Item2.Type.Equals("艦上爆撃機")))
+                    foreach (var info in GetInfoListFromVariables(variables).Where(x => x.ship.ID == shipSlotInfo.ShipInfo.ID)
+                                                                            .Where(i => i.airCraft.Type.Equals("艦上爆撃機")))
                     {
                         constraint.SetCoefficient(info.variable, 1);
                     }
@@ -192,9 +191,8 @@ namespace AircraftCarrierSlotSolverKai.Models
                 {
                     var constraint = solver.MakeConstraint(1, double.PositiveInfinity);
 
-                    foreach (var info in GetInfoListFromVariables(variables).Where(x => x.shipId == shipSlotInfo.ShipInfo.ID)
-                                                                           .Select(y => (y.variable, AirCraftRecords.Instance.Records.First(z => z.Id == y.airCraftId)))
-                                                                           .Where(i => i.Item2.Type.Equals("艦上攻撃機")))
+                    foreach (var info in GetInfoListFromVariables(variables).Where(x => x.ship.ID == shipSlotInfo.ShipInfo.ID)
+                                                                            .Where(i => i.airCraft.Type.Equals("艦上攻撃機")))
                     {
                         constraint.SetCoefficient(info.variable, 1);
                     }
@@ -205,9 +203,8 @@ namespace AircraftCarrierSlotSolverKai.Models
                 {
                     var constraint = solver.MakeConstraint(1, double.PositiveInfinity);
 
-                    foreach (var info in GetInfoListFromVariables(variables).Where(x => x.shipId == shipSlotInfo.ShipInfo.ID)
-                                                                           .Select(y => (y.variable, AirCraftRecords.Instance.Records.First(z => z.Id == y.airCraftId)))
-                                                                           .Where(i => i.Item2.Type.Equals("艦上戦闘機")))
+                    foreach (var info in GetInfoListFromVariables(variables).Where(x => x.ship.ID == shipSlotInfo.ShipInfo.ID)
+                                                                            .Where(i => i.airCraft.Type.Equals("艦上戦闘機")))
                     {
                         constraint.SetCoefficient(info.variable, 1);
                     }
