@@ -1,20 +1,25 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static AircraftCarrierSlotSolverKai.Models.Records.CVCIRecords;
 
 namespace AircraftCarrierSlotSolverKai.Models
 {
+    [JsonObject]
     public class CVCI
     {
-        public int ID { get; set; }
+        [JsonProperty]
+        public CIType Type { get; set; }
 
+        [JsonProperty]
         public string Name { get; set; }
 
-        public CVCI(int id, string name)
+        public CVCI(CIType type, string name)
         {
-            ID = id;
+            Type = type;
             Name = name;
         }
     }

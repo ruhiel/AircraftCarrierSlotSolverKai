@@ -97,7 +97,7 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
 
         public IEnumerable<CVCI> CVCIList => CVCIRecords.Instance.Records;
 
-        public CVCI NowSelectCVCI { get; set; }
+        public ReactiveProperty<CVCI> NowSelectCVCI { get; set; }
 
         public ReactiveProperty<bool> CVCI { get; private set; }
 
@@ -150,6 +150,8 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
             AutoMaintenancePersonnel = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.AutoMaintenancePersonnel);
 
             CVCI = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.CVCI);
+
+            NowSelectCVCI = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.CVCIType);
 
             SlotSetting1SetCommand.Subscribe(_ => 
             {

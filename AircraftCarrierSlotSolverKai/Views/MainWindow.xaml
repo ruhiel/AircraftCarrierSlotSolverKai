@@ -293,7 +293,7 @@
                                 <!-- 戦爆連合カットイン -->
                                 <WrapPanel Margin="5,0,0,0">
                                     <CheckBox Name="CVCIEnableCheckBox" IsChecked="{Binding CVCI.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="戦爆連合カットイン"/>
-                                    <ComboBox Margin="5,0,0,0" ItemsSource="{Binding CVCIList}" DisplayMemberPath="Name" SelectedItem="{Binding NowSelectCVCI, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="150"/>
+                                    <ComboBox Margin="5,0,0,0" ItemsSource="{Binding CVCIList}" DisplayMemberPath="Name" SelectedItem="{Binding NowSelectCVCI.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="150"/>
                                 </WrapPanel>
                             </StackPanel>
                         </GroupBox>

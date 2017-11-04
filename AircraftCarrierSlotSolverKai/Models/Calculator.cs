@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using static AircraftCarrierSlotSolverKai.Models.Records.CVCIRecords;
 
 namespace AircraftCarrierSlotSolverKai.Models
 {
@@ -166,6 +167,52 @@ namespace AircraftCarrierSlotSolverKai.Models
                                                                            .Where(i => i.Item2.Type.Equals("航空要員")))
                 {
                     constraint.SetCoefficient(info.variable, 1);
+                }
+            }
+
+            // 戦爆連合カットイン
+            foreach (var shipSlotInfo in shipSlotInfos.Where(x => x.CVCI))
+            {
+                // 種別取得
+                var type = shipSlotInfo.CVCIType?.Type ?? CIType.DIVE_BOMBER_TORPEDO_BOMBER;
+
+                // 艦上爆撃機
+                if(type.HasFlag(CIType.DIVE_BOMBER) || type.HasFlag(CIType.DIVE_BOMBER2))
+                {
+                    var constraint = solver.MakeConstraint(type.HasFlag(CIType.DIVE_BOMBER) ? 1 : 2, double.PositiveInfinity);
+
+                    foreach (var info in GetInfoListFromVariables(variables).Where(x => x.shipId == shipSlotInfo.ShipInfo.ID)
+                                                                           .Select(y => (y.variable, AirCraftRecords.Instance.Records.First(z => z.Id == y.airCraftId)))
+                                                                           .Where(i => i.Item2.Type.Equals("艦上爆撃機")))
+                    {
+                        constraint.SetCoefficient(info.variable, 1);
+                    }
+                }
+
+                // 艦上攻撃機
+                if (type.HasFlag(CIType.TORPEDO_BOMBER))
+                {
+                    var constraint = solver.MakeConstraint(1, double.PositiveInfinity);
+
+                    foreach (var info in GetInfoListFromVariables(variables).Where(x => x.shipId == shipSlotInfo.ShipInfo.ID)
+                                                                           .Select(y => (y.variable, AirCraftRecords.Instance.Records.First(z => z.Id == y.airCraftId)))
+                                                                           .Where(i => i.Item2.Type.Equals("艦上攻撃機")))
+                    {
+                        constraint.SetCoefficient(info.variable, 1);
+                    }
+                }
+
+                // 艦上戦闘機
+                if (type.HasFlag(CIType.FIGHTER))
+                {
+                    var constraint = solver.MakeConstraint(1, double.PositiveInfinity);
+
+                    foreach (var info in GetInfoListFromVariables(variables).Where(x => x.shipId == shipSlotInfo.ShipInfo.ID)
+                                                                           .Select(y => (y.variable, AirCraftRecords.Instance.Records.First(z => z.Id == y.airCraftId)))
+                                                                           .Where(i => i.Item2.Type.Equals("艦上戦闘機")))
+                    {
+                        constraint.SetCoefficient(info.variable, 1);
+                    }
                 }
             }
         }
