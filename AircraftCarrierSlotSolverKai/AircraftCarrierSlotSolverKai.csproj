@@ -115,8 +115,10 @@
     </ApplicationDefinition>
     <Compile Include="Models\AirCraftInfo.cs" />
     <Compile Include="Models\AirCraftType.cs" />
+    <Compile Include="Models\CVCI.cs" />
     <Compile Include="Models\Records\AirCraftTypeRecords.cs" />
     <Compile Include="Models\Consts.cs" />
+    <Compile Include="Models\Records\CVCIRecords.cs" />
     <Compile Include="Models\Records\FleetRecords.cs" />
     <Compile Include="Models\Records\WorldRecords.cs" />
     <Compile Include="Models\ShipType.cs" />

@@ -95,6 +95,12 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
 
         public bool IsEtc => !IsSpecialAttacks && !IsCV;
 
+        public IEnumerable<CVCI> CVCIList => ShipSlotInfo.CVCIType;
+
+        public ReactiveProperty<CVCI> NowSelectCVCI { get; set; }
+
+        public ReactiveProperty<bool> CVCI { get; private set; }
+
         public ShipSlotInfoViewModel(ShipSlotInfo info)
         {
             ShipSlotInfo = info;
@@ -142,6 +148,19 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
             EquipSlotNum = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.EquipSlotNum);
 
             AutoMaintenancePersonnel = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.AutoMaintenancePersonnel);
+
+            CVCI = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.CVCI);
+
+            CVCI.Subscribe((flag) =>
+            {
+                if(!flag)
+                {
+                    foreach (var item in ShipSlotInfo.CVCIType)
+                    {
+                        item.IsSelected = false;
+                    }
+                }
+            });
 
             SlotSetting1SetCommand.Subscribe(_ => 
             {
