@@ -122,9 +122,7 @@ namespace AircraftCarrierSlotSolverKai.Models
             {
                 var constraint = solver.MakeConstraint(double.NegativeInfinity, shipSlotInfo.SeaplaneFighterNum);
 
-                foreach (var info in GetInfoListFromVariables(variables).Where(x => x.ship.ID == shipSlotInfo.ShipInfo.ID)
-                                                                            .Where(i => i.airCraft.Type.Equals("水上戦闘機")))
-
+                foreach (var info in GetInfoListFromVariables(variables).Where(x => x.ship.ID == shipSlotInfo.ShipInfo.ID && x.airCraft.Type.Equals(Consts.SeaplaneFighter)))
                 {
                     constraint.SetCoefficient(info.variable, 1);
                 }
@@ -135,8 +133,7 @@ namespace AircraftCarrierSlotSolverKai.Models
             {
                 var constraint = solver.MakeConstraint(double.NegativeInfinity, shipSlotInfo.SeaplaneBomberNum);
 
-                foreach (var info in GetInfoListFromVariables(variables).Where(x => x.ship.ID == shipSlotInfo.ShipInfo.ID)
-                                                                            .Where(i => i.airCraft.Type.Equals("水上爆撃機")))
+                foreach (var info in GetInfoListFromVariables(variables).Where(x => x.ship.ID == shipSlotInfo.ShipInfo.ID && x.airCraft.Type.Equals(Consts.SeaplaneBomber)))
                 {
                     constraint.SetCoefficient(info.variable, 1);
                 }
@@ -158,12 +155,11 @@ namespace AircraftCarrierSlotSolverKai.Models
             {
                 var settings = shipSlotInfo.SlotSettings.Where(x => x.airCraft != null);
 
-                var count = settings.Any() ? settings.Select(x => AirCraftRecords.Instance.Records.First(y => y.Id == x.airCraft.Id)).Count(z => z.Type.Equals("航空要員")) : 0;
+                var count = settings.Any() ? settings.Select(x => AirCraftRecords.Instance.Records.First(y => y.Id == x.airCraft.Id)).Count(z => z.Type.Equals(Consts.AviationPersonnel)) : 0;
 
                 var constraint = solver.MakeConstraint(double.NegativeInfinity, count);
 
-                foreach (var info in GetInfoListFromVariables(variables).Where(x => x.ship.ID == shipSlotInfo.ShipInfo.ID)
-                                                                            .Where(i => i.airCraft.Type.Equals("航空要員")))
+                foreach (var info in GetInfoListFromVariables(variables).Where(x => x.ship.ID == shipSlotInfo.ShipInfo.ID && x.airCraft.Type.Equals(Consts.AviationPersonnel)))
                 {
                     constraint.SetCoefficient(info.variable, 1);
                 }
@@ -180,8 +176,7 @@ namespace AircraftCarrierSlotSolverKai.Models
                 {
                     var constraint = solver.MakeConstraint(type.HasFlag(CIType.DIVE_BOMBER) ? 1 : 2, double.PositiveInfinity);
 
-                    foreach (var info in GetInfoListFromVariables(variables).Where(x => x.ship.ID == shipSlotInfo.ShipInfo.ID)
-                                                                            .Where(i => i.airCraft.Type.Equals("艦上爆撃機")))
+                    foreach (var info in GetInfoListFromVariables(variables).Where(x => x.ship.ID == shipSlotInfo.ShipInfo.ID && x.airCraft.Type.Equals(Consts.DiveBomber)))
                     {
                         constraint.SetCoefficient(info.variable, 1);
                     }
@@ -192,8 +187,7 @@ namespace AircraftCarrierSlotSolverKai.Models
                 {
                     var constraint = solver.MakeConstraint(1, double.PositiveInfinity);
 
-                    foreach (var info in GetInfoListFromVariables(variables).Where(x => x.ship.ID == shipSlotInfo.ShipInfo.ID)
-                                                                            .Where(i => i.airCraft.Type.Equals("艦上攻撃機")))
+                    foreach (var info in GetInfoListFromVariables(variables).Where(x => x.ship.ID == shipSlotInfo.ShipInfo.ID && x.airCraft.Type.Equals(Consts.TorpedoBomber)))
                     {
                         constraint.SetCoefficient(info.variable, 1);
                     }
@@ -204,8 +198,7 @@ namespace AircraftCarrierSlotSolverKai.Models
                 {
                     var constraint = solver.MakeConstraint(1, double.PositiveInfinity);
 
-                    foreach (var info in GetInfoListFromVariables(variables).Where(x => x.ship.ID == shipSlotInfo.ShipInfo.ID)
-                                                                            .Where(i => i.airCraft.Type.Equals("艦上戦闘機")))
+                    foreach (var info in GetInfoListFromVariables(variables).Where(x => x.ship.ID == shipSlotInfo.ShipInfo.ID && x.airCraft.Type.Equals(Consts.Fighter)))
                     {
                         constraint.SetCoefficient(info.variable, 1);
                     }
@@ -237,7 +230,7 @@ namespace AircraftCarrierSlotSolverKai.Models
                     var constraint = solver.MakeConstraint(num, double.PositiveInfinity);
 
                     foreach (var info in GetInfoListFromVariables(variables).Where(x => x.ship.ID == shipSlotInfo.ShipInfo.ID &&
-                                                                                    x.airCraft.Type.Equals("艦上戦闘機") &&
+                                                                                    x.airCraft.Type.Equals(Consts.Fighter) &&
                                                                                     x.airCraft.NightType))
                     {
                         constraint.SetCoefficient(info.variable, 1);
@@ -276,7 +269,7 @@ namespace AircraftCarrierSlotSolverKai.Models
                     var constraint = solver.MakeConstraint(1, double.PositiveInfinity);
 
                     foreach (var info in GetInfoListFromVariables(variables).Where(x => x.ship.ID == shipSlotInfo.ShipInfo.ID &&
-                                                                                    x.airCraft.Type.Equals("航空要員") &&
+                                                                                    x.airCraft.Type.Equals(Consts.AviationPersonnel) &&
                                                                                     x.airCraft.NightCutin))
                     {
                         constraint.SetCoefficient(info.variable, 1);
@@ -398,22 +391,7 @@ namespace AircraftCarrierSlotSolverKai.Models
 
                 var shipSlotInfo = shipSlotInfos.First(x => x.ShipInfo.ID == answer.ship.ID);
 
-                if (answer.slotIndex == 1)
-                {
-                    shipSlotInfo.Slot1 = airCraft;
-                }
-                else if (answer.slotIndex == 2)
-                {
-                    shipSlotInfo.Slot2 = airCraft;
-                }
-                else if (answer.slotIndex == 3)
-                {
-                    shipSlotInfo.Slot3 = airCraft;
-                }
-                else if (answer.slotIndex == 4)
-                {
-                    shipSlotInfo.Slot4 = airCraft;
-                }
+                shipSlotInfo.GetType().GetProperty($"Slot{answer.slotIndex}").SetValue(shipSlotInfo, airCraft);
             }
         }
 
@@ -513,15 +491,15 @@ namespace AircraftCarrierSlotSolverKai.Models
         {
             var dic = new Dictionary<string, Func<ShipSlotInfo, bool>>()
             {
-                { "艦上攻撃機" , x => x.ShipInfo.Type.Contains("空母") || x.ShipInfo.Name.Contains("速吸") },
-                { "艦上戦闘機" , x => x.ShipInfo.Type.Contains("空母") || x.ShipInfo.Type.Equals("揚陸艦") },
-                { "艦上偵察機" , x => x.ShipInfo.Type.Contains("空母") },
-                { "艦上爆撃機" , x => x.ShipInfo.Type.Contains("空母") },
-                { "航空要員" , x => x.ShipInfo.Type.Contains("空母") || new []{"航空戦艦", "航空巡洋艦"}.Contains(x.ShipInfo.Type) || new[]{ "由良改二", "Zara due", "速吸", "Commandant Teste", "秋津洲改" }.Any(y => x.ShipInfo.Name.Contains(y)) },
-                { "水上偵察機" , x => x.ShipInfo.Type.Contains("戦艦") || x.ShipInfo.Type.Contains("巡洋艦")},
-                { "水上戦闘機" , x => x.ShipInfo.Type.Contains("空母") || new []{"水上機母艦", "航空戦艦", "航空巡洋艦", "潜水空母"}.Contains(x.ShipInfo.Type) || new [] {"Zara due", "Italia", "Roma改", "長門", "陸奥", "大和", "武蔵"}.Any(y => x.ShipInfo.Name.Contains(y)) },
-                { "水上爆撃機" , x => new []{"水上機母艦", "航空戦艦", "航空巡洋艦", "潜水空母", "補給艦"}.Contains(x.ShipInfo.Type) || new [] {"Zara due", "Italia", "Roma改"}.Any(y => x.ShipInfo.Name.Contains(y)) },
-                { "噴式戦闘爆撃機" , x => Regex.IsMatch(x.ShipInfo.Name, "(翔鶴|瑞鶴)改二甲") },
+                { Consts.TorpedoBomber , x => x.ShipInfo.Type.Contains("空母") || x.ShipInfo.Name.Contains("速吸") },
+                { Consts.Fighter , x => x.ShipInfo.Type.Contains("空母") || x.ShipInfo.Type.Equals("揚陸艦") },
+                { Consts.ReconAircraft , x => x.ShipInfo.Type.Contains("空母") },
+                { Consts.DiveBomber , x => x.ShipInfo.Type.Contains("空母") },
+                { Consts.AviationPersonnel , x => x.ShipInfo.Type.Contains("空母") || new []{"航空戦艦", "航空巡洋艦"}.Contains(x.ShipInfo.Type) || new[]{ "由良改二", "Zara due", "速吸", "Commandant Teste", "秋津洲改" }.Any(y => x.ShipInfo.Name.Contains(y)) },
+                { Consts.ReconnaissanceSeaplane , x => x.ShipInfo.Type.Contains("戦艦") || x.ShipInfo.Type.Contains("巡洋艦")},
+                { Consts.SeaplaneFighter , x => x.ShipInfo.Type.Contains("空母") || new []{"水上機母艦", "航空戦艦", "航空巡洋艦", "潜水空母"}.Contains(x.ShipInfo.Type) || new [] {"Zara due", "Italia", "Roma改", "長門", "陸奥", "大和", "武蔵"}.Any(y => x.ShipInfo.Name.Contains(y)) },
+                { Consts.SeaplaneBomber , x => new []{"水上機母艦", "航空戦艦", "航空巡洋艦", "潜水空母", "補給艦"}.Contains(x.ShipInfo.Type) || new [] {"Zara due", "Italia", "Roma改"}.Any(y => x.ShipInfo.Name.Contains(y)) },
+                { Consts.JetBomber , x => Regex.IsMatch(x.ShipInfo.Name, "(翔鶴|瑞鶴)改二甲") },
             };
 
             var constraint = solver.MakeConstraint(double.NegativeInfinity, 0);
@@ -552,19 +530,8 @@ namespace AircraftCarrierSlotSolverKai.Models
         private static int GetSlotNum(int shipId, int slotIndex)
         {
             var ship = ShipRecords.Instance.Records.ToList().Find(x => x.ID == shipId);
-            switch(slotIndex)
-            {
-                case 1:
-                    return ship.Slot1Num;
-                case 2:
-                    return ship.Slot2Num;
-                case 3:
-                    return ship.Slot3Num;
-                case 4:
-                    return ship.Slot4Num;
-                default:
-                    throw new ArgumentException(slotIndex.ToString());
-            }
+
+            return (int)ship.GetType().GetProperty($"Slot{slotIndex}Num").GetValue(ship);
         }
 
         /// <summary>
