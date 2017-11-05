@@ -276,7 +276,8 @@ namespace AircraftCarrierSlotSolverKai.Models
                     var constraint = solver.MakeConstraint(1, double.PositiveInfinity);
 
                     foreach (var info in GetInfoListFromVariables(variables).Where(x => x.ship.ID == shipSlotInfo.ShipInfo.ID &&
-                                                                                    x.airCraft.Type.Equals("航空要員")))
+                                                                                    x.airCraft.Type.Equals("航空要員") &&
+                                                                                    x.airCraft.NightCutin))
                     {
                         constraint.SetCoefficient(info.variable, 1);
                     }
