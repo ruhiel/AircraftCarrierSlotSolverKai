@@ -1,87 +1,88 @@
 ﻿using AircraftCarrierSlotSolverKai.Models.Records;
-using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AircraftCarrierSlotSolverKai.Models
 {
-    [JsonObject]
     public class AirCraft
     {
         /// <summary>
         /// 名称
         /// </summary>
-        [JsonProperty] public string Name { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// 種別
         /// </summary>
-        [JsonIgnore] public string Type => AirCraftTypeRecords.Instance.Records.First(x => x.Id == AircraftType).Name;
+        public string Type => AirCraftTypeRecords.Instance.Records.First(x => x.Id == AircraftType).Name;
 
         /// <summary>
         /// 種別ID
         /// </summary>
-        [JsonProperty] public int AircraftType { get; set; }
+        public int AircraftType { get; set; }
 
         /// <summary>
         /// 火力
         /// </summary>
-        [JsonProperty] public int FirePower { get; set; }
+        public int FirePower { get; set; }
 
         /// <summary>
         /// 改修値
         /// </summary>
-        [JsonProperty] public int Improvement { get; set; } = 0;
+        public int Improvement { get; set; } = 0;
 
         /// <summary>
         /// 対空
         /// </summary>
-        [JsonProperty] public int AAValue { get; set; }
+        public int AAValue { get; set; }
 
         /// <summary>
         /// 爆装
         /// </summary>
-        [JsonProperty] public int Bomber { get; set; }
+        public int Bomber { get; set; }
         /// <summary>
         /// 雷装
         /// </summary>
-        [JsonProperty] public int Torpedo { get; set; }
+        public int Torpedo { get; set; }
         /// <summary>
         /// 命中
         /// </summary>
-        [JsonProperty] public int Accuracy { get; set; }
+        public int Accuracy { get; set; }
         /// <summary>
         /// 回避
         /// </summary>
-        [JsonProperty] public int Evasion { get; set; }
+        public int Evasion { get; set; }
         /// <summary>
         /// ID
         /// </summary>
-        [JsonProperty] public int Id { get; set; }
+        public int Id { get; set; }
         /// <summary>
         /// 装甲
         /// </summary>
-        [JsonProperty] public int Armor { get; set; }
+        public int Armor { get; set; }
         /// <summary>
         /// 対潜
         /// </summary>
-        [JsonProperty] public int ASW { get; set; }
+        public int ASW { get; set; }
         /// <summary>
         /// 索敵
         /// </summary>
-        [JsonProperty] public int ViewRange { get; set; }
+        public int ViewRange { get; set; }
         /// <summary>
         /// 運
         /// </summary>
-        [JsonProperty] public int Luck { get; set; }
-
+        public int Luck { get; set; }
+        /// <summary>
+        /// 夜戦型
+        /// </summary>
+        public bool NightType { get; set; }
+        /// <summary>
+        /// 夜襲カットイン
+        /// </summary>
+        public bool NightCutin { get; set; }
         /// <summary>
         /// 艦載機名称(改修値付き)
         /// </summary>
-        [JsonIgnore]
         public virtual string FullName
         {
             get
@@ -90,7 +91,6 @@ namespace AircraftCarrierSlotSolverKai.Models
             }
         }
 
-        [JsonIgnore]
         public virtual int TypeOrder
         {
             get
@@ -111,13 +111,12 @@ namespace AircraftCarrierSlotSolverKai.Models
         /// <summary>
         /// 攻撃可能か
         /// </summary>
-        [JsonIgnore] public virtual bool Attackable => Type == Consts.TorpedoBomber || Type == Consts.DiveBomber;
+        public virtual bool Attackable => Type == Consts.TorpedoBomber || Type == Consts.DiveBomber;
 
 
         /// <summary>
         /// 対空値
         /// </summary>
-        [JsonIgnore]
         public virtual int AA
         {
             get

@@ -294,7 +294,6 @@
                                     <!-- 戦爆連合カットイン -->
                                     <StackPanel Margin="5,0,0,0">
                                         <CheckBox Name="CVCIEnableCheckBox" IsChecked="{Binding CVCI.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="戦爆連合カットイン"/>
-
                                         <ListBox ItemsSource="{Binding CVCIList}" Margin="0,10,0,10" BorderThickness="0" Background="Transparent">
                                             <ListBox.ItemContainerStyle>
                                                 <Style TargetType="{x:Type ListBoxItem}">
@@ -310,12 +309,42 @@
                                             </ListBox.ItemContainerStyle>
                                             <ListBox.ItemsPanel>
                                                 <ItemsPanelTemplate>
-                                                    <StackPanel/>
+                                                    <UniformGrid Columns="2"/>
                                                 </ItemsPanelTemplate>
                                             </ListBox.ItemsPanel>
                                             <ListBox.ItemTemplate>
                                                 <DataTemplate>
-                                                    <RadioButton Content="{Binding Name}" IsChecked="{Binding Path=IsSelected, Mode=TwoWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}}" Margin="0,5,0,5"/>
+                                                    <RadioButton GroupName="CVCIGroup" Content="{Binding Name}" IsChecked="{Binding Path=IsSelected, Mode=TwoWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}}" Margin="0,5,0,5"/>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+                                    </StackPanel>
+                                </GroupBox>
+                                <GroupBox>
+                                    <!-- 夜襲カットイン -->
+                                    <StackPanel Margin="5,0,0,0">
+                                        <CheckBox Name="NightCVCIEnableCheckBox" IsChecked="{Binding NightCVCI.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="夜襲カットイン"/>
+                                        <ListBox ItemsSource="{Binding NightCVCIList}" Margin="0,10,0,10" BorderThickness="0" Background="Transparent">
+                                            <ListBox.ItemContainerStyle>
+                                                <Style TargetType="{x:Type ListBoxItem}">
+                                                    <Setter Property="IsSelected" Value="{Binding Path=IsSelected, Mode=TwoWay}" />
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="ListBoxItem">
+                                                                <ContentPresenter/>
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </ListBox.ItemContainerStyle>
+                                            <ListBox.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <UniformGrid Columns="2"/>
+                                                </ItemsPanelTemplate>
+                                            </ListBox.ItemsPanel>
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <RadioButton GroupName="NightCVCIGroup" Content="{Binding Name}" IsChecked="{Binding Path=IsSelected, Mode=TwoWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}}" Margin="0,5,0,5"/>
                                                 </DataTemplate>
                                             </ListBox.ItemTemplate>
                                         </ListBox>
