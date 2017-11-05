@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using static AircraftCarrierSlotSolverKai.Models.NightCVCI;
 using static AircraftCarrierSlotSolverKai.Models.Records.CVCIRecords;
 
 namespace AircraftCarrierSlotSolverKai.Models
@@ -88,7 +89,7 @@ namespace AircraftCarrierSlotSolverKai.Models
             AirCraftSettingConstraintsDetail(solver, variables, shipSlotInfos, x => x.Saiun, SaiunFilter);
 
             // 熟練艦載機整備員を最小スロットに積む
-            AirCraftSettingConstraintsDetail(solver, variables, shipSlotInfos, x => x.MaintenancePersonnel, SaiunFilter);
+            AirCraftSettingConstraintsDetail(solver, variables, shipSlotInfos, x => x.MaintenancePersonnel, MaintenancePersonnelFilter);
 
             // 攻撃機を最小スロットに積まない
             AirCraftSettingConstraintsDetail(solver, variables, shipSlotInfos, x => x.MinimumSlot, MinimumSlotFilter, double.NegativeInfinity, 0);
@@ -205,6 +206,77 @@ namespace AircraftCarrierSlotSolverKai.Models
 
                     foreach (var info in GetInfoListFromVariables(variables).Where(x => x.ship.ID == shipSlotInfo.ShipInfo.ID)
                                                                             .Where(i => i.airCraft.Type.Equals("艦上戦闘機")))
+                    {
+                        constraint.SetCoefficient(info.variable, 1);
+                    }
+                }
+            }
+
+            // 夜襲カットイン
+            foreach (var shipSlotInfo in shipSlotInfos.Where(x => x.NightCVCI))
+            {
+                // 種別取得
+                var type = shipSlotInfo.NightCVCIList.FirstOrDefault(x => x.IsSelected)?.Type ?? NightCVCIType.NIGHT_FIGHTER_NIGHT_BOMBER;
+
+                // 夜戦
+                if(type.HasFlag(NightCVCIType.NIGHT_FIGHTER) || type.HasFlag(NightCVCIType.NIGHT_FIGHTER2) || type.HasFlag(NightCVCIType.NIGHT_FIGHTER3))
+                {
+                    int num;
+                    if (type.HasFlag(NightCVCIType.NIGHT_FIGHTER))
+                    {
+                        num = 1;
+                    }
+                    else if (type.HasFlag(NightCVCIType.NIGHT_FIGHTER2))
+                    {
+                        num = 2;
+                    }
+                    else
+                    {
+                        num = 3;
+                    }
+                    var constraint = solver.MakeConstraint(num, double.PositiveInfinity);
+
+                    foreach (var info in GetInfoListFromVariables(variables).Where(x => x.ship.ID == shipSlotInfo.ShipInfo.ID &&
+                                                                                    x.airCraft.Type.Equals("艦上戦闘機") &&
+                                                                                    x.airCraft.NightType))
+                    {
+                        constraint.SetCoefficient(info.variable, 1);
+                    }
+                }
+                
+                // 夜攻
+                if (type.HasFlag(NightCVCIType.NIGHT_BOMBER))
+                {
+                    var constraint = solver.MakeConstraint(1, double.PositiveInfinity);
+
+                    foreach (var info in GetInfoListFromVariables(variables).Where(x => x.ship.ID == shipSlotInfo.ShipInfo.ID &&
+                                                                                    x.airCraft.Attackable &&
+                                                                                    x.airCraft.NightType))
+                    {
+                        constraint.SetCoefficient(info.variable, 1);
+                    }
+                }
+                
+                // 夜襲カットイン対応艦載機
+                if (type.HasFlag(NightCVCIType.BOMBER) || type.HasFlag(NightCVCIType.BOMBER2))
+                {
+                    var constraint = solver.MakeConstraint(type.HasFlag(NightCVCIType.BOMBER) ? 1 : 2, double.PositiveInfinity);
+
+                    foreach (var info in GetInfoListFromVariables(variables).Where(x => x.ship.ID == shipSlotInfo.ShipInfo.ID &&
+                                                                                    x.airCraft.Attackable &&
+                                                                                    x.airCraft.NightCutin))
+                    {
+                        constraint.SetCoefficient(info.variable, 1);
+                    }
+                }
+
+                // 夜間作戦航空要員
+                if(!shipSlotInfo.ShipInfo.NightCutin)
+                {
+                    var constraint = solver.MakeConstraint(1, double.PositiveInfinity);
+
+                    foreach (var info in GetInfoListFromVariables(variables).Where(x => x.ship.ID == shipSlotInfo.ShipInfo.ID &&
+                                                                                    x.airCraft.Type.Equals("航空要員")))
                     {
                         constraint.SetCoefficient(info.variable, 1);
                     }

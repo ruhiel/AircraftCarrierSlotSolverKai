@@ -229,7 +229,7 @@ namespace AircraftCarrierSlotSolverKai.Models
 
         [JsonProperty] public int EquipSlotNum { get => _EquipSlotNum; set => SetProperty(ref _EquipSlotNum, value); }
 
-        private bool _AutoMaintenancePersonnel = true;
+        private bool _AutoMaintenancePersonnel;
 
         [JsonProperty] public bool AutoMaintenancePersonnel { get => _AutoMaintenancePersonnel; set => SetProperty(ref _AutoMaintenancePersonnel, value); }
 
@@ -256,6 +256,7 @@ namespace AircraftCarrierSlotSolverKai.Models
             ShipId = shipId;
             CVCIType = new List<CVCI>(CVCIRecords.Instance.Records);
             NightCVCIList = new List<NightCVCI>(NightCVCIRecords.Instance.Records);
+            AutoMaintenancePersonnel = ShipInfo.IsSpecialAttacks;
         }
     }
 }
