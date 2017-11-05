@@ -97,9 +97,11 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
 
         public IEnumerable<CVCI> CVCIList => ShipSlotInfo.CVCIType;
 
-        public ReactiveProperty<CVCI> NowSelectCVCI { get; set; }
-
         public ReactiveProperty<bool> CVCI { get; private set; }
+
+        public IEnumerable<NightCVCI> NightCVCIList => ShipSlotInfo.NightCVCIList;
+
+        public ReactiveProperty<bool> NightCVCI { get; private set; }
 
         public ShipSlotInfoViewModel(ShipSlotInfo info)
         {
@@ -156,6 +158,19 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
                 if(!flag)
                 {
                     foreach (var item in ShipSlotInfo.CVCIType)
+                    {
+                        item.IsSelected = false;
+                    }
+                }
+            });
+
+            NightCVCI = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.NightCVCI);
+
+            NightCVCI.Subscribe((flag) =>
+            {
+                if (!flag)
+                {
+                    foreach (var item in ShipSlotInfo.NightCVCIList)
                     {
                         item.IsSelected = false;
                     }
