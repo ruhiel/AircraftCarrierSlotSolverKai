@@ -314,7 +314,7 @@ namespace AircraftCarrierSlotSolverKai.Models
         /// <returns></returns>
         private static Func<(Variable variable, Ship ship, AirCraft airCraft, int improvement, int slotIndex), bool> FirstAttackFilter(ShipSlotInfo ship) =>
                                 v => v.ship.ID == ship.ShipInfo.ID &&
-                                GetAirCraft(v.airCraft.Id, v.improvement).AirCraft.Attackable &&
+                                v.airCraft.Attackable &&
                                 v.slotIndex == 1;
 
         /// <summary>
@@ -324,7 +324,7 @@ namespace AircraftCarrierSlotSolverKai.Models
         /// <returns></returns>
         private static Func<(Variable variable, Ship ship, AirCraft airCraft, int improvement, int slotIndex), bool> MinimumSlotFilter(ShipSlotInfo ship) =>
                                 v => v.ship.ID == ship.ShipInfo.ID &&
-                                GetAirCraft(v.airCraft.Id, v.improvement).AirCraft.Attackable &&
+                                v.airCraft.Attackable &&
                                 v.slotIndex == ship.MinSlotIndex;
 
         /// <summary>
@@ -334,7 +334,7 @@ namespace AircraftCarrierSlotSolverKai.Models
         /// <returns></returns>
         private static Func<(Variable variable, Ship ship, AirCraft airCraft, int improvement, int slotIndex), bool> MaintenancePersonnelFilter(ShipSlotInfo ship) =>
                                         v => v.ship.ID == ship.ShipInfo.ID &&
-                                        GetAirCraft(v.airCraft.Id, v.improvement).AirCraft.Name.Contains("熟練艦載機整備員") &&
+                                        v.airCraft.Name.Contains("熟練艦載機整備員") &&
                                         v.slotIndex == ship.MinSlotIndex;
 
         /// <summary>
@@ -344,7 +344,7 @@ namespace AircraftCarrierSlotSolverKai.Models
         /// <returns></returns>
         private static Func<(Variable variable, Ship ship, AirCraft airCraft, int improvement, int slotIndex), bool> SaiunFilter(ShipSlotInfo ship) => 
                                         v => v.ship.ID == ship.ShipInfo.ID &&
-                                        GetAirCraft(v.airCraft.Id, v.improvement).AirCraft.Name.Contains("彩雲") &&
+                                        v.airCraft.Name.Contains("彩雲") &&
                                         v.slotIndex == ship.MinSlotIndex;
 
         /// <summary>
@@ -354,7 +354,7 @@ namespace AircraftCarrierSlotSolverKai.Models
         /// <returns></returns>
         private static Func<(Variable variable, Ship ship, AirCraft airCraft, int improvement, int slotIndex), bool> AttackFilter(ShipSlotInfo ship) => 
                                         v => v.ship.ID == ship.ShipInfo.ID &&
-                                        GetAirCraft(v.airCraft.Id, v.improvement).AirCraft.Attackable;
+                                        v.airCraft.Attackable;
 
         /// <summary>
         /// 制約条件(艦載機設定)フィルタ(攻撃機のみ積む)
@@ -363,7 +363,7 @@ namespace AircraftCarrierSlotSolverKai.Models
         /// <returns></returns>
         private static Func<(Variable variable, Ship ship, AirCraft airCraft, int improvement, int slotIndex), bool> OnlyAttackerFilter(ShipSlotInfo ship) =>
                         v => v.ship.ID == ship.ShipInfo.ID &&
-                        !GetAirCraft(v.airCraft.Id, v.improvement).AirCraft.Attackable;
+                        !v.airCraft.Attackable;
 
         /// <summary>
         /// 変数リスト取得
@@ -506,7 +506,7 @@ namespace AircraftCarrierSlotSolverKai.Models
 
             foreach (var info in GetInfoListFromVariables(variables).Select(x => (x.variable,
                                                                                     shipSlotInfos.First(y => y.ShipInfo.ID == x.ship.ID),
-                                                                                    AirCraftRecords.Instance.Records.First(y => y.Id == x.airCraft.Id)))
+                                                                                    x.airCraft))
                                                                     .Where(z => !dic[z.Item3.Type](z.Item2)))
             {
                 constraint.SetCoefficient(info.variable, 1);
