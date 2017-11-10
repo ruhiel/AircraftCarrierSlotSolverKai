@@ -91,28 +91,10 @@ namespace AircraftCarrierSlotSolverKai.Models
             }
         }
 
-        public virtual int TypeOrder
-        {
-            get
-            {
-                switch (Type)
-                {
-                    case Consts.Fighter:
-                        return 0;
-                    case Consts.TorpedoBomber:
-                        return 1;
-                    case Consts.DiveBomber:
-                        return 2;
-                    default:
-                        return 3;
-                }
-            }
-        }
         /// <summary>
         /// 攻撃可能か
         /// </summary>
         public virtual bool Attackable => Type == Consts.TorpedoBomber || Type == Consts.DiveBomber;
-
 
         /// <summary>
         /// 対空値
