@@ -234,10 +234,19 @@ namespace AircraftCarrierSlotSolverKai.Models
         [JsonProperty] public bool AutoMaintenancePersonnel { get => _AutoMaintenancePersonnel; set => SetProperty(ref _AutoMaintenancePersonnel, value); }
 
         [JsonIgnore]
-        public int MinSlotNum => new[] { Slot1Num, Slot2Num, Slot3Num, Slot4Num }.Min();
+        public int MinSlotNum => SlotNums.Min();
 
         [JsonIgnore]
-        public int MinSlotIndex => new[] { Slot1Num, Slot2Num, Slot3Num, Slot4Num }.Select((slot, index) => (slot, index)).OrderByDescending(x => x.index).First(y => y.slot == MinSlotNum).index + 1;
+        public int MinSlotIndex => SlotNums.Select((slot, index) => (slot, index)).OrderByDescending(x => x.index).First(y => y.slot == MinSlotNum).index + 1;
+
+        [JsonIgnore]
+        public int[] SlotNums => new[] { Slot1Num, Slot2Num, Slot3Num, Slot4Num };
+
+        [JsonIgnore]
+        public AirCraftInfo[] Slots => new [] { Slot1, Slot2, Slot3, Slot4 };
+
+        [JsonIgnore]
+        public IEnumerable<(int, AirCraftInfo)> EquipedSlots => SlotNums.Zip(Slots, (slotNum, airCraft) => (slotNum, airCraft)).Where(x => x.airCraft != null);
 
         [JsonIgnore]
         public IEnumerable<(AirCraft airCraft, int index)> SlotSettings => new AirCraft[] { SlotSetting1?.AirCraft, SlotSetting2?.AirCraft, SlotSetting3?.AirCraft, SlotSetting4?.AirCraft }.Select((airCraft, index) => { (AirCraft airCraft, int index) tuple = (airCraft, index + 1); return tuple; });

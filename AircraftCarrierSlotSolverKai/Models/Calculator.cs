@@ -19,13 +19,13 @@ namespace AircraftCarrierSlotSolverKai.Models
         /// <param name="airSuperiority"></param>
         /// <param name="shipSlotInfos"></param>
         /// <returns></returns>
-        public static async Task<(bool result, string message)> Calc(int airSuperiority, IEnumerable<ShipSlotInfo> shipSlotInfos) => await Task.Run(() =>
+        public static async Task<(bool result, string message, int resultAirSuperiority)> Calc(int airSuperiority, IEnumerable<ShipSlotInfo> shipSlotInfos) => await Task.Run(() =>
         {
             try
             {
                 if (!shipSlotInfos.Any())
                 {
-                    return (false, "艦娘が追加されていないため計算実行できません。");
+                    return (false, "艦娘が追加されていないため計算実行できません。", 0);
                 }
 
                 // 表示初期化
@@ -60,17 +60,17 @@ namespace AircraftCarrierSlotSolverKai.Models
 
                 if (resultStatus != Solver.OPTIMAL)
                 {
-                    return (false, "制空値を満たす解がありませんでした。");
+                    return (false, "制空値を満たす解がありませんでした。", 0);
                 }
 
                 // 結果表示
                 CalcResultViewProcess(solver, variables, shipSlotInfos);
 
-                return (true, string.Empty);
+                return (true, string.Empty, shipSlotInfos.Sum(x => x.EquipedSlots.Sum(y => y.Item2.AirCraft.AirSuperiorityPotential(y.Item1))));
             }
             catch (Exception e)
             {
-                return (false, $"計算に失敗しました。{e.Message}");
+                return (false, $"計算に失敗しました。{e.Message}", 0);
             }
         });
 

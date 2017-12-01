@@ -12,7 +12,7 @@
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
         xmlns:properties="clr-namespace:AircraftCarrierSlotSolverKai.Properties"
         mc:Ignorable="d"
-        Title="空母スロットソルバー改" Height="900" Width="500"
+        Title="{Binding Title.Value}" Height="900" Width="500"
         GlowBrush="{DynamicResource AccentColorBrush}"
         BorderThickness="1"
         ShowMaxRestoreButton="False"

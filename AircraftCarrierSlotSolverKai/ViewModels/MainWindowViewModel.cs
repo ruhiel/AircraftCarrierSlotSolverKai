@@ -59,6 +59,8 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
 
         public ReactiveProperty<World> NowSelectFleetWorld { get; set; } = new ReactiveProperty<World>(WorldRecords.Instance.WithDummyList.First());
 
+        public ReactiveProperty<string> Title { get; set; } = new ReactiveProperty<string>("空母スロットソルバー改");
+
         public MainWindowViewModel()
         {
             ShipSlotInfoList = new ObservableCollection<ShipSlotInfoViewModel>();
@@ -77,7 +79,9 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
             CalcCommand.Subscribe(async _ => 
             {
                 GridVisible.Value = false;
-                Messenger.Instance.GetEvent<PubSubEvent<(bool result, string message)>>().Publish(await Calculator.Calc(int.Parse(TargetAirSuperiorityPotential.Value), ShipSlotInfoList.Select(x => x.ShipSlotInfo)));
+                var result = await Calculator.Calc(int.Parse(TargetAirSuperiorityPotential.Value), ShipSlotInfoList.Select(x => x.ShipSlotInfo));
+                Messenger.Instance.GetEvent<PubSubEvent<(bool result, string message)>>().Publish((result.result, result.message));
+                Title.Value = $"空母スロットソルバー改{(result.result ? $" 制空値:{result.resultAirSuperiority}" : string.Empty)}";
                 GridVisible.Value = true;
             });
 
