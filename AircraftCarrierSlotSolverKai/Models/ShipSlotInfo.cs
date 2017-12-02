@@ -198,7 +198,7 @@ namespace AircraftCarrierSlotSolverKai.Models
             get { return _SeaplaneFighterNumEnable; }
             set { SetProperty(ref _SeaplaneFighterNumEnable, value); }
         }
-        private int _SeaplaneFighterNum = 0;
+        private int _SeaplaneFighterNum;
         [JsonProperty]
         public int SeaplaneFighterNum
         {
@@ -214,7 +214,7 @@ namespace AircraftCarrierSlotSolverKai.Models
             set => SetProperty(ref _SeaplaneBomberNumEnable, value);
         }
 
-        private int _SeaplaneBomberNum = 1;
+        private int _SeaplaneBomberNum;
         [JsonProperty]
         public int SeaplaneBomberNum
         {
@@ -263,6 +263,16 @@ namespace AircraftCarrierSlotSolverKai.Models
         public ShipSlotInfo(int shipId)
         {
             ShipId = shipId;
+            if(ShipInfo.Type.Equals("戦艦"))
+            {
+                SeaplaneFighterNum = 1;
+                SeaplaneBomberNum = 0;
+            }
+            else
+            {
+                SeaplaneFighterNum = 0;
+                SeaplaneBomberNum = 1;
+            }
             CVCIType = new List<CVCI>(CVCIRecords.Instance.Records);
             NightCVCIList = new List<NightCVCI>(NightCVCIRecords.Instance.Records);
             AutoMaintenancePersonnel = ShipInfo.IsSpecialAttacks;

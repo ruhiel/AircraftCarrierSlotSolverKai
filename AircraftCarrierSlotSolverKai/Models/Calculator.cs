@@ -497,8 +497,8 @@ namespace AircraftCarrierSlotSolverKai.Models
                 { Consts.DiveBomber , x => x.ShipInfo.Type.Contains("空母") },
                 { Consts.AviationPersonnel , x => x.ShipInfo.Type.Contains("空母") || new []{"航空戦艦", "航空巡洋艦"}.Contains(x.ShipInfo.Type) || new[]{ "由良改二", "Zara due", "速吸", "Commandant Teste", "秋津洲改" }.Any(y => x.ShipInfo.Name.Contains(y)) },
                 { Consts.ReconnaissanceSeaplane , x => x.ShipInfo.Type.Contains("戦艦") || x.ShipInfo.Type.Contains("巡洋艦")},
-                { Consts.SeaplaneFighter , x => x.ShipInfo.Type.Contains("空母") || new []{"水上機母艦", "航空戦艦", "航空巡洋艦", "潜水空母"}.Contains(x.ShipInfo.Type) || new [] {"Zara due", "Italia", "Roma改", "長門", "陸奥", "大和", "武蔵"}.Any(y => x.ShipInfo.Name.Contains(y)) },
-                { Consts.SeaplaneBomber , x => new []{"水上機母艦", "航空戦艦", "航空巡洋艦", "潜水空母", "補給艦"}.Contains(x.ShipInfo.Type) || new [] {"Zara due", "Italia", "Roma改"}.Any(y => x.ShipInfo.Name.Contains(y)) },
+                { Consts.SeaplaneFighter , x => x.ShipInfo.Type.Contains("空母") || new []{"水上機母艦", "航空戦艦", "航空巡洋艦", "重巡洋艦", "戦艦", "巡洋戦艦", "潜水空母" }.Contains(x.ShipInfo.Type) || new [] {"Zara due", "Italia", "Roma改", "長門", "陸奥", "大和", "武蔵"}.Any(y => x.ShipInfo.Name.Contains(y)) },
+                { Consts.SeaplaneBomber , x => new []{"水上機母艦", "航空戦艦", "航空巡洋艦", "重巡洋艦", "巡洋戦艦", "潜水空母", "補給艦"}.Contains(x.ShipInfo.Type) || new [] {"Zara due", "Italia", "Roma改"}.Any(y => x.ShipInfo.Name.Contains(y)) },
                 { Consts.JetBomber , x => Regex.IsMatch(x.ShipInfo.Name, "(翔鶴|瑞鶴)改二甲") },
             };
 
