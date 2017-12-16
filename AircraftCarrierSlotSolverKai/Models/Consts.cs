@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AircraftCarrierSlotSolverKai.Models
 {
-    public class Consts
+    public static class Consts
     {
         public const string Fighter = "艦上戦闘機";
 

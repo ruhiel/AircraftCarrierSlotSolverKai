@@ -87,7 +87,7 @@ namespace AircraftCarrierSlotSolverKai.Models
         {
             get
             {
-                return Name + (Improvement == 0 ? string.Empty : string.Format("(★{0})", Improvement));
+                return Name + (Improvement == 0 ? string.Empty : $"(★{Improvement})");
             }
         }
 
@@ -105,10 +105,13 @@ namespace AircraftCarrierSlotSolverKai.Models
             {
                 switch (Type)
                 {
-                    case "艦戦":
+                    case Consts.Fighter:
+                    case Consts.SeaplaneFighter:
                         return (int)(AAValue + 0.2 * Improvement);
-                    case "艦爆":
+                    case Consts.DiveBomber:
                         return (int)(AAValue + 0.25 * Improvement);
+                    case Consts.AviationPersonnel:
+                        return 0;
                     default:
                         return AAValue;
                 }
@@ -174,12 +177,13 @@ namespace AircraftCarrierSlotSolverKai.Models
         public int AirSuperiorityPotential(int slotNum)
         {
             var air = AA * Math.Sqrt(slotNum);
-            double bonus = 0;
+            var bonus = 0;
             switch (Type)
             {
                 case Consts.TorpedoBomber:
                 case Consts.DiveBomber:
                 case Consts.SeaplaneBomber:
+                case Consts.JetBomber:
                     bonus = 3;
                     break;
                 case Consts.Fighter:
