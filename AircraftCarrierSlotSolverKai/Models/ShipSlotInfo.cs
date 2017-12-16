@@ -275,7 +275,7 @@ namespace AircraftCarrierSlotSolverKai.Models
             }
             CVCIType = new List<CVCI>(CVCIRecords.Instance.Records);
             NightCVCIList = new List<NightCVCI>(NightCVCIRecords.Instance.Records);
-            AutoMaintenancePersonnel = ShipInfo.IsSpecialAttacks;
+            AutoMaintenancePersonnel = ShipInfo.IsSeaplaneEquipable;
         }
     }
 }

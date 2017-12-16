@@ -89,7 +89,7 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
 
         public ReactiveProperty<bool> AutoMaintenancePersonnel { get; private set; }
 
-        public bool IsSpecialAttacks => ShipSlotInfo.ShipInfo.IsSpecialAttacks;
+        public bool IsSeaplaneEquipable => ShipSlotInfo.ShipInfo.IsSeaplaneEquipable;
 
         public bool IsCV => ShipSlotInfo.ShipInfo.IsCV;
 

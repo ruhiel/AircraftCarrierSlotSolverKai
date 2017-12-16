@@ -122,18 +122,6 @@ namespace AircraftCarrierSlotSolverKai.Models
         {
         }
 
-        public AirCraft(string name, int type, int firePower = 0, int aa = 0, int bomber = 0, int torpedo = 0, int accuracy = 0, int evasion = 0, int improvement = 0)
-        {
-            Name = name;
-            AircraftType = type;
-            AAValue = aa;
-            Bomber = bomber;
-            Torpedo = torpedo;
-            Accuracy = accuracy;
-            Evasion = evasion;
-            Improvement = improvement;
-        }
-
         public AirCraft(AirCraft source)
         {
             Id = source?.Id ?? 0;

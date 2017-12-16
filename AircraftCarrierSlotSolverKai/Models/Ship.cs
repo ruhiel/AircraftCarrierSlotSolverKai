@@ -1,5 +1,6 @@
 ﻿using AircraftCarrierSlotSolverKai.Models.Records;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace AircraftCarrierSlotSolverKai.Models
 {
@@ -58,11 +59,11 @@ namespace AircraftCarrierSlotSolverKai.Models
         /// </summary>
         public bool NightCutin { get; set; }
 
-        public bool IsSpecialAttacks => Type.Contains("戦艦") || Type.Contains("巡洋艦");
+        public bool IsSeaplaneEquipable => Type.Contains("戦艦") || Type.Contains("巡洋艦") || Type.Equals("潜水空母");
 
-        public bool IsCV => Type.Contains("空母");
+        public bool IsCV => Regex.IsMatch(Type, "(正規|装甲|軽)空母");
 
-        public bool IsEtc => !IsSpecialAttacks && !IsCV;
+        public bool IsEtc => !IsSeaplaneEquipable && !IsCV;
     }
 
 }

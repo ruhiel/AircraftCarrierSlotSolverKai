@@ -257,7 +257,7 @@
                             </StackPanel>
                         </GroupBox>
                         <!-- 昼戦弾着観測射撃設定 -->
-                        <GroupBox Visibility="{Binding IsSpecialAttacks, Converter={StaticResource BoolToVisibility}}">
+                        <GroupBox Visibility="{Binding IsSeaplaneEquipable, Converter={StaticResource BoolToVisibility}}">
                             <StackPanel>
                                 <WrapPanel Margin="5">
                                     <CheckBox Name="SeplaneFighterNumEnableCheckBox" IsChecked="{Binding SeaplaneFighterNumEnable.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="水上戦闘機の数を制限する"/>
