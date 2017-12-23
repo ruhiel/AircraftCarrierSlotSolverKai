@@ -59,7 +59,7 @@ namespace AircraftCarrierSlotSolverKai.Models
         /// </summary>
         public bool NightCutin { get; set; }
 
-        public bool IsSeaplaneEquipable => Type.Contains("戦艦") || Type.Contains("巡洋艦") || Type.Equals("潜水空母");
+        public bool IsSeaplaneEquipable => Regex.IsMatch(Type, ".*戦艦|.*巡洋艦|潜水空母|水上機母艦");
 
         public bool IsCV => Regex.IsMatch(Type, "(正規|装甲|軽)空母");
 
