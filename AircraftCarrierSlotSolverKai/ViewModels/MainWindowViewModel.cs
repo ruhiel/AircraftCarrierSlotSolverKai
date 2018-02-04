@@ -60,15 +60,18 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
 
         public ReactiveProperty<World> NowSelectFleetWorld { get; set; } = new ReactiveProperty<World>(WorldRecords.Instance.WithDummyList.First());
 
-        public ReactiveProperty<string> Title { get; set; } = new ReactiveProperty<string>("空母スロットソルバー改");
+        public ReactiveProperty<string> Title { get; set; }
 
         public ReactiveProperty<bool> IsCalcable { get; set; }
+
+        public ReactiveProperty<(bool result, string message, int resultAirSuperiority)> CalcResult { get; set; } = new ReactiveProperty<(bool result, string message, int resultAirSuperiority)>((false, null, 0));
 
         public MainWindowViewModel()
         {
             ShipSlotInfoList = new ObservableCollection<ShipSlotInfoViewModel>();
 
             IsCalcable = ShipSlotInfoList.ToCollectionChanged().Select(x => ShipSlotInfoList.Any()).ToReactiveProperty();
+
 
             ShipAddCommand.Subscribe(_ =>
             {
@@ -85,9 +88,15 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
             CalcCommand.Subscribe(async _ => 
             {
                 GridVisible.Value = false;
-                var result = await Calculator.Calc(int.Parse(TargetAirSuperiorityPotential.Value), ShipSlotInfoList.Select(x => x.ShipSlotInfo));
-                Messenger.Instance.GetEvent<PubSubEvent<(bool result, string message)>>().Publish((result.result, result.message));
-                Title.Value = $"空母スロットソルバー改{(result.result ? $" 制空値:{result.resultAirSuperiority}" : string.Empty)}";
+                CalcResult.Value = await Calculator.Calc(int.Parse(TargetAirSuperiorityPotential.Value), ShipSlotInfoList.Select(x => x.ShipSlotInfo));
+                
+            });
+
+            Title = CalcResult.Select(x => $"空母スロットソルバー改{(x.result ? $" 制空値:{x.resultAirSuperiority}" : string.Empty)}").ToReactiveProperty();
+
+            CalcResult.Subscribe(x =>
+            {
+                Messenger.Instance.GetEvent<PubSubEvent<(bool result, string message)>>().Publish((x.result, x.message));
                 GridVisible.Value = true;
             });
 
