@@ -55,7 +55,7 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
 
         public ObservableCollection<AirCraftInfo> AirCraftList { get; private set; } = new ObservableCollection<AirCraftInfo>();
 
-        public IEnumerable<AirCraftType> AirCraftTypeList => AirCraftTypeRecords.Instance.Records;
+        public ObservableCollection<AirCraftType> AirCraftTypeList { get; private set; } = new ObservableCollection<AirCraftType>();// => AirCraftTypeRecords.Instance.Records;
 
         public ReactiveProperty<AirCraftType> NowSelectAirCraftType { get; set; } = new ReactiveProperty<AirCraftType>();
 
@@ -108,6 +108,14 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
             ShipSlotInfo = info;
 
             ShipName = info.ObserveProperty(x => x.ShipName).ToReadOnlyReactiveProperty();
+
+            foreach (var record in AirCraftTypeRecords.Instance.Records)
+            {
+                if(AirCraftSettingRecords.Instance.Records.Any(x => x.AirCraft.AircraftType == record.Id && Calculator.Equippable(record.Name, ShipSlotInfo)))
+                {
+                    AirCraftTypeList.Add(record);
+                }
+            }
 
             Slot1 = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.Slot1);
 
@@ -220,7 +228,7 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
             NowSelectAirCraftType.Subscribe(type =>
             {
                 AirCraftList.Clear();
-                foreach (var item in AirCraftSettingRecords.Instance.Records.Where(x => null == type?.Id ? true : x.AirCraft.AircraftType == type.Id))
+                foreach (var item in AirCraftSettingRecords.Instance.Records.Where(x => null == type?.Id ? true : (x.AirCraft.AircraftType == type.Id && Calculator.Equippable(x.AirCraft.Type, ShipSlotInfo))))
                 {
                     AirCraftList.Add(item);
                 }

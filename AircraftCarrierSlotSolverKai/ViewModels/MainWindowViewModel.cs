@@ -10,6 +10,7 @@ using Reactive.Bindings.Extensions;
 using System.Reactive.Linq;
 using AircraftCarrierSlotSolverKai.Models.Records;
 
+
 namespace AircraftCarrierSlotSolverKai.ViewModels
 {
     public class MainWindowViewModel
@@ -61,9 +62,13 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
 
         public ReactiveProperty<string> Title { get; set; } = new ReactiveProperty<string>("空母スロットソルバー改");
 
+        public ReactiveProperty<bool> IsCalcable { get; set; }
+
         public MainWindowViewModel()
         {
             ShipSlotInfoList = new ObservableCollection<ShipSlotInfoViewModel>();
+
+            IsCalcable = ShipSlotInfoList.ToCollectionChanged().Select(x => ShipSlotInfoList.Any()).ToReactiveProperty();
 
             ShipAddCommand.Subscribe(_ =>
             {
@@ -75,7 +80,8 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
 
             TargetAirSuperiorityPotential = new ReactiveProperty<string>(default(int).ToString()).SetValidateAttribute(() => TargetAirSuperiorityPotential);
 
-            CalcCommand = new[] { TargetAirSuperiorityPotential.ObserveHasErrors}.CombineLatestValuesAreAllFalse().ToReactiveCommand();
+            CalcCommand = new[] { TargetAirSuperiorityPotential.ObserveHasErrors.Select(x => !x), IsCalcable}.CombineLatestValuesAreAllTrue().ToReactiveCommand();
+
             CalcCommand.Subscribe(async _ => 
             {
                 GridVisible.Value = false;

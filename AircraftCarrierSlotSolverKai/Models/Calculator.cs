@@ -489,6 +489,25 @@ namespace AircraftCarrierSlotSolverKai.Models
         /// <param name="shipSlotInfos"></param>
         private static void AirCraftTypeConstraints(Solver solver, List<Variable> variables, IEnumerable<ShipSlotInfo> shipSlotInfos)
         {
+            var constraint = solver.MakeConstraint(double.NegativeInfinity, 0);
+
+            foreach (var info in GetInfoListFromVariables(variables).Select(x => (x.variable,
+                                                                                    shipSlotInfos.First(y => y.ShipInfo.ID == x.ship.ID),
+                                                                                    x.airCraft))
+                                                                    .Where(z => !Equippable(z.Item3.Type, z.Item2)))
+            {
+                constraint.SetCoefficient(info.variable, 1);
+            }
+        }
+
+        /// <summary>
+        /// 装備可能か
+        /// </summary>
+        /// <param name="airCraftType"></param>
+        /// <param name="info"></param>
+        /// <returns></returns>
+        public static bool Equippable(string airCraftType, ShipSlotInfo info)
+        {
             var dic = new Dictionary<string, Func<ShipSlotInfo, bool>>()
             {
                 { Consts.TorpedoBomber , x => Regex.IsMatch(x.ShipInfo.Type,"(正規|装甲|軽)空母") || x.ShipInfo.Name.Contains("速吸") },
@@ -497,20 +516,12 @@ namespace AircraftCarrierSlotSolverKai.Models
                 { Consts.DiveBomber , x => Regex.IsMatch(x.ShipInfo.Type,"(正規|装甲|軽)空母") },
                 { Consts.AviationPersonnel , x => Regex.IsMatch(x.ShipInfo.Type,"(正規|装甲|軽)空母") || new []{"航空戦艦", "航空巡洋艦"}.Contains(x.ShipInfo.Type) || new[]{ "由良改二", "Zara due", "速吸", "Commandant Teste", "秋津洲改" }.Any(y => x.ShipInfo.Name.Contains(y)) },
                 { Consts.ReconnaissanceSeaplane , x => x.ShipInfo.Type.Contains("戦艦") || x.ShipInfo.Type.Contains("巡洋艦")},
-                { Consts.SeaplaneFighter , x => new []{"水上機母艦", "航空戦艦", "航空巡洋艦", "重巡洋艦", "戦艦", "巡洋戦艦", "潜水空母" }.Contains(x.ShipInfo.Type) || new [] { "由良改二", "Zara due", "Italia", "Roma改", "長門", "陸奥", "大和", "武蔵"}.Any(y => x.ShipInfo.Name.Contains(y)) },
+                { Consts.SeaplaneFighter , x => new []{"水上機母艦", "航空戦艦", "航空巡洋艦", "重巡洋艦", "戦艦", "巡洋戦艦", "潜水空母", "補給艦" }.Contains(x.ShipInfo.Type) || new [] { "由良改二", "Zara due", "Italia", "Roma改", "長門", "陸奥", "大和", "武蔵"}.Any(y => x.ShipInfo.Name.Contains(y)) },
                 { Consts.SeaplaneBomber , x => new []{"水上機母艦", "航空戦艦", "航空巡洋艦", "重巡洋艦", "巡洋戦艦", "潜水空母", "補給艦"}.Contains(x.ShipInfo.Type) || new [] { "由良改二", "Zara due", "Italia", "Roma改"}.Any(y => x.ShipInfo.Name.Contains(y)) },
                 { Consts.JetBomber , x => Regex.IsMatch(x.ShipInfo.Name, "(翔鶴|瑞鶴)改二甲") },
             };
 
-            var constraint = solver.MakeConstraint(double.NegativeInfinity, 0);
-
-            foreach (var info in GetInfoListFromVariables(variables).Select(x => (x.variable,
-                                                                                    shipSlotInfos.First(y => y.ShipInfo.ID == x.ship.ID),
-                                                                                    x.airCraft))
-                                                                    .Where(z => !dic[z.Item3.Type](z.Item2)))
-            {
-                constraint.SetCoefficient(info.variable, 1);
-            }
+            return dic[airCraftType](info);
         }
 
         /// <summary>
