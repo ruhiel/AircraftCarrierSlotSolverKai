@@ -407,6 +407,7 @@ namespace AircraftCarrierSlotSolverKai.Models
                 shipSlotInfo.Slot2 = null;
                 shipSlotInfo.Slot3 = null;
                 shipSlotInfo.Slot4 = null;
+                shipSlotInfo.Slot5 = null;
             }
         }
 

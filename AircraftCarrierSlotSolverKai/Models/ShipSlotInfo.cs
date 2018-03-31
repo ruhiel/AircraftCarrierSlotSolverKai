@@ -15,6 +15,21 @@ namespace AircraftCarrierSlotSolverKai.Models
         [JsonIgnore]
         public Ship ShipInfo => ShipRecords.Instance.Records.First(x => x.ID == ShipId);
 
+        [JsonIgnore]
+        public int SlotNum => ShipInfo.SlotNum;
+
+        [JsonIgnore]
+        public bool Slot2Enable => ShipInfo.SlotNum >= 2;
+
+        [JsonIgnore]
+        public bool Slot3Enable => ShipInfo.SlotNum >= 3;
+
+        [JsonIgnore]
+        public bool Slot4Enable => ShipInfo.SlotNum >= 4;
+
+        [JsonIgnore]
+        public bool Slot5Enable => ShipInfo.SlotNum >= 5;
+
         /// <summary>
         /// 艦名
         /// </summary>
@@ -88,6 +103,23 @@ namespace AircraftCarrierSlotSolverKai.Models
         /// </summary>
         [JsonIgnore]
         public int Slot4Num => ShipInfo.Slot4Num;
+
+        private AirCraftInfo _Slot5;
+        /// <summary>
+        /// 第五スロット艦載機
+        /// </summary>
+        [JsonProperty]
+        public AirCraftInfo Slot5
+        {
+            get { return _Slot5; }
+            set { SetProperty(ref _Slot5, value); }
+        }
+
+        /// <summary>
+        /// 第四スロット数
+        /// </summary>
+        [JsonIgnore]
+        public int Slot5Num => ShipInfo.Slot5Num;
 
         private bool _Attack;
         [JsonProperty]
@@ -191,6 +223,15 @@ namespace AircraftCarrierSlotSolverKai.Models
             get { return _SlotSetting4; }
             set { SetProperty(ref _SlotSetting4, value); }
         }
+
+        private AirCraftInfo _SlotSetting5;
+        [JsonProperty]
+        public AirCraftInfo SlotSetting5
+        {
+            get { return _SlotSetting5; }
+            set { SetProperty(ref _SlotSetting5, value); }
+        }
+
         private bool _SeaplaneFighterNumEnable = true;
         [JsonProperty]
         public bool SeaplaneFighterNumEnable
@@ -249,14 +290,14 @@ namespace AircraftCarrierSlotSolverKai.Models
         public IEnumerable<(int, AirCraftInfo)> EquipedSlots => SlotNums.Zip(Slots, (slotNum, airCraft) => (slotNum, airCraft)).Where(x => x.airCraft != null);
 
         [JsonIgnore]
-        public IEnumerable<(AirCraft airCraft, int index)> SlotSettings => new AirCraft[] { SlotSetting1?.AirCraft, SlotSetting2?.AirCraft, SlotSetting3?.AirCraft, SlotSetting4?.AirCraft }.Select((airCraft, index) => { (AirCraft airCraft, int index) tuple = (airCraft, index + 1); return tuple; });
+        public IEnumerable<(AirCraft airCraft, int index)> SlotSettings => new AirCraft[] { SlotSetting1?.AirCraft, SlotSetting2?.AirCraft, SlotSetting3?.AirCraft, SlotSetting4?.AirCraft, SlotSetting5?.AirCraft }.Select((airCraft, index) => { (AirCraft airCraft, int index) tuple = (airCraft, index + 1); return tuple; });
 
         [JsonIgnore]
         public Dictionary<int, string> AirCraftSetting
         {
             get
             {
-                return new Dictionary<int, string> { { 0, SlotSetting1?.AirCraft.FullName ?? "未指定" }, { 1, SlotSetting2?.AirCraft.FullName ?? "未指定" }, { 2, SlotSetting3?.AirCraft.FullName ?? "未指定" }, { 3, SlotSetting4?.AirCraft.FullName ?? "未指定" } };
+                return new Dictionary<int, string> { { 0, SlotSetting1?.AirCraft.FullName ?? "未指定" }, { 1, SlotSetting2?.AirCraft.FullName ?? "未指定" }, { 2, SlotSetting3?.AirCraft.FullName ?? "未指定" }, { 3, SlotSetting4?.AirCraft.FullName ?? "未指定" } , { 4, SlotSetting5?.AirCraft.FullName ?? "未指定" } };
             }
         }
 

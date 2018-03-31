@@ -47,9 +47,13 @@ namespace AircraftCarrierSlotSolverKai.Models
         /// </summary>
         public int Slot4Num { get; set; }
         /// <summary>
+        /// スロット数5
+        /// </summary>
+        public int Slot5Num { get; set; }
+        /// <summary>
         /// スロット数リスト
         /// </summary>
-        public int[] Slots => new int[] { Slot1Num, Slot2Num, Slot3Num, Slot4Num };
+        public int[] Slots => new int[] { Slot1Num, Slot2Num, Slot3Num, Slot4Num, Slot5Num };
         /// <summary>
         /// 改装前
         /// </summary>

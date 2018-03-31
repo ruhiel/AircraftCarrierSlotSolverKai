@@ -23,6 +23,10 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
 
         public ReactiveProperty<AirCraftInfo> Slot4 { get; private set; }
 
+        public ReactiveProperty<AirCraftInfo> Slot5 { get; private set; }
+
+        public int SlotNum => ShipSlotInfo.SlotNum;
+
         public int Slot1Num => ShipSlotInfo.Slot1Num;
 
         public int Slot2Num => ShipSlotInfo.Slot2Num;
@@ -30,6 +34,16 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
         public int Slot3Num => ShipSlotInfo.Slot3Num;
 
         public int Slot4Num => ShipSlotInfo.Slot4Num;
+
+        public int Slot5Num => ShipSlotInfo.Slot5Num;
+
+        public bool Slot2Enable => ShipSlotInfo.Slot2Enable;
+
+        public bool Slot3Enable => ShipSlotInfo.Slot3Enable;
+
+        public bool Slot4Enable => ShipSlotInfo.Slot4Enable;
+
+        public bool Slot5Enable => ShipSlotInfo.Slot5Enable;
 
         public ReactiveProperty<bool> Attack { get; private set; }
 
@@ -50,6 +64,8 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
         public ReactiveProperty<AirCraftInfo> SlotSetting3 { get; private set; }
 
         public ReactiveProperty<AirCraftInfo> SlotSetting4 { get; private set; }
+
+        public ReactiveProperty<AirCraftInfo> SlotSetting5 { get; private set; }
 
         public AirCraftInfo NowSelectSlotSetting { get; set; }
 
@@ -74,6 +90,10 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
         public ReactiveCommand SlotSetting4SetCommand { get; } = new ReactiveCommand();
 
         public ReactiveCommand SlotSetting4ReSetCommand { get; } = new ReactiveCommand();
+
+        public ReactiveCommand SlotSetting5SetCommand { get; } = new ReactiveCommand();
+
+        public ReactiveCommand SlotSetting5ReSetCommand { get; } = new ReactiveCommand();
 
         public ReactiveProperty<bool> SeaplaneFighterNumEnable { get; private set; }
 
@@ -125,6 +145,8 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
 
             Slot4 = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.Slot4);
 
+            Slot5 = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.Slot5);
+
             Attack = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.Attack);
 
             Saiun = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.Saiun);
@@ -144,6 +166,8 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
             SlotSetting3 = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.SlotSetting3);
 
             SlotSetting4 = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.SlotSetting4);
+
+            SlotSetting5 = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.SlotSetting5);
 
             SeaplaneFighterNumEnable = ShipSlotInfo.ToReactivePropertyAsSynchronized(x => x.SeaplaneFighterNumEnable);
 
@@ -225,10 +249,21 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
 
             SlotSetting4ReSetCommand.Subscribe(_ => SlotSetting4.Value = null);
 
+
+            SlotSetting5SetCommand.Subscribe(_ =>
+            {
+                if (NowSelectSlotSetting != null)
+                {
+                    SlotSetting5.Value = NowSelectSlotSetting;
+                }
+            });
+
+            SlotSetting5ReSetCommand.Subscribe(_ => SlotSetting5.Value = null);
+
             NowSelectAirCraftType.Subscribe(type =>
             {
                 AirCraftList.Clear();
-                foreach (var item in AirCraftSettingRecords.Instance.Records.Where(x => null == type?.Id ? true : (x.AirCraft.AircraftType == type.Id && Calculator.Equippable(x.AirCraft.Type, ShipSlotInfo))))
+                foreach (var item in AirCraftSettingRecords.Instance.Records.Where(x => Calculator.Equippable(x.AirCraft.Type, ShipSlotInfo) && (null == type?.Id ? true : x.AirCraft.AircraftType == type.Id)))
                 {
                     AirCraftList.Add(item);
                 }
