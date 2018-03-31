@@ -64,7 +64,7 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
 
         public ReactiveProperty<bool> IsCalcable { get; set; }
 
-        public ReactiveProperty<(bool result, string message, int resultAirSuperiority)> CalcResult { get; set; } = new ReactiveProperty<(bool result, string message, int resultAirSuperiority)>((false, null, 0));
+        public ReactiveProperty<(bool result, string message, int resultAirSuperiority)> CalcResult { get; set; } = new ReactiveProperty<(bool result, string message, int resultAirSuperiority)>(default((bool result, string message, int resultAirSuperiority)));
 
         public MainWindowViewModel()
         {
@@ -89,17 +89,13 @@ namespace AircraftCarrierSlotSolverKai.ViewModels
             {
                 GridVisible.Value = false;
                 CalcResult.Value = await Calculator.Calc(int.Parse(TargetAirSuperiorityPotential.Value), ShipSlotInfoList.Select(x => x.ShipSlotInfo));
-                
+                Messenger.Instance.GetEvent<PubSubEvent<(bool result, string message)>>().Publish((CalcResult.Value.result, CalcResult.Value.message));
+                GridVisible.Value = true;
             });
 
             Title = CalcResult.Select(x => $"空母スロットソルバー改{(x.result ? $" 制空値:{x.resultAirSuperiority}" : string.Empty)}").ToReactiveProperty();
 
-            CalcResult.Subscribe(x =>
-            {
-                Messenger.Instance.GetEvent<PubSubEvent<(bool result, string message)>>().Publish((x.result, x.message));
-                GridVisible.Value = true;
-            });
-
+  
             AirCraftSettingCommand.Subscribe(_ =>
             {
                 new AirCraftSettingView().ShowDialog();
