@@ -172,7 +172,7 @@ namespace AircraftCarrierSlotSolverKai.Models
                 var type = shipSlotInfo.CVCIType.FirstOrDefault(x => x.IsSelected)?.Type ?? CIType.DIVE_BOMBER_TORPEDO_BOMBER;
 
                 // 艦上爆撃機
-                if(type.HasFlag(CIType.DIVE_BOMBER) || type.HasFlag(CIType.DIVE_BOMBER2))
+                if (type.HasFlag(CIType.DIVE_BOMBER) || type.HasFlag(CIType.DIVE_BOMBER2))
                 {
                     var constraint = solver.MakeConstraint(type.HasFlag(CIType.DIVE_BOMBER) ? 1 : 2, double.PositiveInfinity);
 
@@ -212,7 +212,7 @@ namespace AircraftCarrierSlotSolverKai.Models
                 var type = shipSlotInfo.NightCVCIList.FirstOrDefault(x => x.IsSelected)?.Type ?? NightCVCIType.NIGHT_FIGHTER_NIGHT_BOMBER;
 
                 // 夜戦
-                if(type.HasFlag(NightCVCIType.NIGHT_FIGHTER) || type.HasFlag(NightCVCIType.NIGHT_FIGHTER2) || type.HasFlag(NightCVCIType.NIGHT_FIGHTER3))
+                if (type.HasFlag(NightCVCIType.NIGHT_FIGHTER) || type.HasFlag(NightCVCIType.NIGHT_FIGHTER2) || type.HasFlag(NightCVCIType.NIGHT_FIGHTER3))
                 {
                     int num;
                     if (type.HasFlag(NightCVCIType.NIGHT_FIGHTER))
@@ -236,7 +236,7 @@ namespace AircraftCarrierSlotSolverKai.Models
                         constraint.SetCoefficient(info.variable, 1);
                     }
                 }
-                
+
                 // 夜攻
                 if (type.HasFlag(NightCVCIType.NIGHT_BOMBER))
                 {
@@ -249,7 +249,7 @@ namespace AircraftCarrierSlotSolverKai.Models
                         constraint.SetCoefficient(info.variable, 1);
                     }
                 }
-                
+
                 // 夜襲カットイン対応艦載機
                 if (type.HasFlag(NightCVCIType.BOMBER) || type.HasFlag(NightCVCIType.BOMBER2))
                 {
@@ -264,7 +264,7 @@ namespace AircraftCarrierSlotSolverKai.Models
                 }
 
                 // 夜間作戦航空要員
-                if(!shipSlotInfo.ShipInfo.NightCutin)
+                if (!shipSlotInfo.ShipInfo.NightCutin)
                 {
                     var constraint = solver.MakeConstraint(1, double.PositiveInfinity);
 
@@ -342,7 +342,7 @@ namespace AircraftCarrierSlotSolverKai.Models
         /// </summary>
         /// <param name="ship"></param>
         /// <returns></returns>
-        private static Func<(Variable variable, Ship ship, AirCraft airCraft, int improvement, int slotIndex), bool> SaiunFilter(ShipSlotInfo ship) => 
+        private static Func<(Variable variable, Ship ship, AirCraft airCraft, int improvement, int slotIndex), bool> SaiunFilter(ShipSlotInfo ship) =>
                                         v => v.ship.ID == ship.ShipInfo.ID &&
                                         v.airCraft.Name.Contains("彩雲") &&
                                         v.slotIndex == ship.MinSlotIndex;
@@ -352,7 +352,7 @@ namespace AircraftCarrierSlotSolverKai.Models
         /// </summary>
         /// <param name="ship"></param>
         /// <returns></returns>
-        private static Func<(Variable variable, Ship ship, AirCraft airCraft, int improvement, int slotIndex), bool> AttackFilter(ShipSlotInfo ship) => 
+        private static Func<(Variable variable, Ship ship, AirCraft airCraft, int improvement, int slotIndex), bool> AttackFilter(ShipSlotInfo ship) =>
                                         v => v.ship.ID == ship.ShipInfo.ID &&
                                         v.airCraft.Attackable;
 
@@ -492,10 +492,10 @@ namespace AircraftCarrierSlotSolverKai.Models
         {
             var constraint = solver.MakeConstraint(double.NegativeInfinity, 0);
 
-            foreach (var info in GetInfoListFromVariables(variables).Select(x => (x.variable,
+            foreach (var info in GetInfoListFromVariables(variables)/*.Select(x => (x.variable,
                                                                                     shipSlotInfos.First(y => y.ShipInfo.ID == x.ship.ID),
-                                                                                    x.airCraft))
-                                                                    .Where(z => !Equippable(z.Item3.Type, z.Item2)))
+                                                                                    x.airCraft))*/
+                                                                    .Where(z => !Equippable(z.Item3.Type, shipSlotInfos.First(y => y.ShipInfo.ID == z.ship.ID), z.slotIndex)))
             {
                 constraint.SetCoefficient(info.variable, 1);
             }
@@ -507,8 +507,16 @@ namespace AircraftCarrierSlotSolverKai.Models
         /// <param name="airCraftType"></param>
         /// <param name="info"></param>
         /// <returns></returns>
-        public static bool Equippable(string airCraftType, ShipSlotInfo info)
+        public static bool Equippable(string airCraftType, ShipSlotInfo info, int slotIndex)
         {
+            if(EquipableSlotRecord.Instance.Records.Any(x => 
+                info.ShipId == x.Shipid &&
+                airCraftType == AirCraftTypeRecords.Instance.Records.First(y => y.Id == x.AircraftType).Name &&
+                x.SlotIndex == slotIndex))
+            {
+                return true;
+            }
+
             var dic = new Dictionary<string, Func<ShipSlotInfo, bool>>()
             {
                 { Consts.TorpedoBomber , x => Regex.IsMatch(x.ShipInfo.Type,"(正規|装甲|軽)空母") || x.ShipInfo.Name.Contains("速吸") },
@@ -524,6 +532,8 @@ namespace AircraftCarrierSlotSolverKai.Models
 
             return dic[airCraftType](info);
         }
+
+        public static bool Equippable(string airCraftType, ShipSlotInfo info) => Enumerable.Range(0, info.SlotNum).Any(x => Equippable(airCraftType, info, x));
 
         /// <summary>
         /// 艦載機取得

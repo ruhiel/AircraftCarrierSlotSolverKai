@@ -34,9 +34,7 @@ namespace AircraftCarrierSlotSolverKai.Models.Records
 
                 var query = connection.Query<T>($"select * from {TableName}");
 
-                var result = func == null ? query : func(query);
-
-                foreach (var record in result)
+                foreach (var record in func == null ? query : func(query))
                 {
                     Records.Add(record);
                 }
